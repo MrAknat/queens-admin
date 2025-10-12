@@ -1,73 +1,5 @@
 @import "tailwindcss";
 
-/* Custom CSS Variables for Theme System - Dashboard Inspired Colors */
-:root {
-  /* Brand colors - Professional Blue & Teal palette inspired by data dashboard */
-  --color-primary: #1d4ed8; /* Deep blue - main dashboard color */
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #0891b2; /* Professional teal - secondary actions */
-  --color-secondary-foreground: #ffffff;
-  --color-accent: #3b82f6; /* Medium blue - accents and highlights */
-  --color-accent-foreground: #ffffff;
-
-  /* UI colors - Professional gray scale */
-  --color-background: #ffffff;
-  --color-foreground: #0f172a; /* Darker foreground for better contrast */
-  --color-muted: #f1f5f9; /* Slightly warmer muted background */
-  --color-muted-foreground: #475569; /* Improved contrast for muted text */
-  --color-card: #ffffff;
-  --color-card-foreground: #0f172a;
-  --color-border: #cbd5e1; /* More visible borders */
-  --color-input: #f8fafc;
-  --color-ring: #1d4ed8; /* Primary blue for focus rings */
-
-  /* Semantic colors - Dashboard inspired */
-  --color-success: #059669; /* Professional green */
-  --color-success-foreground: #ffffff;
-  --color-warning: #d97706; /* Orange from dashboard highlight */
-  --color-warning-foreground: #ffffff;
-  --color-destructive: #dc2626; /* Professional red */
-  --color-destructive-foreground: #ffffff;
-  --color-error: #dc2626;
-  --color-info: #0284c7; /* Dashboard info blue */
-
-  /* Border radius - minimal design */
-  --radius: 0.25rem;
-
-  /* Typography */
-  --font-family-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Dark theme - Professional dashboard dark mode */
-.dark {
-  --color-primary: #3b82f6; /* Brighter blue for dark mode visibility */
-  --color-primary-foreground: #0f172a;
-  --color-secondary: #06b6d4; /* Bright teal for dark mode */
-  --color-secondary-foreground: #0f172a;
-  --color-accent: #60a5fa; /* Light blue accent for dark mode */
-  --color-accent-foreground: #0f172a;
-
-  --color-background: #0f172a; /* Dark navy background */
-  --color-foreground: #f8fafc; /* Light foreground */
-  --color-muted: #1e293b; /* Dark muted background */
-  --color-muted-foreground: #94a3b8; /* Muted text */
-  --color-card: #1e293b; /* Slightly lighter card background */
-  --color-card-foreground: #f8fafc;
-  --color-border: #334155; /* Visible dark borders */
-  --color-input: #374151; /* Dark input backgrounds */
-  --color-ring: #3b82f6; /* Primary blue focus ring */
-
-  --color-success: #10b981; /* Bright green for dark mode */
-  --color-success-foreground: #0f172a;
-  --color-warning: #f59e0b; /* Bright orange for dark mode */
-  --color-warning-foreground: #0f172a;
-  --color-destructive: #ef4444; /* Bright red for dark mode */
-  --color-destructive-foreground: #0f172a;
-  --color-error: #ef4444;
-  --color-info: #3b82f6; /* Consistent info blue */
-}
-
 /* Global styles using Tailwind v4 utilities */
 /* Global styles */
 * {
@@ -84,6 +16,136 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom CSS Variables for Theme System - Dashboard Inspired Colors */
+@theme {
+  /* Brand colors - Professional Blue & Teal palette inspired by data dashboard */
+  --color-primary: #1d4ed8;
+  /* Deep blue - main dashboard color */
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #0891b2;
+  /* Professional teal - secondary actions */
+  --color-secondary-foreground: #ffffff;
+  --color-accent: #3b82f6;
+  /* Medium blue - accents and highlights */
+  --color-accent-foreground: #ffffff;
+
+  /* UI colors - Professional gray scale */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  /* Darker foreground for better contrast */
+  --color-muted: #f1f5f9;
+  /* Slightly warmer muted background */
+  --color-muted-foreground: #475569;
+  /* Improved contrast for muted text */
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-border: #cbd5e1;
+  /* More visible borders */
+  --color-input: #f8fafc;
+  --color-ring: #1d4ed8;
+  /* Primary blue for focus rings */
+
+  /* Semantic colors - Dashboard inspired */
+  --color-success: #059669;
+  /* Professional green */
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  /* Orange from dashboard highlight */
+  --color-warning-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  /* Professional red */
+  --color-destructive-foreground: #ffffff;
+  --color-error: #dc2626;
+  --color-info: #0284c7;
+  /* Dashboard info blue */
+
+  /* Border radius - minimal design */
+  --radius: 0.25rem;
+
+  /* Typography */
+  --font-family-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Data visualization colors - inspired by the dashboard gradient */
+  --color-chart-1: #1e40af;
+  /* Deep blue */
+  --color-chart-2: #3b82f6;
+  /* Medium blue */
+  --color-chart-3: #60a5fa;
+  /* Light blue */
+  --color-chart-4: #93c5fd;
+  /* Very light blue */
+  --color-chart-5: #0891b2;
+  /* Teal */
+  --color-chart-6: #d97706;
+  /* Dashboard orange */
+
+  /* Professional neutrals */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+}
+
+/* Dark theme - Professional dashboard dark mode */
+.dark {
+  --color-primary: #3b82f6;
+  /* Brighter blue for dark mode visibility */
+  --color-primary-foreground: #ffffff;
+  /* Light text for better contrast on blue background */
+  --color-secondary: #06b6d4;
+  /* Bright teal for dark mode */
+  --color-secondary-foreground: #0f172a;
+  --color-accent: #60a5fa;
+  /* Light blue accent for dark mode */
+  --color-accent-foreground: #0f172a;
+
+  --color-background: #0f172a;
+  /* Dark navy background */
+  --color-foreground: #f8fafc;
+  /* Light foreground */
+  --color-muted: #1e293b;
+  /* Dark muted background */
+  --color-muted-foreground: #94a3b8;
+  /* Muted text */
+  --color-card: #1e293b;
+  /* Slightly lighter card background */
+  --color-card-foreground: #f8fafc;
+  --color-border: #334155;
+  /* Visible dark borders */
+  --color-input: #374151;
+  /* Dark input backgrounds */
+  --color-ring: #3b82f6;
+  /* Primary blue focus ring */
+
+  --color-success: #10b981;
+  /* Bright green for dark mode */
+  --color-success-foreground: #0f172a;
+  --color-warning: #f59e0b;
+  /* Bright orange for dark mode */
+  --color-warning-foreground: #0f172a;
+  --color-destructive: #ef4444;
+  /* Bright red for dark mode */
+  --color-destructive-foreground: #0f172a;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  /* Consistent info blue */
+
+  /* Dark mode chart colors */
+  --color-chart-1: #3b82f6;
+  --color-chart-2: #60a5fa;
+  --color-chart-3: #93c5fd;
+  --color-chart-4: #bfdbfe;
+  --color-chart-5: #06b6d4;
+  --color-chart-6: #f59e0b;
 }
 
 :focus-visible {
@@ -123,178 +185,6 @@ body {
   );
 }
 
-/* Custom utility classes */
-.bg-primary {
-  background-color: var(--color-primary);
-}
-.bg-primary\/10 {
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-}
-.bg-secondary {
-  background-color: var(--color-secondary);
-}
-.bg-secondary\/10 {
-  background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
-}
-.bg-accent {
-  background-color: var(--color-accent);
-}
-.bg-accent\/5 {
-  background-color: color-mix(in srgb, var(--color-accent) 5%, transparent);
-}
-.bg-accent\/20 {
-  background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
-}
-.bg-background {
-  background-color: var(--color-background);
-}
-.bg-foreground {
-  background-color: var(--color-foreground);
-}
-.bg-muted {
-  background-color: var(--color-muted);
-}
-.bg-card {
-  background-color: var(--color-card);
-}
-.bg-success {
-  background-color: var(--color-success);
-}
-.bg-success\/10 {
-  background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
-}
-.bg-warning {
-  background-color: var(--color-warning);
-}
-.bg-warning\/10 {
-  background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
-}
-.bg-error {
-  background-color: var(--color-error);
-}
-.bg-error\/10 {
-  background-color: color-mix(in srgb, var(--color-error) 10%, transparent);
-}
-.bg-info {
-  background-color: var(--color-info);
-}
-.bg-info\/10 {
-  background-color: color-mix(in srgb, var(--color-info) 10%, transparent);
-}
-
-.text-primary {
-  color: var(--color-primary);
-}
-.text-secondary {
-  color: var(--color-secondary);
-}
-.text-accent {
-  color: var(--color-accent);
-}
-.text-background {
-  color: var(--color-background);
-}
-.text-foreground {
-  color: var(--color-foreground);
-}
-.text-muted-foreground {
-  color: var(--color-muted-foreground);
-}
-.text-card-foreground {
-  color: var(--color-card-foreground);
-}
-.text-success {
-  color: var(--color-success);
-}
-.text-warning {
-  color: var(--color-warning);
-}
-.text-error {
-  color: var(--color-error);
-}
-.text-info {
-  color: var(--color-info);
-}
-
-.border-border {
-  border-color: var(--color-border);
-}
-.ring-ring {
-  --tw-ring-color: var(--color-ring);
-}
-
-/* Additional Dashboard Color Utilities */
-:root {
-  /* Data visualization colors - inspired by the dashboard gradient */
-  --color-chart-1: #1e40af; /* Deep blue */
-  --color-chart-2: #3b82f6; /* Medium blue */
-  --color-chart-3: #60a5fa; /* Light blue */
-  --color-chart-4: #93c5fd; /* Very light blue */
-  --color-chart-5: #0891b2; /* Teal */
-  --color-chart-6: #d97706; /* Dashboard orange */
-
-  /* Professional neutrals */
-  --color-neutral-50: #f8fafc;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-300: #cbd5e1;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-500: #64748b;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1e293b;
-  --color-neutral-900: #0f172a;
-}
-
-.dark {
-  /* Dark mode chart colors */
-  --color-chart-1: #3b82f6;
-  --color-chart-2: #60a5fa;
-  --color-chart-3: #93c5fd;
-  --color-chart-4: #bfdbfe;
-  --color-chart-5: #06b6d4;
-  --color-chart-6: #f59e0b;
-}
-
-/* Chart and data visualization utilities */
-.bg-chart-1 {
-  background-color: var(--color-chart-1);
-}
-.bg-chart-2 {
-  background-color: var(--color-chart-2);
-}
-.bg-chart-3 {
-  background-color: var(--color-chart-3);
-}
-.bg-chart-4 {
-  background-color: var(--color-chart-4);
-}
-.bg-chart-5 {
-  background-color: var(--color-chart-5);
-}
-.bg-chart-6 {
-  background-color: var(--color-chart-6);
-}
-
-.text-chart-1 {
-  color: var(--color-chart-1);
-}
-.text-chart-2 {
-  color: var(--color-chart-2);
-}
-.text-chart-3 {
-  color: var(--color-chart-3);
-}
-.text-chart-4 {
-  color: var(--color-chart-4);
-}
-.text-chart-5 {
-  color: var(--color-chart-5);
-}
-.text-chart-6 {
-  color: var(--color-chart-6);
-}
-
 /* Dashboard gradient backgrounds */
 .bg-gradient-dashboard {
   background: linear-gradient(
@@ -318,6 +208,7 @@ body {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -340,6 +231,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -350,6 +242,7 @@ body {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
