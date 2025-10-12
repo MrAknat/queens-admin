@@ -1,0 +1,18 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-push checks: type-check and lint"
+
+npm run type-check
+if [ $? -ne 0 ]; then
+  echo "Type-check failed. Aborting push."
+  exit 1
+fi
+
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "Lint failed. Aborting push."
+  exit 1
+fi
+
+echo "Pre-push checks passed. Proceeding with push."

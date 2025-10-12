@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
+    "prepare": "husky install",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "format": "biome format --write",
@@ -29,7 +30,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.2.4",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx,json,css,scss,md,mdx}": [
+      "npm run format",
+      "npm run lint:fix",
+      "git add"
+    ]
   }
 }

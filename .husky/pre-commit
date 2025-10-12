@@ -1,0 +1,15 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit: lint-staged (format only staged files)..."
+
+# Use npx to ensure local lint-staged is executed
+npx --no-install lint-staged
+
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+  echo "lint-staged failed. Aborting commit."
+  exit $RESULT
+fi
+
+echo "Pre-commit (lint-staged) passed. Proceeding with commit."
