@@ -1,7 +1,7 @@
-import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const inter = Inter({
@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Queens Control Panel',
-  description: 'Queens Control Panel',
+  title: "Queens Control Panel",
+  description: "Queens Control Panel",
 };
 
 export default function RootLayout({

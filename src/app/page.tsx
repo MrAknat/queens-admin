@@ -23,9 +23,7 @@ export default function Home() {
                 <Crown className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">
-                  Queens
-                </h1>
+                <h1 className="text-xl font-bold text-foreground">Queens</h1>
                 <p className="text-xs text-muted-foreground">
                   Queens Control Panel
                 </p>
@@ -46,15 +44,15 @@ export default function Home() {
           <div className="text-center space-y-6">
             <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
               <CheckCircle className="mr-2 h-4 w-4" />
-              Teal/Cyan Brand Theme Active
+              Professional Dashboard Theme Active
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-foreground tracking-tight">
-              Modern Admin Dashboard
+              Professional Data Dashboard
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Built with Next.js 15, TypeScript, and Tailwind CSS featuring a
-              comprehensive teal/cyan brand theme with perfect light/dark mode
-              support.
+              sophisticated blue & teal color scheme inspired by modern data
+              visualization interfaces.
             </p>
           </div>
           <div className="bg-card rounded-lg border shadow-sm p-8">
@@ -72,18 +70,18 @@ export default function Home() {
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 rounded bg-primary shadow-sm"></div>
                     <div>
-                      <div className="font-medium text-sm">Primary</div>
+                      <div className="font-medium text-sm">Primary Blue</div>
                       <div className="text-xs text-muted-foreground">
-                        #00BCD4
+                        #1D4ED8
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-primary-600 shadow-sm"></div>
+                    <div className="w-8 h-8 rounded bg-chart-1 shadow-sm"></div>
                     <div>
-                      <div className="font-medium text-sm">Primary 600</div>
+                      <div className="font-medium text-sm">Chart Blue</div>
                       <div className="text-xs text-muted-foreground">
-                        #0097A7
+                        #1E40AF
                       </div>
                     </div>
                   </div>
@@ -97,18 +95,18 @@ export default function Home() {
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 rounded bg-secondary shadow-sm"></div>
                     <div>
-                      <div className="font-medium text-sm">Secondary</div>
+                      <div className="font-medium text-sm">Secondary Teal</div>
                       <div className="text-xs text-muted-foreground">
-                        #006064
+                        #0891B2
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 rounded bg-accent shadow-sm"></div>
                     <div>
-                      <div className="font-medium text-sm">Accent</div>
+                      <div className="font-medium text-sm">Accent Blue</div>
                       <div className="text-xs text-muted-foreground">
-                        #B2EBF2
+                        #3B82F6
                       </div>
                     </div>
                   </div>
@@ -158,6 +156,8 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Status Cards with Semantic Colors */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-card border rounded-lg p-4 hover:shadow-md transition-all duration-200">
               <div className="flex items-center space-x-3">
