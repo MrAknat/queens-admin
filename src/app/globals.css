@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
+/* Custom CSS Variables for Theme System */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand colors - Teal/Cyan palette */
+  --color-primary: #00bcd4;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #006064;
+  --color-secondary-foreground: #ffffff;
+  --color-accent: #b2ebf2;
+  --color-accent-foreground: #1e293b;
+  
+  /* UI colors */
+  --color-background: #ffffff;
+  --color-foreground: #1e293b;
+  --color-muted: #f8fafc;
+  --color-muted-foreground: #64748b;
+  --color-card: #ffffff;
+  --color-card-foreground: #1e293b;
+  --color-border: #e2e8f0;
+  --color-input: #f1f5f9;
+  --color-ring: #00bcd4;
+  
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Border radius - minimal design */
+  --radius: 0.25rem;
+  
+  /* Typography */
+  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark theme */
+.dark {
+  --color-primary: #22d3ee;
+  --color-primary-foreground: #0f172a;
+  --color-secondary: #0891b2;
+  --color-secondary-foreground: #f1f5f9;
+  --color-accent: #164e63;
+  --color-accent-foreground: #f1f5f9;
+  
+  --color-background: #0f172a;
+  --color-foreground: #f1f5f9;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-card: #0f172a;
+  --color-card-foreground: #f1f5f9;
+  --color-border: #334155;
+  --color-input: #1e293b;
+  --color-ring: #22d3ee;
+  
+  --color-success: #4ade80;
+  --color-success-foreground: #0f172a;
+  --color-warning: #fbbf24;
+  --color-warning-foreground: #0f172a;
+  --color-destructive: #f87171;
+  --color-destructive-foreground: #0f172a;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Global styles using Tailwind v4 utilities */
+  /* Global styles */
+* {
+  border-color: var(--color-border, #e2e8f0);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background, #ffffff);
+  color: var(--color-foreground, #1e293b);
+  font-family: var(--font-family-sans);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+:focus-visible {
+  outline: 2px solid var(--color-ring, #00bcd4);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary, #00bcd4) 20%, transparent);
+  color: var(--color-foreground, #1e293b);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-muted, #f8fafc);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border, #e2e8f0);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-muted-foreground, #64748b) 30%, transparent);
+}
+
+/* Custom utility classes */
+.bg-primary { background-color: var(--color-primary); }
+.bg-primary\/10 { background-color: color-mix(in srgb, var(--color-primary) 10%, transparent); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-secondary\/10 { background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent); }
+.bg-accent { background-color: var(--color-accent); }
+.bg-accent\/5 { background-color: color-mix(in srgb, var(--color-accent) 5%, transparent); }
+.bg-accent\/20 { background-color: color-mix(in srgb, var(--color-accent) 20%, transparent); }
+.bg-background { background-color: var(--color-background); }
+.bg-foreground { background-color: var(--color-foreground); }
+.bg-muted { background-color: var(--color-muted); }
+.bg-card { background-color: var(--color-card); }
+.bg-success { background-color: var(--color-success); }
+.bg-success\/10 { background-color: color-mix(in srgb, var(--color-success) 10%, transparent); }
+.bg-warning { background-color: var(--color-warning); }
+.bg-warning\/10 { background-color: color-mix(in srgb, var(--color-warning) 10%, transparent); }
+.bg-error { background-color: var(--color-error); }
+.bg-error\/10 { background-color: color-mix(in srgb, var(--color-error) 10%, transparent); }
+.bg-info { background-color: var(--color-info); }
+.bg-info\/10 { background-color: color-mix(in srgb, var(--color-info) 10%, transparent); }
+
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-background { color: var(--color-background); }
+.text-foreground { color: var(--color-foreground); }
+.text-muted-foreground { color: var(--color-muted-foreground); }
+.text-card-foreground { color: var(--color-card-foreground); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-error { color: var(--color-error); }
+.text-info { color: var(--color-info); }
+
+.border-border { border-color: var(--color-border); }
+.ring-ring { --tw-ring-color: var(--color-ring); }
