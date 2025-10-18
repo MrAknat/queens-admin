@@ -28,6 +28,7 @@ body {
   --color-foreground: #0f172a;
   --color-muted: #f1f5f9;
   --color-muted-foreground: #475569;
+  --color-card-muted: #f1f5f9;
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
   --color-border: #cbd5e1;
@@ -81,6 +82,7 @@ body {
   --color-muted-foreground: #94a3b8;
   --color-card: #1e293b;
   --color-card-foreground: #f8fafc;
+  --color-card-muted: #334155;
   --color-border: #334155;
   --color-input: #374151;
   --color-ring: #3b82f6;

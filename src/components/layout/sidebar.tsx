@@ -78,7 +78,7 @@ export const Sidebar: React.FC = () => {
           isMobile && !sidebarCollapsed && "translate-x-0",
         )}
       >
-        <div className="flex h-16 items-center justify-start px-4">
+        <div className="flex h-16 items-center justify-start px-4 gap-1">
           <Link href="/dashboard" className="flex w-full items-center gap-2">
             <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <span className="text-sm font-bold">Q</span>
@@ -92,10 +92,10 @@ export const Sidebar: React.FC = () => {
             <Button
               variant="ghost"
               onClick={toggleSidebar}
-              className="h-8 w-8 p-0"
+              className="h-8 w-8 p-0 hover:bg-card-muted"
             >
               {sidebarCollapsed ? (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-3" />
               ) : (
                 <ChevronLeft className="h-4 w-4" />
               )}
@@ -122,7 +122,7 @@ export const Sidebar: React.FC = () => {
 
         <div className="p-4 space-y-4">
           <div className={cn("flex items-center gap-3", "justify-start")}>
-            <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-muted">
+            <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-card-muted">
               <span className="text-sm font-medium text-muted-foreground">
                 {getInitials(user?.firstName, user?.lastName)}
               </span>
