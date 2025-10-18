@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, Menu } from "lucide-react";
+import { LogoutButton } from "@/components/logoutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/stores/ui-store";
@@ -46,6 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
           <div className="hidden lg:block">
             <ThemeToggle />
           </div>
+          <LogoutButton />
         </div>
       </div>
     </header>

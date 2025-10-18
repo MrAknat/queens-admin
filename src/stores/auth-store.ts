@@ -4,21 +4,20 @@ import { devtools, persist } from "zustand/middleware";
 type User = {
   id: string;
   email: string;
-  name?: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
 };
 
 type AuthState = {
   user: User | null;
-  isAuthenticated: boolean;
   isLoading: boolean;
-  hasHydrated: boolean;
-  setHasHydrated: (hydrated: boolean) => void;
   login: (creds: {
     email: string;
     password: string;
-    remember?: boolean;
   }) => Promise<{ success: boolean; message?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  verifyAuth: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -28,40 +27,114 @@ export const useAuthStore = create<AuthState>()(
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        hasHydrated: false,
-        setHasHydrated: (hydrated) => set({ hasHydrated: hydrated }),
         login: async ({
           email,
           password,
-          remember,
         }: {
           email: string;
           password: string;
           remember?: boolean;
         }) => {
           set({ isLoading: true });
-          // Simulate API call
-          await new Promise((r) => setTimeout(r, 1000));
 
-          if (email === "admin@example.com" && password === "password") {
-            const user = { id: "1", email, name: "Admin" };
-            set({ user, isAuthenticated: true, isLoading: false });
-            return { success: true };
+          try {
+            const response = await fetch("/api/auth/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+              const user = {
+                id: data.user.id,
+                email: data.user.email,
+                firstName: data.user.firstName,
+                lastName: data.user.lastName,
+                roles: data.user.roles,
+              };
+
+              set({ user, isLoading: false });
+
+              return { success: true };
+            } else {
+              set({ isLoading: false });
+
+              return {
+                success: false,
+                message: data.message || "Login failed",
+              };
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+
+            set({ isLoading: false });
+
+            return {
+              success: false,
+              message: "Network error. Please try again.",
+            };
           }
-
-          set({ isLoading: false });
-          return { success: false, message: "Invalid credentials" };
         },
-        logout: () => set({ user: null, isAuthenticated: false }),
+        logout: async () => {
+          try {
+            await fetch("/api/auth/logout", {
+              method: "POST",
+              credentials: "include",
+            });
+          } catch (error) {
+            console.error("Logout error:", error);
+          } finally {
+            set({ user: null });
+          }
+        },
+        verifyAuth: async () => {
+          try {
+            const response = await fetch("/api/auth/profile", {
+              method: "GET",
+              credentials: "include",
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+
+              if (data.success && data.user) {
+                const user = {
+                  id: data.user.id,
+                  email: data.user.email,
+                  firstName: data.user.firstName,
+                  lastName: data.user.lastName,
+                  roles: data.user.roles,
+                };
+
+                set({ user });
+              } else {
+                set({ user: null });
+              }
+            } else {
+              set({ user: null });
+            }
+          } catch (error) {
+            console.error("Auth verification error:", error);
+
+            set({ user: null });
+          }
+        },
       }),
       {
-        name: "auth-storage",
+        name: "auth",
         partialize: (state) => ({
           user: state.user,
-          isAuthenticated: state.isAuthenticated,
         }),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => async (state) => {
+          await state?.verifyAuth();
         },
       },
     ),
@@ -70,8 +143,7 @@ export const useAuthStore = create<AuthState>()(
 
 export const useUser = () => useAuthStore((state) => state.user);
 export const useIsAuthenticated = () =>
-  useAuthStore((state) => state.isAuthenticated);
+  useAuthStore((state) => Boolean(state.user));
 export const useLogin = () => useAuthStore((state) => state.login);
 export const useLogout = () => useAuthStore((state) => state.logout);
 export const useIsLoading = () => useAuthStore((state) => state.isLoading);
-export const useHasHydrated = () => useAuthStore((state) => state.hasHydrated);

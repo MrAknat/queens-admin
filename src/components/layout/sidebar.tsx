@@ -50,6 +50,16 @@ export const Sidebar: React.FC = () => {
     }
   };
 
+  const getInitials = (firstName?: string, lastName?: string) => {
+    if (firstName || lastName) {
+      return `${firstName?.charAt(0).toUpperCase() || ""}${
+        lastName?.charAt(0).toUpperCase() || ""
+      }`;
+    }
+
+    return "?";
+  };
+
   return (
     <>
       {isMobile && !sidebarCollapsed && (
@@ -114,11 +124,11 @@ export const Sidebar: React.FC = () => {
           <div className={cn("flex items-center gap-3", "justify-start")}>
             <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-muted">
               <span className="text-sm font-medium text-muted-foreground">
-                A
+                {getInitials(user?.firstName, user?.lastName)}
               </span>
             </div>
             <div className="flex-1 min-w-0 overflow-hidden">
-              <p className="text-sm font-medium truncate">{user?.name}</p>
+              <p className="text-sm font-medium truncate">{`${user?.firstName} ${user?.lastName}`}</p>
               <p className="text-xs text-muted-foreground truncate">
                 {user?.email}
               </p>

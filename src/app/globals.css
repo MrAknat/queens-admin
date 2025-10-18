@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* Global styles using Tailwind v4 utilities */
-/* Global styles */
 * {
   border-color: var(--color-border, #e2e8f0);
 }
@@ -18,71 +16,45 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom CSS Variables for Theme System - Dashboard Inspired Colors */
 @theme {
-  /* Brand colors - Professional Blue & Teal palette inspired by data dashboard */
   --color-primary: #1d4ed8;
-  /* Deep blue - main dashboard color */
   --color-primary-foreground: #ffffff;
   --color-secondary: #0891b2;
-  /* Professional teal - secondary actions */
   --color-secondary-foreground: #ffffff;
   --color-accent: #3b82f6;
-  /* Medium blue - accents and highlights */
   --color-accent-foreground: #ffffff;
 
-  /* UI colors - Professional gray scale */
   --color-background: #ffffff;
   --color-foreground: #0f172a;
-  /* Darker foreground for better contrast */
   --color-muted: #f1f5f9;
-  /* Slightly warmer muted background */
   --color-muted-foreground: #475569;
-  /* Improved contrast for muted text */
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
   --color-border: #cbd5e1;
-  /* More visible borders */
   --color-input: #f8fafc;
   --color-ring: #1d4ed8;
-  /* Primary blue for focus rings */
 
-  /* Semantic colors - Dashboard inspired */
   --color-success: #059669;
-  /* Professional green */
   --color-success-foreground: #ffffff;
   --color-warning: #d97706;
-  /* Orange from dashboard highlight */
   --color-warning-foreground: #ffffff;
   --color-destructive: #dc2626;
-  /* Professional red */
   --color-destructive-foreground: #ffffff;
   --color-error: #dc2626;
   --color-info: #0284c7;
-  /* Dashboard info blue */
 
-  /* Border radius - minimal design */
   --radius: 0.25rem;
 
-  /* Typography */
   --font-family-sans:
     system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Data visualization colors - inspired by the dashboard gradient */
   --color-chart-1: #1e40af;
-  /* Deep blue */
   --color-chart-2: #3b82f6;
-  /* Medium blue */
   --color-chart-3: #60a5fa;
-  /* Light blue */
   --color-chart-4: #93c5fd;
-  /* Very light blue */
   --color-chart-5: #0891b2;
-  /* Teal */
   --color-chart-6: #d97706;
-  /* Dashboard orange */
 
-  /* Professional neutrals */
   --color-neutral-50: #f8fafc;
   --color-neutral-100: #f1f5f9;
   --color-neutral-200: #e2e8f0;
@@ -95,51 +67,33 @@ body {
   --color-neutral-900: #0f172a;
 }
 
-/* Dark theme - Professional dashboard dark mode */
 .dark {
   --color-primary: #3b82f6;
-  /* Brighter blue for dark mode visibility */
   --color-primary-foreground: #ffffff;
-  /* Light text for better contrast on blue background */
   --color-secondary: #06b6d4;
-  /* Bright teal for dark mode */
   --color-secondary-foreground: #0f172a;
   --color-accent: #60a5fa;
-  /* Light blue accent for dark mode */
   --color-accent-foreground: #0f172a;
 
   --color-background: #0f172a;
-  /* Dark navy background */
   --color-foreground: #f8fafc;
-  /* Light foreground */
   --color-muted: #1e293b;
-  /* Dark muted background */
   --color-muted-foreground: #94a3b8;
-  /* Muted text */
   --color-card: #1e293b;
-  /* Slightly lighter card background */
   --color-card-foreground: #f8fafc;
   --color-border: #334155;
-  /* Visible dark borders */
   --color-input: #374151;
-  /* Dark input backgrounds */
   --color-ring: #3b82f6;
-  /* Primary blue focus ring */
 
   --color-success: #10b981;
-  /* Bright green for dark mode */
   --color-success-foreground: #0f172a;
   --color-warning: #f59e0b;
-  /* Bright orange for dark mode */
   --color-warning-foreground: #0f172a;
   --color-destructive: #ef4444;
-  /* Bright red for dark mode */
   --color-destructive-foreground: #0f172a;
   --color-error: #ef4444;
   --color-info: #3b82f6;
-  /* Consistent info blue */
 
-  /* Dark mode chart colors */
   --color-chart-1: #3b82f6;
   --color-chart-2: #60a5fa;
   --color-chart-3: #93c5fd;
@@ -162,7 +116,6 @@ body {
   color: var(--color-foreground, #1e293b);
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -185,7 +138,6 @@ body {
   );
 }
 
-/* Dashboard gradient backgrounds */
 .bg-gradient-dashboard {
   background: linear-gradient(
     135deg,
@@ -202,7 +154,6 @@ body {
   );
 }
 
-/* Dropdown animations */
 @keyframes animate-in {
   from {
     opacity: 0;

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import * as React from "react";
+import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,33 +13,18 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  useHasHydrated,
-  useIsAuthenticated,
-  useIsLoading,
-  useLogin,
-} from "@/stores/auth-store";
+import { useIsLoading, useLogin } from "@/stores/auth-store";
 
 export default function LoginPage() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [remember, setRemember] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const hasHydrated = useHasHydrated();
   const login = useLogin();
   const isLoading = useIsLoading();
-  const isAuthenticated = useIsAuthenticated();
 
-  if (!hasHydrated) {
-    return null;
-  }
-
-  if (isAuthenticated) {
-    redirect("/dashboard");
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -47,7 +33,8 @@ export default function LoginPage() {
       return;
     }
 
-    const res = await login({ email, password, remember });
+    const res = await login({ email, password });
+
     if (!res.success) {
       setError(res.message || "Login failed");
     } else {
