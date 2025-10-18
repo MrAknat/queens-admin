@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { Report } from "@/components/reports/reports-table";
 
 interface UseFetchReportsProps {
@@ -14,7 +14,7 @@ export const useFetchReports = ({
   const [loading, setLoading] = useState(!initialData.length);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -33,7 +33,7 @@ export const useFetchReports = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [complete]);
 
   return { reports, error, loading, fetchReports };
 };
