@@ -33,7 +33,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange={false}
-          storageKey="queens-admin-theme"
+          storageKey="theme"
         >
           <div className="relative flex min-h-screen flex-col">{children}</div>
         </ThemeProvider>

@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,16 +12,31 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthStore } from "@/stores/auth-store";
+import {
+  useHasHydrated,
+  useIsAuthenticated,
+  useIsLoading,
+  useLogin,
+} from "@/stores/auth-store";
 
 export default function LoginPage() {
-  const login = useAuthStore((s) => s.login);
-  const isLoading = useAuthStore((s) => s.isLoading);
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [remember, setRemember] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  const hasHydrated = useHasHydrated();
+  const login = useLogin();
+  const isLoading = useIsLoading();
+  const isAuthenticated = useIsAuthenticated();
+
+  if (!hasHydrated) {
+    return null;
+  }
+
+  if (isAuthenticated) {
+    redirect("/dashboard");
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +48,11 @@ export default function LoginPage() {
     }
 
     const res = await login({ email, password, remember });
-    if (!res.success) setError(res.message || "Login failed");
+    if (!res.success) {
+      setError(res.message || "Login failed");
+    } else {
+      redirect("/dashboard");
+    }
   };
 
   return (

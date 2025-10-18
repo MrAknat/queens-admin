@@ -7,12 +7,14 @@ import {
   Settings,
   TrendingUp,
   Users,
+  Wrench,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/stores/auth-store";
 import { useUIStore } from "@/stores/ui-store";
 import { NavItem } from "./nav-item";
 
@@ -21,10 +23,12 @@ const navigationItems = [
   { href: "/dashboard/users", icon: Users, label: "Users" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
   { href: "/dashboard/statistics", icon: TrendingUp, label: "Statistics" },
+  { href: "/theme", icon: Wrench, label: "Theme" },
 ];
 
 export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, toggleSidebar, isMobile } = useUIStore();
+  const user = useUser();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -65,7 +69,7 @@ export const Sidebar: React.FC = () => {
         )}
       >
         <div className="flex h-16 items-center justify-start px-4">
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex w-full items-center gap-2">
             <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <span className="text-sm font-bold">Q</span>
             </div>
@@ -114,9 +118,9 @@ export const Sidebar: React.FC = () => {
               </span>
             </div>
             <div className="flex-1 min-w-0 overflow-hidden">
-              <p className="text-sm font-medium truncate">Admin User</p>
+              <p className="text-sm font-medium truncate">{user?.name}</p>
               <p className="text-xs text-muted-foreground truncate">
-                admin@queens.com
+                {user?.email}
               </p>
             </div>
           </div>
