@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-type User = {
+export type User = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   roles: string[];
+  createdAt: string;
+  lastLoginAt: string | null;
 };
 
 type AuthState = {
@@ -59,6 +61,8 @@ export const useAuthStore = create<AuthState>()(
                 firstName: data.user.firstName,
                 lastName: data.user.lastName,
                 roles: data.user.roles,
+                createdAt: data.user.createdAt,
+                lastLoginAt: data.user.lastLoginAt,
               };
 
               set({ user, isLoading: false });
@@ -112,6 +116,8 @@ export const useAuthStore = create<AuthState>()(
                   firstName: data.user.firstName,
                   lastName: data.user.lastName,
                   roles: data.user.roles,
+                  createdAt: data.user.createdAt,
+                  lastLoginAt: data.user.lastLoginAt,
                 };
 
                 set({ user });

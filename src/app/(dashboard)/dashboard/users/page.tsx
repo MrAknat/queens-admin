@@ -1,3 +1,5 @@
+import { UsersTable } from "@/components/users/users-table";
+
 export default function UsersPage() {
   return (
     <div className="space-y-6">
@@ -8,12 +10,7 @@ export default function UsersPage() {
         </p>
       </div>
 
-      <div className="rounded-lg border bg-card p-6">
-        <h3 className="text-lg font-semibold mb-4">User Management</h3>
-        <p className="text-sm text-muted-foreground">
-          User management interface will be implemented here.
-        </p>
-      </div>
+      <UsersTable />
     </div>
   );
 }
