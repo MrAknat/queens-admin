@@ -3,6 +3,8 @@
 import {
   ChevronLeft,
   ChevronRight,
+  ClipboardCheck,
+  ClipboardEdit,
   Home,
   Settings,
   TrendingUp,
@@ -20,6 +22,16 @@ import { NavItem } from "./nav-item";
 
 const navigationItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
+  {
+    href: "/dashboard/pending-evaluations",
+    icon: ClipboardEdit,
+    label: "Pending Evaluations",
+  },
+  {
+    href: "/dashboard/completed-evaluations",
+    icon: ClipboardCheck,
+    label: "Completed Evaluations",
+  },
   { href: "/dashboard/users", icon: Users, label: "Users" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
   { href: "/dashboard/statistics", icon: TrendingUp, label: "Statistics" },
