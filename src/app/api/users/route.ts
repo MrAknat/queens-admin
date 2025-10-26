@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get("limit") || "10";
     const search = searchParams.get("search") || "";
 
-    const apiUrl = new URL(`${API_BASE_URL}/api/v1/auth/users`);
+    const apiUrl = new URL(`${API_BASE_URL}/api/v1/users`);
 
     apiUrl.searchParams.set("page", page);
     apiUrl.searchParams.set("limit", limit);
