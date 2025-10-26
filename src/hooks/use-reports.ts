@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Types
 export interface Vehicle {
@@ -119,5 +119,36 @@ export function useReports(options: UseReportsOptions = {}) {
     enabled,
     placeholderData: (previousData) => previousData,
     refetchInterval: 30000,
+  });
+}
+
+export function useCreateDraftReport() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: {
+      plateNumber: string;
+      state: string;
+      region: string;
+    }) => {
+      const response = await fetch("/api/reports", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to create draft report: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: reportQueryKeys.lists() });
+    },
   });
 }

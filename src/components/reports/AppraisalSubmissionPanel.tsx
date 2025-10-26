@@ -3,6 +3,7 @@
 import { Car, Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useCreateDraftReport } from "@/hooks/use-reports";
 import { Card, CardContent, CardHeader } from "../ui/Card";
 import { FormField } from "../ui/form-field";
 import { FormGrid } from "../ui/form-grid";
@@ -32,26 +33,28 @@ export function AppraisalSubmissionPanel() {
     },
   });
 
+  const { mutate } = useCreateDraftReport();
+
   const onSubmit = async (data: AppraisalFormData) => {
     setIsSubmitting(true);
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Appraisal Data:", data);
-
-      reset();
-    } catch (error) {
-      console.error("Submission error:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    mutate(
+      { plateNumber: data.rego, region: data.region, state: data.state },
+      {
+        onSuccess: () => {
+          reset();
+        },
+        onSettled: () => {
+          setIsSubmitting(false);
+        },
+      },
+    );
   };
 
   return (
     <Card>
       <CardHeader variant="admin">
-        <h3 className="text-lg font-semibold">Admin Appraisal Submission</h3>
+        <h3 className="text-lg font-semibold">Manual Appraisal Submission</h3>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
