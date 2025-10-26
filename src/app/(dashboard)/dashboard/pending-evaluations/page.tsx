@@ -1,6 +1,9 @@
+import { AppraisalSubmissionPanel } from "@/components/reports/AppraisalSubmissionPanel";
 import { ReportsTable } from "@/components/reports/reports-table";
 
 export default function PendingEvaluationsPage() {
+  const isAdmin = true; // TODO: Replace with actual admin check logic
+
   return (
     <div className="space-y-6">
       <div>
@@ -11,6 +14,8 @@ export default function PendingEvaluationsPage() {
           Monitor and manage pending vehicle evaluation reports.
         </p>
       </div>
+
+      {isAdmin && <AppraisalSubmissionPanel />}
 
       <ReportsTable />
     </div>
