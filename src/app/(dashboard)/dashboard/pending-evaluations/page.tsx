@@ -1,5 +1,5 @@
 import { AppraisalSubmissionPanel } from "@/components/reports/AppraisalSubmissionPanel";
-import { ReportsTable } from "@/components/reports/reports-table";
+import { ReportsTable } from "@/components/reports/ReportsTable";
 
 export default function PendingEvaluationsPage() {
   const isAdmin = true; // TODO: Replace with actual admin check logic

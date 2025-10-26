@@ -1,4 +1,4 @@
-import { ReportsTable } from "@/components/reports/reports-table";
+import { ReportsTable } from "@/components/reports/ReportsTable";
 
 export default function CompletedEvaluationsPage() {
   return (
