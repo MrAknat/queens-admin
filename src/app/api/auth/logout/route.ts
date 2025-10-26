@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
 
     const setCookieHeaders = response.headers.getSetCookie();
 
-    console.log("🚀 ~ POST ~ setCookieHeaders:", setCookieHeaders);
     setCookieHeaders.forEach((cookie) => {
       nextResponse.headers.append("Set-Cookie", cookie);
     });
