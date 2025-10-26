@@ -12,7 +12,7 @@ export default function CompletedEvaluationsPage() {
         </p>
       </div>
 
-      <ReportsTable complete />
+      <ReportsTable />
     </div>
   );
 }

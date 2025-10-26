@@ -8,9 +8,10 @@ const API_BASE_URL =
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    console.log("🚀 ~ GET ~ searchParams:", searchParams);
 
     const response = await fetch(
-      `${API_BASE_URL}/api/v1/report?${searchParams}`,
+      `${API_BASE_URL}/api/v1/reports?${searchParams}`,
       {
         headers: {
           "Content-Type": "application/json",

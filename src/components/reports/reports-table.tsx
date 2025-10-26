@@ -14,80 +14,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useFetchReports } from "@/hooks/useFetchReports";
-
-interface Vehicle {
-  _id: string;
-  modelId: string;
-  vin: string;
-  rego: string;
-  odometer: number | null;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Lead {
-  _id: string;
-  externalId: string;
-  modelId: string;
-  listedAt: string;
-  removedAt: string;
-  sellerType: string;
-  state: string;
-  driveAwayPrice: number;
-  kms: number;
-  listingSources: string[];
-}
-
-export interface Report {
-  _id: string;
-  vehicle: Vehicle;
-  leads: Lead[];
-  slope: number | null;
-  intercept: number | null;
-  lastOdometer: number | null;
-  estimatedRetail: number | null;
-  tradeInEstimate: number | null;
-  isDraft: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { useReports } from "@/hooks/use-reports";
+import { Loader } from "../ui";
 
 interface ReportsTableProps {
-  initialData?: Report[];
-  complete?: boolean;
+  showDraftsOnly?: boolean;
 }
 
-export function ReportsTable({
-  initialData = [],
-  complete = false,
-}: ReportsTableProps) {
+export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredReports, setFilteredReports] = useState<Report[]>(initialData);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
-  const { reports, error, loading, fetchReports } = useFetchReports({
-    initialData,
-    complete,
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setPage(1);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const {
+    data: reportsResponse,
+    error,
+    isLoading,
+    isRefetching,
+    isError,
+    refetch,
+  } = useReports({
+    page,
+    limit,
+    search: debouncedSearchTerm,
+    isDraft: showDraftsOnly ? "true" : "false",
   });
 
-  useEffect(() => {
-    if (!initialData.length) {
-      fetchReports();
-    }
-  }, [initialData.length, fetchReports]);
-
-  useEffect(() => {
-    const filtered = reports.filter(
-      (report) =>
-        report.vehicle.description
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        report.vehicle.rego.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.vehicle.vin.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    setFilteredReports(filtered);
-  }, [reports, searchTerm]);
+  const reports = reportsResponse?.data || [];
 
   const formatCurrency = (amount: number | null) => {
     if (amount === null) return "N/A";
@@ -111,12 +74,12 @@ export function ReportsTable({
   const getStatusBadge = (isDraft: boolean) => {
     return (
       <Badge variant={isDraft ? "secondary" : "default"}>
-        {isDraft ? "Draft" : "Complete"}
+        {isDraft ? "Draft" : "Drafted"}
       </Badge>
     );
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Card>
         <CardHeader>
@@ -139,7 +102,7 @@ export function ReportsTable({
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <Card>
         <CardHeader>
@@ -148,11 +111,11 @@ export function ReportsTable({
         <CardContent>
           <div className="text-center py-8">
             <p className="text-muted-foreground">
-              Error loading reports: {error}
+              Error loading reports: {error?.message || "Unknown error"}
             </p>
             <button
               type="button"
-              onClick={fetchReports}
+              onClick={() => refetch()}
               className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
             >
               Try Again
@@ -166,9 +129,10 @@ export function ReportsTable({
   return (
     <Card>
       <CardHeader className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">
-          Reports ({filteredReports.length})
-        </h3>
+        <div className="flex items-center gap-4">
+          <h3 className="text-lg font-semibold">Reports ({reports.length})</h3>
+          {isRefetching && <Loader size="sm" />}
+        </div>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -180,7 +144,7 @@ export function ReportsTable({
         </div>
       </CardHeader>
       <CardContent>
-        {filteredReports.length === 0 ? (
+        {reports.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">
               {searchTerm
@@ -189,61 +153,99 @@ export function ReportsTable({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Vehicle</TableHead>
-                  <TableHead>Registration</TableHead>
-                  <TableHead>VIN</TableHead>
-                  <TableHead>Total Leads</TableHead>
-                  <TableHead>Estimated Retail</TableHead>
-                  <TableHead>Trade-in Estimate</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredReports.map((report) => (
-                  <TableRow key={report._id} className="hover:bg-muted/50">
-                    <TableCell>
-                      <div className="font-medium">
-                        {report.vehicle.description}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Model ID: {report.vehicle.modelId}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-mono">
-                      {report.vehicle.rego}
-                    </TableCell>
-                    <TableCell className="font-mono text-sm">
-                      {report.vehicle.vin}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{report.leads.length}</Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="font-medium">
-                        {formatCurrency(report.estimatedRetail)}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="font-medium">
-                        {formatCurrency(report.tradeInEstimate)}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(report.isDraft)}</TableCell>
-                    <TableCell className="text-sm">
-                      {formatDate(report.createdAt)}
-                    </TableCell>
+          <>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Vehicle</TableHead>
+                    <TableHead>Registration</TableHead>
+                    <TableHead>VIN</TableHead>
+                    <TableHead>Total Leads</TableHead>
+                    <TableHead>Estimated Retail</TableHead>
+                    <TableHead>Trade-in Estimate</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Created</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {reports.map((report) => (
+                    <TableRow key={report._id} className="hover:bg-muted/50">
+                      <TableCell>
+                        <div className="font-medium">
+                          {report.vehicle.description}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Model ID: {report.vehicle.modelId}
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-mono">
+                        {report.vehicle.rego}
+                      </TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {report.vehicle.vin}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{report.leads.length}</Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="font-medium">
+                          {formatCurrency(report.estimatedRetail)}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="font-medium">
+                          {formatCurrency(report.tradeInEstimate)}
+                        </div>
+                      </TableCell>
+                      <TableCell>{getStatusBadge(report.isDraft)}</TableCell>
+                      <TableCell className="text-sm">
+                        {formatDate(report.createdAt)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Pagination Controls */}
+            {reportsResponse && reportsResponse.totalPages > 1 && (
+              <div className="flex items-center justify-between px-2 py-4">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(page - 1) * limit + 1} to{" "}
+                  {Math.min(page * limit, reportsResponse.total)} of{" "}
+                  {reportsResponse.total} results
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm">
+                    Page {page} of {reportsResponse.totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPage((p) =>
+                        Math.min(reportsResponse.totalPages, p + 1),
+                      )
+                    }
+                    disabled={page >= reportsResponse.totalPages}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>

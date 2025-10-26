@@ -17,7 +17,7 @@ export default function PendingEvaluationsPage() {
 
       {isAdmin && <AppraisalSubmissionPanel />}
 
-      <ReportsTable />
+      <ReportsTable showDraftsOnly />
     </div>
   );
 }
