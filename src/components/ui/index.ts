@@ -1,6 +1,4 @@
-// Form Components
-
-// Base Components
+export { AdminSection } from "../admin-section";
 export { Badge } from "./badge";
 export { Button } from "./button";
 export { Card, CardContent, CardHeader } from "./Card";
@@ -10,13 +8,7 @@ export { FormGrid } from "./form-grid";
 export { FormSection } from "./form-section";
 export { Input } from "./input";
 export { Label } from "./label";
-// Loader Components
-export {
-  Loader,
-  type LoaderProps,
-  type LoaderSize,
-} from "./loader";
-// Input Components
+export { Loader, type LoaderProps, type LoaderSize } from "./loader";
 export { LoadingButton } from "./loading-button";
 export { Select, type SelectOption, type SelectProps } from "./select";
 export { Separator } from "./separator";

@@ -29,7 +29,7 @@ export function Button({
         "transition-all duration-200 ease-in-out",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "disabled:pointer-events-none disabled:opacity-50",
-        "border shadow-sm hover:shadow-md",
+        "border",
         // Variant styles
         {
           // Primary (Teal/Cyan)

@@ -15,7 +15,7 @@ export const LogoutButton = () => {
   return (
     <Button
       variant="outline"
-      className="text-destructive hover:bg-destructive cursor-pointer"
+      className="text-destructive hover:bg-destructive"
       onClick={handleClick}
     >
       <LogOut className="mr-2 h-4 w-4" />

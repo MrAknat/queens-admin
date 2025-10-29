@@ -42,7 +42,13 @@ export const NavItem: React.FC<NavItemProps> = ({
         )}
       />
 
-      <span className={cn(isActive && "text-primary", "overflow-hidden")}>
+      <span
+        className={cn(
+          "whitespace-nowrap",
+          isActive && "text-primary",
+          "overflow-hidden",
+        )}
+      >
         {label}
       </span>
     </Link>

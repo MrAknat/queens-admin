@@ -3,6 +3,7 @@
 import { Car, Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAdminContent } from "@/hooks/use-admin-content";
 import { useCreateDraftReport } from "@/hooks/use-reports";
 import { Card, CardContent, CardHeader } from "../ui/Card";
 import { FormField } from "../ui/form-field";
@@ -18,6 +19,7 @@ interface AppraisalFormData {
 }
 
 export function AppraisalSubmissionPanel() {
+  const { isAdminModeActive } = useAdminContent();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -34,6 +36,9 @@ export function AppraisalSubmissionPanel() {
   });
 
   const { mutate } = useCreateDraftReport();
+  if (!isAdminModeActive) {
+    return null;
+  }
 
   const onSubmit = async (data: AppraisalFormData) => {
     setIsSubmitting(true);

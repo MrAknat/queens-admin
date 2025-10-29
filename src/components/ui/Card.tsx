@@ -1,4 +1,4 @@
-import { Zap } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -32,16 +32,18 @@ export const CardHeader = ({
   ...props
 }: CardHeaderProps) => {
   const isAdmin = variant === "admin";
+
   return (
     <div
       className={cn(
         "p-6 border-b border-border flex items-center gap-2 mb-2",
+        isAdmin && "bg-warning/5 border-warning/20",
         className,
       )}
       {...props}
-      title={isAdmin ? "Admin Only" : undefined}
+      title={isAdmin ? "Admin Only Section" : undefined}
     >
-      {isAdmin && <Zap className="h-4 w-4 text-warning" />}
+      {isAdmin && <ShieldCheck className="h-4 w-4 text-warning" />}
       {children}
     </div>
   );

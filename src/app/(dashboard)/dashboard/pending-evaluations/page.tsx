@@ -2,8 +2,6 @@ import { AppraisalSubmissionPanel } from "@/components/reports/AppraisalSubmissi
 import { ReportsTable } from "@/components/reports/ReportsTable";
 
 export default function PendingEvaluationsPage() {
-  const isAdmin = true; // TODO: Replace with actual admin check logic
-
   return (
     <div className="space-y-6">
       <div>
@@ -15,7 +13,7 @@ export default function PendingEvaluationsPage() {
         </p>
       </div>
 
-      {isAdmin && <AppraisalSubmissionPanel />}
+      <AppraisalSubmissionPanel />
 
       <ReportsTable showDraftsOnly />
     </div>

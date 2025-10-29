@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, Menu } from "lucide-react";
+import { AdminModeToggle } from "@/components/admin-mode-toggle";
 import { LogoutButton } from "@/components/logoutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,11 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             <span className="absolute -top-1 -right-1 h-2 w-2 bg-destructive rounded-full"></span>
           </Button>
 
+          {/* TODO: Remove container divs passing className string to components directly */}
+          <div className="hidden lg:block">
+            <AdminModeToggle />
+          </div>
+          {/* TODO: Remove container divs passing className string to components directly */}
           <div className="hidden lg:block">
             <ThemeToggle />
           </div>

@@ -15,31 +15,50 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useAdminContent } from "@/hooks/use-admin-content";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/stores/auth-store";
 import { useUIStore } from "@/stores/ui-store";
 import { NavItem } from "./nav-item";
 
 const navigationItems = [
-  { href: "/dashboard", icon: Home, label: "Dashboard" },
+  { href: "/dashboard", icon: Home, label: "Dashboard", isAdminContent: false },
   {
     href: "/dashboard/pending-evaluations",
     icon: ClipboardEdit,
     label: "Pending Evaluations",
+    isAdminContent: false,
   },
   {
     href: "/dashboard/completed-evaluations",
     icon: ClipboardCheck,
     label: "Completed Evaluations",
+    isAdminContent: false,
   },
-  { href: "/dashboard/users", icon: Users, label: "Users" },
-  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
-  { href: "/dashboard/statistics", icon: TrendingUp, label: "Statistics" },
-  { href: "/theme", icon: Wrench, label: "Theme" },
+  {
+    href: "/dashboard/users",
+    icon: Users,
+    label: "Users",
+    isAdminContent: true,
+  },
+  {
+    href: "/dashboard/settings",
+    icon: Settings,
+    label: "Settings",
+    isAdminContent: false,
+  },
+  {
+    href: "/dashboard/statistics",
+    icon: TrendingUp,
+    label: "Statistics",
+    isAdminContent: false,
+  },
+  { href: "/theme", icon: Wrench, label: "Theme", isAdminContent: true },
 ];
 
 export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, toggleSidebar, isMobile } = useUIStore();
+  const { isAdminModeActive } = useAdminContent();
   const user = useUser();
 
   useEffect(() => {
@@ -118,16 +137,18 @@ export const Sidebar: React.FC = () => {
         <Separator />
 
         <nav className="flex-1 space-y-1 p-4">
-          {navigationItems.map((item) => (
-            <NavItem
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              collapsed={sidebarCollapsed}
-              onClick={handleNavClick}
-            />
-          ))}
+          {navigationItems.map((item) =>
+            item.isAdminContent && !isAdminModeActive ? null : (
+              <NavItem
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={item.label}
+                collapsed={sidebarCollapsed}
+                onClick={handleNavClick}
+              />
+            ),
+          )}
         </nav>
 
         <Separator />

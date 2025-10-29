@@ -114,7 +114,7 @@ export function useReports(options: UseReportsOptions = {}) {
   } = options;
 
   return useQuery({
-    queryKey: reportQueryKeys.list({ page, limit, search }),
+    queryKey: reportQueryKeys.list({ page, limit, search, isDraft }),
     queryFn: () => fetchReports({ page, limit, search, isDraft }),
     enabled,
     placeholderData: (previousData) => previousData,

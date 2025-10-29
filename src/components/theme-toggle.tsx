@@ -58,7 +58,6 @@ export function ThemeToggle() {
             "disabled:pointer-events-none disabled:opacity-50",
             "border border-input bg-card hover:bg-accent hover:text-accent-foreground",
             "h-9 px-3",
-            "shadow-sm hover:shadow-md",
           )}
         >
           <Sun className="h-4 w-4 opacity-60" />
@@ -101,9 +100,8 @@ export function ThemeToggle() {
           "transition-all duration-200 ease-in-out",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
-          "border border-input bg-card hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-card hover:bg-accent",
           "h-9 px-3",
-          "shadow-sm hover:shadow-md hover:scale-105 active:scale-95",
           "group",
           isOpen && "bg-accent text-accent-foreground",
         )}
@@ -111,14 +109,24 @@ export function ThemeToggle() {
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
-        <Icon className="h-4 w-4 text-primary transition-all duration-200 group-hover:scale-110" />
-        <span className="hidden sm:inline-block text-foreground">
+        <Icon
+          className={cn(
+            "h-4 w-4 text-primary transition-all duration-200 group-hover:text-accent-foreground",
+            isOpen && "text-accent-foreground",
+          )}
+        />
+        <span
+          className={cn(
+            "hidden sm:inline-block text-foreground transition-all duration-200 group-hover:text-accent-foreground",
+            isOpen && "text-accent-foreground",
+          )}
+        >
           {getCurrentLabel()}
         </span>
         <ChevronDown
           className={cn(
-            "h-3 w-3 text-muted-foreground transition-transform duration-200",
-            isOpen && "rotate-180",
+            "h-3 w-3 text-muted-foreground transition-all duration-200 group-hover:text-accent-foreground",
+            isOpen && "rotate-180 text-accent-foreground",
           )}
         />
       </button>

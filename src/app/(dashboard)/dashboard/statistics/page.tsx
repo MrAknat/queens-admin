@@ -2,9 +2,9 @@ export default function StatisticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Statistics</h2>
         <p className="text-muted-foreground">
-          Configure system settings and preferences.
+          Overview of key performance indicators and metrics.
         </p>
       </div>
 
@@ -55,9 +55,9 @@ export default function StatisticsPage() {
       </div>
 
       <div className="rounded-lg border bg-card p-6">
-        <h3 className="text-lg font-semibold mb-4">System Settings</h3>
+        <h3 className="text-lg font-semibold mb-4">Statistics</h3>
         <p className="text-sm text-muted-foreground">
-          System configuration options will be implemented here.
+          Detailed statistical charts and reports will be implemented here.
         </p>
       </div>
     </div>
