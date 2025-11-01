@@ -159,8 +159,6 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Vehicle</TableHead>
-                    <TableHead>Registration</TableHead>
-                    <TableHead>VIN</TableHead>
                     <TableHead>Total Leads</TableHead>
                     <TableHead>Estimated Retail</TableHead>
                     <TableHead>Trade-in Estimate</TableHead>
@@ -176,14 +174,11 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                           {report.vehicle.description}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          Model ID: {report.vehicle.modelId}
+                          {`${report.vehicle.rego}${report.lastOdometer ? ` • ${report.lastOdometer} km` : ""}`}
                         </div>
-                      </TableCell>
-                      <TableCell className="font-mono">
-                        {report.vehicle.rego}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {report.vehicle.vin}
+                        <div className="text-sm text-muted-foreground">
+                          {report.vehicle.vin}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
