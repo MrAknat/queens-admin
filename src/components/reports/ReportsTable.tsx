@@ -80,7 +80,10 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
 
   const getStatusBadge = (isDraft: boolean) => {
     return (
-      <Badge variant={isDraft ? "secondary" : "default"}>
+      <Badge
+        variant={isDraft ? "secondary" : "default"}
+        className="cursor-pointer"
+      >
         {isDraft ? "Draft" : "Drafted"}
       </Badge>
     );
@@ -167,8 +170,8 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                   <TableRow>
                     <TableHead>Vehicle</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead>Estimated Retail</TableHead>
-                    <TableHead>Trade-in Estimate</TableHead>
+                    <TableHead>Est. Retail</TableHead>
+                    <TableHead>Max Offer</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
