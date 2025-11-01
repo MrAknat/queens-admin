@@ -83,11 +83,12 @@ export function AppraisalsTable({
     });
   };
 
-  if (isLoading || isRefetching) {
+  if (isLoading) {
     return (
       <Card>
         <CardHeader>
           <h3 className="text-lg font-semibold">Appraisals</h3>
+          <Loader size="sm" />
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
