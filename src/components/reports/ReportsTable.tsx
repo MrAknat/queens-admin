@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
@@ -22,6 +23,8 @@ interface ReportsTableProps {
 }
 
 export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
+  const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [page, setPage] = useState(1);
@@ -76,17 +79,6 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
-
-  const getStatusBadge = (isDraft: boolean) => {
-    return (
-      <Badge
-        variant={isDraft ? "secondary" : "default"}
-        className="cursor-pointer"
-      >
-        {isDraft ? "Draft" : "Drafted"}
-      </Badge>
-    );
   };
 
   if (isLoading) {
@@ -183,7 +175,11 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                           {report.vehicle.description}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {`${report.vehicle.rego}${report.lastOdometer ? ` • ${report.lastOdometer} km` : ""}`}
+                          {`${report.vehicle.rego}${
+                            report.lastOdometer
+                              ? ` • ${report.lastOdometer} km`
+                              : ""
+                          }`}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           {report.vehicle.vin}
@@ -207,7 +203,19 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                           {formatCurrency(report.tradeInEstimate)}
                         </div>
                       </TableCell>
-                      <TableCell>{getStatusBadge(report.isDraft)}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={report.isDraft ? "secondary" : "default"}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            router.push(
+                              `todays-appraisals/${report.vehicle._id}`,
+                            )
+                          }
+                        >
+                          {report.isDraft ? "Draft" : "Drafted"}
+                        </Badge>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -24,31 +24,31 @@ import { NavItem } from "./nav-item";
 const navigationItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard", isAdminContent: false },
   {
-    href: "/dashboard/todays-appraisals",
+    href: "/todays-appraisals",
     icon: ClipboardEdit,
     label: "Today’s Appraisals",
     isAdminContent: false,
   },
   {
-    href: "/dashboard/past-appraisals",
+    href: "/past-appraisals",
     icon: ClipboardCheck,
     label: "Past Appraisals",
     isAdminContent: false,
   },
   {
-    href: "/dashboard/users",
+    href: "/users",
     icon: Users,
     label: "Users",
     isAdminContent: true,
   },
   {
-    href: "/dashboard/settings",
+    href: "/settings",
     icon: Settings,
     label: "Settings",
     isAdminContent: false,
   },
   {
-    href: "/dashboard/statistics",
+    href: "/statistics",
     icon: TrendingUp,
     label: "Statistics",
     isAdminContent: false,

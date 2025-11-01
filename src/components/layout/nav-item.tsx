@@ -22,7 +22,7 @@ export const NavItem: React.FC<NavItemProps> = ({
   onClick,
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = pathname.startsWith(href);
 
   return (
     <Link
