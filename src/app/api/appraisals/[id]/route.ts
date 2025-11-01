@@ -11,18 +11,16 @@ interface Params {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Params },
+  { params }: { params: Promise<Params> },
 ) {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/v1/appraisals/${params.id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: request.headers.get("cookie") || "",
-        },
+    const { id } = await params;
+    const response = await fetch(`${API_BASE_URL}/api/v1/appraisals/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: request.headers.get("cookie") || "",
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status}`);
