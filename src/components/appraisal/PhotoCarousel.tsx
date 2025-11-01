@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Camera, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 import type { PhotoData } from "./types";
 
 interface PhotoCarouselProps {
@@ -15,14 +16,14 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
-      align: "center",
+      align: "start",
       containScroll: "trimSnaps",
+      slidesToScroll: 1,
     },
     [Autoplay({ delay: 4000, stopOnInteraction: true })],
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -39,22 +40,19 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
     [emblaApi],
   );
 
-  const onInit = useCallback((emblaApi: any) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, []);
-
   const onSelect = useCallback((emblaApi: any) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
 
+  // Calculate number of pages based on 3 photos per viewport
+  const totalPages = Math.ceil(photos.length / 3);
+
   useEffect(() => {
     if (!emblaApi) return;
 
-    onInit(emblaApi);
     onSelect(emblaApi);
-    emblaApi.on("reInit", onInit);
     emblaApi.on("select", onSelect);
-  }, [emblaApi, onInit, onSelect]);
+  }, [emblaApi, onSelect]);
 
   if (!photos || photos.length === 0) {
     return (
@@ -75,6 +73,9 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
     );
   }
 
+  const buttonClassName =
+    "absolute top-1/2 -translate-y-1/2 bg-secondary opacity-30 hover:opacity-100 text-gray-800 rounded-full p-2 shadow-lg transition-all cursor-pointer";
+
   return (
     <Card>
       <CardHeader>
@@ -88,8 +89,11 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
           <div className="overflow-hidden rounded-lg" ref={emblaRef}>
             <div className="flex">
               {photos.map((photo) => (
-                <div key={photo.id} className="flex-[0_0_100%] min-w-0">
-                  <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                <div
+                  key={photo.id}
+                  className="min-w-0 md:flex-[0_0_calc(30%-0.75rem)] sm:flex-[0_0_calc(50%-0.5rem)] xs:flex-[0_0_100%]"
+                >
+                  <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mr-2 group">
                     <img
                       src={photo.url}
                       alt={photo.alt}
@@ -97,8 +101,8 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
                       loading="lazy"
                     />
                     {photo.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
-                        <p className="text-sm">{photo.caption}</p>
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2 group-hover:translate-y-[100%] transition-transform">
+                        <p className="text-xs">{photo.caption}</p>
                       </div>
                     )}
                   </div>
@@ -107,43 +111,25 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
             </div>
           </div>
 
-          {photos.length > 1 && (
+          {photos.length > 4 && (
             <>
               <button
                 type="button"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-primary bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all cursor-pointer"
+                className={cn(buttonClassName, "left-0")}
                 onClick={scrollPrev}
-                aria-label="Previous photo"
+                aria-label="Previous photos"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all cursor-pointer"
+                className={cn(buttonClassName, "right-0")}
                 onClick={scrollNext}
-                aria-label="Next photo"
+                aria-label="Next photos"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </>
-          )}
-
-          {photos.length > 1 && (
-            <div className="flex justify-center gap-2 mt-4">
-              {scrollSnaps.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === selectedIndex
-                      ? "bg-primary"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
-                  onClick={() => scrollTo(index)}
-                  aria-label={`Go to photo ${index + 1}`}
-                />
-              ))}
-            </div>
           )}
         </div>
       </CardContent>

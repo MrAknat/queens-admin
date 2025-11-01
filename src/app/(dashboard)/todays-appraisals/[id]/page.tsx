@@ -104,6 +104,18 @@ export default function TodaysAppraisalEditPage() {
       alt: "Engine bay",
       caption: "Engine compartment",
     },
+    {
+      id: "5",
+      url: "https://picsum.photos/800/600?random=5",
+      alt: "Trunk space",
+      caption: "Spacious trunk",
+    },
+    {
+      id: "6",
+      url: "https://picsum.photos/800/600?random=6",
+      alt: "Side profile",
+      caption: "Vehicle side profile",
+    },
   ];
 
   // Update form when appraisal data loads
