@@ -1,12 +1,22 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
+import { Loader } from "@/components/ui";
 import type { BreadcrumbItem } from "@/components/ui/Breadcrumbs";
+import { useAppraisal } from "@/hooks/useAppraisals";
 
 export default function TodaysAppraisalEditPage() {
   const params = useParams();
+  const router = useRouter();
+
   const appraisalId = params.id as string;
+
+  const {
+    data: appraisal,
+    isLoading,
+    isRefetching,
+  } = useAppraisal(appraisalId);
 
   // Custom breadcrumbs for this detail page
   const breadcrumbs: BreadcrumbItem[] = [
@@ -15,34 +25,19 @@ export default function TodaysAppraisalEditPage() {
       href: "/todays-appraisals",
     },
     {
-      label: `Appraisal #${appraisalId}`,
+      label: `${appraisal?.vehicle.description || ""}`,
       isCurrentPage: true,
+      ...(isRefetching || isLoading ? { icon: Loader } : {}),
     },
   ];
 
   return (
     <DashboardPageLayout
-      title={`Edit Appraisal #${appraisalId}`}
+      title={`Draft Appraisal`}
       description="Modify the details of the selected appraisal."
       breadcrumbs={breadcrumbs}
     >
-      {/* Placeholder for Today's Appraisal Edit Form */}
-      <div className="rounded-lg border bg-card p-6">
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Appraisal Details</h3>
-          <p className="text-muted-foreground">
-            Today's Appraisal Edit Form goes here. This would include fields
-            for:
-          </p>
-          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-            <li>Vehicle Information</li>
-            <li>Appraisal Values</li>
-            <li>Assessment Notes</li>
-            <li>Market Conditions</li>
-            <li>Final Recommendations</li>
-          </ul>
-        </div>
-      </div>
+      <span>Edit form for appraisal ID: {appraisalId}</span>
     </DashboardPageLayout>
   );
 }

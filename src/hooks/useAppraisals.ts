@@ -152,3 +152,21 @@ export function useCreateDraftAppraisal() {
     },
   });
 }
+
+export function useAppraisal(id: string) {
+  return useQuery({
+    queryKey: appraisalQueryKeys.detail(id),
+    queryFn: async () => {
+      const response = await fetch(`/api/appraisals/${id}`);
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch appraisal: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    enabled: !!id,
+  });
+}

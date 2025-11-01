@@ -212,9 +212,7 @@ export function AppraisalsTable({
                           variant={report.isDraft ? "secondary" : "default"}
                           className="cursor-pointer"
                           onClick={() =>
-                            router.push(
-                              `todays-appraisals/${report.vehicle._id}`,
-                            )
+                            router.push(`todays-appraisals/${report._id}`)
                           }
                         >
                           {report.isDraft ? "Draft" : "Drafted"}
