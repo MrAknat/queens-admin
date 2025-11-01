@@ -30,36 +30,34 @@ export function VehicleInfoCard({ control, vehicle }: VehicleInfoCardProps) {
         {/* Read-only vehicle details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <span className="text-sm font-medium text-gray-700">
-              Description
-            </span>
-            <p className="mt-1 text-sm text-gray-900">{vehicle.description}</p>
+            <span className="text-sm font-medium">Description</span>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {vehicle.description}
+            </p>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-700">
-              Registration
-            </span>
-            <p className="mt-1 text-sm text-gray-900 font-mono">
+            <span className="text-sm font-medium">Registration</span>
+            <p className="mt-1 text-sm text-muted-foreground font-mono">
               {vehicle.rego}
             </p>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-700">VIN</span>
-            <p className="mt-1 text-sm text-gray-900 font-mono">
+            <span className="text-sm font-medium">VIN</span>
+            <p className="mt-1 text-sm text-muted-foreground font-mono">
               {vehicle.vin}
             </p>
           </div>
           <div>
-            <span className="text-sm font-medium text-gray-700">Model ID</span>
-            <p className="mt-1 text-sm text-gray-900">{vehicle.modelId}</p>
+            <span className="text-sm font-medium">Model ID</span>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {vehicle.modelId}
+            </p>
           </div>
         </div>
 
         {/* Editable fields */}
         <div className="border-t pt-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-4">
-            Editable Fields
-          </h4>
+          <h4 className="text-sm font-medium mb-4">Editable Fields</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Controller
               name="odometer"

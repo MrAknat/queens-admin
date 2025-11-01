@@ -82,14 +82,15 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
               {photos.map((photo, photoIndex) => (
                 <div
                   key={photo.id}
-                  className="min-w-0 md:flex-[0_0_calc(30%-0.75rem)] sm:flex-[0_0_calc(50%-0.5rem)] xs:flex-[0_0_100%]"
+                  className="mr-2 min-w-0 min-h-[200px] md:flex-[0_0_calc(30%-0.75rem)] sm:flex-[0_0_calc(50%-0.5rem)] xs:flex-[0_0_100%]"
                 >
                   <button
                     type="button"
-                    className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mr-2 group cursor-pointer"
+                    className="relative w-full h-full aspect-video bg-gray-100 rounded-lg overflow-hidden group cursor-pointer"
                     onClick={() => handlePhotoClick(photoIndex)}
                   >
                     <Image
+                      fill
                       src={photo.url}
                       alt={photo.alt}
                       className="w-full h-full object-cover"

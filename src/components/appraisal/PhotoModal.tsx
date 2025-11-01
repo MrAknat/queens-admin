@@ -272,8 +272,9 @@ export function PhotoModal({
       )}
 
       {/* Main image container */}
-      <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+      <div className="relative w-[50%] h-[50%] flex items-center justify-center">
         <Image
+          fill
           src={currentPhoto.url}
           alt={currentPhoto.alt}
           className="max-w-full max-h-full object-contain transition-transform duration-200"

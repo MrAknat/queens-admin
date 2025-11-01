@@ -83,7 +83,7 @@ export function AppraisalsTable({
     });
   };
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <Card>
         <CardHeader>

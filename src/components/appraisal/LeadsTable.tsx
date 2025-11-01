@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import {
@@ -78,18 +78,9 @@ export function LeadsTable({ leads }: LeadsTableProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-primary" />
-            <h3 className="font-medium">Market Leads ({leads.length})</h3>
-          </div>
-          <div className="text-sm text-gray-500">
-            Avg Price:{" "}
-            {formatCurrency(
-              leads.reduce((sum, lead) => sum + lead.driveAwayPrice, 0) /
-                leads.length,
-            )}
-          </div>
+        <div className="flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-primary" />
+          <h3 className="font-medium">Market Leads ({leads.length})</h3>
         </div>
       </CardHeader>
       <CardContent>
@@ -97,25 +88,21 @@ export function LeadsTable({ leads }: LeadsTableProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>External ID</TableHead>
+                <TableHead>ID</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Kilometers</TableHead>
                 <TableHead>Seller Type</TableHead>
                 <TableHead>State</TableHead>
                 <TableHead>Listed Date</TableHead>
                 <TableHead>Sources</TableHead>
-                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {leads.map((lead) => (
+              {leads.map((lead, index) => (
                 <TableRow key={lead._id} className="hover:bg-muted/50">
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm">
-                        {lead.externalId}
-                      </span>
-                      <ExternalLink className="h-3 w-3 text-gray-400" />
+                      <span className="font-mono text-sm">{index + 1}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -124,13 +111,15 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="font-mono">{formatKms(lead.kms)} km</span>
+                    <span className="font-mono whitespace-nowrap">
+                      {formatKms(lead.kms)} km
+                    </span>
                   </TableCell>
                   <TableCell>{getSellerTypeBadge(lead.sellerType)}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{lead.state}</Badge>
                   </TableCell>
-                  <TableCell className="text-sm">
+                  <TableCell className="text-sm whitespace-nowrap">
                     {formatDate(lead.listedAt)}
                   </TableCell>
                   <TableCell>
@@ -146,51 +135,10 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                       ))}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={lead.removedAt ? "destructive" : "default"}
-                      className="text-xs"
-                    >
-                      {lead.removedAt ? "Removed" : "Active"}
-                    </Badge>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
-
-        {/* Summary statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 p-4 bg-gray-50 rounded-lg">
-          <div className="text-center">
-            <div className="text-lg font-semibold text-primary">
-              {formatCurrency(Math.min(...leads.map((l) => l.driveAwayPrice)))}
-            </div>
-            <div className="text-sm text-gray-600">Lowest Price</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-semibold text-primary">
-              {formatCurrency(Math.max(...leads.map((l) => l.driveAwayPrice)))}
-            </div>
-            <div className="text-sm text-gray-600">Highest Price</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-semibold text-primary">
-              {formatKms(
-                Math.round(
-                  leads.reduce((sum, lead) => sum + lead.kms, 0) / leads.length,
-                ),
-              )}{" "}
-              km
-            </div>
-            <div className="text-sm text-gray-600">Avg Kilometers</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-semibold text-primary">
-              {leads.filter((l) => !l.removedAt).length}
-            </div>
-            <div className="text-sm text-gray-600">Active Listings</div>
-          </div>
         </div>
       </CardContent>
     </Card>
