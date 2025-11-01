@@ -71,6 +71,13 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
     });
   };
 
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString("en-AU", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const getStatusBadge = (isDraft: boolean) => {
     return (
       <Badge variant={isDraft ? "secondary" : "default"}>
@@ -159,10 +166,10 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Vehicle</TableHead>
+                    <TableHead>Date</TableHead>
                     <TableHead>Estimated Retail</TableHead>
                     <TableHead>Trade-in Estimate</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -179,6 +186,14 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                           {report.vehicle.vin}
                         </div>
                       </TableCell>
+                      <TableCell className="text-sm">
+                        <div className="font-medium">
+                          {formatDate(report.createdAt)}
+                        </div>
+                        <div className="text-sm">
+                          {formatTime(report.createdAt)}
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <div className="font-medium">
                           {formatCurrency(report.estimatedRetail)}
@@ -190,9 +205,6 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                         </div>
                       </TableCell>
                       <TableCell>{getStatusBadge(report.isDraft)}</TableCell>
-                      <TableCell className="text-sm">
-                        {formatDate(report.createdAt)}
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
