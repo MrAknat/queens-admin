@@ -7,10 +7,9 @@ import { useForm } from "react-hook-form";
 import { LeadsTable } from "@/components/appraisal/LeadsTable";
 import { PhotoCarousel } from "@/components/appraisal/PhotoCarousel";
 import { ReconditioningForm } from "@/components/appraisal/ReconditioningForm";
-import {
-  type AppraisalFormData,
-  LeadData,
-  type PhotoData,
+import type {
+  AppraisalFormData,
+  PhotoData,
 } from "@/components/appraisal/types";
 import { VehicleInfoCard } from "@/components/appraisal/VehicleInfoCard";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
@@ -37,9 +36,8 @@ export default function TodaysAppraisalEditPage() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isDirty: hasUnsavedChanges },
+    formState: { isValid, isDirty: hasUnsavedChanges },
     reset,
-    watch,
   } = useForm<AppraisalFormData>({
     mode: "onChange",
     defaultValues: {
@@ -51,13 +49,8 @@ export default function TodaysAppraisalEditPage() {
       registration: "",
     },
   });
-  console.log("🚀 ~ TodaysAppraisalEditPage ~ isDirty:", hasUnsavedChanges);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Watch all form fields to detect changes
-  const formData = watch();
-
   const {
     showModal,
     handleNavigation,

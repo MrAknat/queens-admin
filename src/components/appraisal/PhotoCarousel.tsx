@@ -2,10 +2,12 @@
 
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import { Camera, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Camera, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import Image from "next/image";
+import { useCallback, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
+import { PhotoModal } from "./PhotoModal";
 import type { PhotoData } from "./types";
 
 interface PhotoCarouselProps {
@@ -23,7 +25,8 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
     [Autoplay({ delay: 4000, stopOnInteraction: true })],
   );
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPhotoIndex, setModalPhotoIndex] = useState(0);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -33,26 +36,14 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  const scrollTo = useCallback(
-    (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
-    },
-    [emblaApi],
-  );
+  const handlePhotoClick = (photoIndex: number) => {
+    setModalPhotoIndex(photoIndex);
+    setIsModalOpen(true);
+  };
 
-  const onSelect = useCallback((emblaApi: any) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, []);
-
-  // Calculate number of pages based on 3 photos per viewport
-  const totalPages = Math.ceil(photos.length / 3);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    onSelect(emblaApi);
-    emblaApi.on("select", onSelect);
-  }, [emblaApi, onSelect]);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   if (!photos || photos.length === 0) {
     return (
@@ -88,24 +79,35 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
         <div className="relative">
           <div className="overflow-hidden rounded-lg" ref={emblaRef}>
             <div className="flex">
-              {photos.map((photo) => (
+              {photos.map((photo, photoIndex) => (
                 <div
                   key={photo.id}
                   className="min-w-0 md:flex-[0_0_calc(30%-0.75rem)] sm:flex-[0_0_calc(50%-0.5rem)] xs:flex-[0_0_100%]"
                 >
-                  <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mr-2 group">
-                    <img
+                  <button
+                    type="button"
+                    className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mr-2 group cursor-pointer"
+                    onClick={() => handlePhotoClick(photoIndex)}
+                  >
+                    <Image
                       src={photo.url}
                       alt={photo.alt}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
+
+                    {/* Hover overlay with zoom icon */}
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-all duration-200 flex items-center justify-center">
+                      <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    </div>
+
+                    {/* Caption */}
                     {photo.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2 group-hover:translate-y-[100%] transition-transform">
+                      <div className="absolute bottom-0 left-0 right-0 bg-black opacity-90 text-white p-2 group-hover:translate-y-[100%] transition-transform">
                         <p className="text-xs">{photo.caption}</p>
                       </div>
                     )}
-                  </div>
+                  </button>
                 </div>
               ))}
             </div>
@@ -133,6 +135,14 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
           )}
         </div>
       </CardContent>
+
+      {/* Photo Modal */}
+      <PhotoModal
+        photos={photos}
+        initialIndex={modalPhotoIndex}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </Card>
   );
 }

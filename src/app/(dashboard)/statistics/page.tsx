@@ -1,8 +1,6 @@
 "use client";
 
-import { Download, Filter } from "lucide-react";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { Button } from "@/components/ui/button";
 
 export default function StatisticsPage() {
   return (

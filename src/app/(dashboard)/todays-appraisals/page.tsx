@@ -3,7 +3,6 @@
 import { AppraisalSubmissionPanel } from "@/components/appraisals/AppraisalSubmissionPanel";
 import { AppraisalsTable } from "@/components/appraisals/AppraisalsTable";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { AdminSection } from "@/components/ui";
 
 export default function TodaysAppraisalsPage() {
   return (
