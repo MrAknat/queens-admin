@@ -159,11 +159,10 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Vehicle</TableHead>
-                    <TableHead>Total Leads</TableHead>
                     <TableHead>Estimated Retail</TableHead>
                     <TableHead>Trade-in Estimate</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
+                    <TableHead>Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -178,11 +177,6 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                         </div>
                         <div className="text-sm text-muted-foreground">
                           {report.vehicle.vin}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">{report.leads.length}</Badge>
                         </div>
                       </TableCell>
                       <TableCell>
