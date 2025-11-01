@@ -3,15 +3,12 @@
 import { ShieldCheck, ShieldOff } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
-import {
-  useAdminModeEnabled,
-  useHasAdminRole,
-  useToggleAdminMode,
-} from "@/stores/admin-store";
+import { useAdminModeEnabled, useToggleAdminMode } from "@/stores/admin-store";
 
 export function AdminModeToggle() {
-  const hasAdminRole = useHasAdminRole();
+  const { hasAdminRole } = useUserRoles();
   const adminModeEnabled = useAdminModeEnabled();
   const toggleAdminMode = useToggleAdminMode();
   const [mounted, setMounted] = React.useState(false);

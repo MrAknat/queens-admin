@@ -35,9 +35,6 @@ export const useAdminModeEnabled = () =>
 export const useToggleAdminMode = () =>
   useAdminStore((state) => state.toggleAdminMode);
 
-export const useSetAdminMode = () =>
-  useAdminStore((state) => state.setAdminMode);
-
 export const useIsAdminModeActive = () => {
   const user = useUser();
   const adminModeEnabled = useAdminModeEnabled();
@@ -45,10 +42,4 @@ export const useIsAdminModeActive = () => {
   const hasAdminRole = user?.roles?.includes("admin") ?? false;
 
   return hasAdminRole && adminModeEnabled;
-};
-
-export const useHasAdminRole = () => {
-  const user = useUser();
-
-  return user?.roles?.includes("admin") ?? false;
 };

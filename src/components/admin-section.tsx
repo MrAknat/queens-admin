@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useAdminContent } from "@/hooks/use-admin-content";
+import { useAdminContent } from "@/hooks/useAdminContent";
 
 interface AdminSectionProps {
   children: ReactNode;

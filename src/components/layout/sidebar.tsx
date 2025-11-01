@@ -15,50 +15,52 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useAdminContent } from "@/hooks/use-admin-content";
+import { useAdminContent } from "@/hooks/useAdminContent";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/stores/auth-store";
 import { useUIStore } from "@/stores/ui-store";
 import { NavItem } from "./nav-item";
 
 const navigationItems = [
-  { href: "/dashboard", icon: Home, label: "Dashboard", isAdminContent: false },
+  { href: "/dashboard", icon: Home, label: "Dashboard", roles: [] },
   {
     href: "/todays-appraisals",
     icon: ClipboardEdit,
     label: "Today’s Appraisals",
-    isAdminContent: false,
+    roles: [],
   },
   {
     href: "/past-appraisals",
     icon: ClipboardCheck,
     label: "Past Appraisals",
-    isAdminContent: false,
+    roles: [],
   },
   {
     href: "/users",
     icon: Users,
     label: "Users",
-    isAdminContent: true,
+    roles: ["admin"],
   },
   {
     href: "/settings",
     icon: Settings,
     label: "Settings",
-    isAdminContent: false,
+    roles: ["admin"],
   },
   {
     href: "/statistics",
     icon: TrendingUp,
     label: "Statistics",
-    isAdminContent: false,
+    roles: [],
   },
-  { href: "/theme", icon: Wrench, label: "Theme", isAdminContent: true },
+  { href: "/theme", icon: Wrench, label: "Theme", roles: ["developer"] },
 ];
 
 export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, toggleSidebar, isMobile } = useUIStore();
   const { isAdminModeActive } = useAdminContent();
+  const { hasAnyRole } = useUserRoles();
   const user = useUser();
 
   useEffect(() => {
@@ -137,17 +139,18 @@ export const Sidebar: React.FC = () => {
         <Separator />
 
         <nav className="flex-1 space-y-1 p-4">
-          {navigationItems.map((item) =>
-            item.isAdminContent && !isAdminModeActive ? null : (
-              <NavItem
-                key={item.href}
-                href={item.href}
-                icon={item.icon}
-                label={item.label}
-                collapsed={sidebarCollapsed}
-                onClick={handleNavClick}
-              />
-            ),
+          {navigationItems.map(
+            (item) =>
+              hasAnyRole(item.roles) && (
+                <NavItem
+                  key={item.href}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
+                  collapsed={sidebarCollapsed}
+                  onClick={handleNavClick}
+                />
+              ),
           )}
         </nav>
 
