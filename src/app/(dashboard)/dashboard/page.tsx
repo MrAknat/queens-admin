@@ -14,7 +14,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Pending Evaluations
+                Today's Appraisals
               </p>
               <p className="text-2xl font-bold">135</p>
             </div>
@@ -25,7 +25,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Completed Evaluations
+                Past Appraisals
               </p>
               <p className="text-2xl font-bold">98,712</p>
             </div>

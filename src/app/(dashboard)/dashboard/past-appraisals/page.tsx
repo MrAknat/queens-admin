@@ -1,14 +1,12 @@
 import { ReportsTable } from "@/components/reports/ReportsTable";
 
-export default function CompletedEvaluationsPage() {
+export default function PastAppraisalsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">
-          Complete Evaluations
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight">Past Appraisals</h2>
         <p className="text-muted-foreground">
-          Monitor and manage coplete vehicle evaluation reports.
+          Monitor and manage past appraisals.
         </p>
       </div>
 

@@ -24,15 +24,15 @@ import { NavItem } from "./nav-item";
 const navigationItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard", isAdminContent: false },
   {
-    href: "/dashboard/pending-evaluations",
+    href: "/dashboard/todays-appraisals",
     icon: ClipboardEdit,
-    label: "Pending Evaluations",
+    label: "Today’s Appraisals",
     isAdminContent: false,
   },
   {
-    href: "/dashboard/completed-evaluations",
+    href: "/dashboard/past-appraisals",
     icon: ClipboardCheck,
-    label: "Completed Evaluations",
+    label: "Past Appraisals",
     isAdminContent: false,
   },
   {
