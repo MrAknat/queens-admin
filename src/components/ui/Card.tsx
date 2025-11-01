@@ -16,7 +16,7 @@ export const Card = ({ children, className }: CardProps) => {
   return (
     <div
       className={cn(
-        "bg-card border border-border rounded-sm shadow-sm p-0 overflow-hidden",
+        "bg-card border border-border rounded-sm p-0 overflow-hidden",
         className,
       )}
     >
@@ -49,8 +49,18 @@ export const CardHeader = ({
   );
 };
 
-export const CardContent = ({ children }: { children: React.ReactNode }) => (
-  <div className="p-6">{children}</div>
+interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+export const CardContent = ({
+  children,
+  className,
+  ...props
+}: CardContentProps) => (
+  <div className={cn("p-6", className)} {...props}>
+    {children}
+  </div>
 );
 
 export const CardFooter = ({ children }: { children: React.ReactNode }) => (

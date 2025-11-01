@@ -1,13 +1,15 @@
+"use client";
+
+import { Download, Filter } from "lucide-react";
+import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
+import { Button } from "@/components/ui/button";
+
 export default function StatisticsPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Statistics</h2>
-        <p className="text-muted-foreground">
-          Overview of key performance indicators and metrics.
-        </p>
-      </div>
-
+    <DashboardPageLayout
+      title="Statistics"
+      description="Overview of key performance indicators and metrics."
+    >
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card p-6">
           <div className="flex items-center justify-between">
@@ -60,6 +62,6 @@ export default function StatisticsPage() {
           Detailed statistical charts and reports will be implemented here.
         </p>
       </div>
-    </div>
+    </DashboardPageLayout>
   );
 }

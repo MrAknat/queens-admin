@@ -1,4 +1,10 @@
 export { AdminSection } from "../admin-section";
+export {
+  type BreadcrumbItem,
+  Breadcrumbs,
+  type BreadcrumbsProps,
+  DashboardBreadcrumbs,
+} from "./Breadcrumbs";
 export { Badge } from "./badge";
 export { Button } from "./button";
 export { Card, CardContent, CardHeader } from "./Card";
