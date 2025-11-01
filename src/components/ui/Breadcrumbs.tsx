@@ -42,7 +42,7 @@ export interface BreadcrumbsProps {
  * // Manual breadcrumbs
  * <Breadcrumbs
  *   items={[
- *     { label: "Reports", href: "/dashboard/reports" },
+ *     { label: "Appraisals", href: "/dashboard/appraisals" },
  *     { label: "Pending Evaluations", href: "/dashboard/pending-evaluations" },
  *     { label: "Report #123", isCurrentPage: true }
  *   ]}

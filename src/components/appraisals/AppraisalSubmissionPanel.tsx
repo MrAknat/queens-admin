@@ -4,7 +4,7 @@ import { Car, Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAdminContent } from "@/hooks/use-admin-content";
-import { useCreateDraftReport } from "@/hooks/use-reports";
+import { useCreateDraftAppraisal } from "@/hooks/useAppraisals";
 import { Card, CardContent, CardHeader } from "../ui/Card";
 import { FormField } from "../ui/form-field";
 import { FormGrid } from "../ui/form-grid";
@@ -35,7 +35,7 @@ export function AppraisalSubmissionPanel() {
     },
   });
 
-  const { mutate } = useCreateDraftReport();
+  const { mutate } = useCreateDraftAppraisal();
   if (!isAdminModeActive) {
     return null;
   }

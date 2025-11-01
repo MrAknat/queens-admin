@@ -1,8 +1,8 @@
 "use client";
 
+import { AppraisalSubmissionPanel } from "@/components/appraisals/AppraisalSubmissionPanel";
+import { AppraisalsTable } from "@/components/appraisals/AppraisalsTable";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { AppraisalSubmissionPanel } from "@/components/reports/AppraisalSubmissionPanel";
-import { ReportsTable } from "@/components/reports/ReportsTable";
 import { AdminSection } from "@/components/ui";
 
 export default function TodaysAppraisalsPage() {
@@ -13,7 +13,7 @@ export default function TodaysAppraisalsPage() {
     >
       <AppraisalSubmissionPanel />
 
-      <ReportsTable showDraftsOnly />
+      <AppraisalsTable showDraftsOnly />
     </DashboardPageLayout>
   );
 }

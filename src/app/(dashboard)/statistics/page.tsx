@@ -59,7 +59,7 @@ export default function StatisticsPage() {
       <div className="rounded-lg border bg-card p-6">
         <h3 className="text-lg font-semibold mb-4">Statistics</h3>
         <p className="text-sm text-muted-foreground">
-          Detailed statistical charts and reports will be implemented here.
+          Detailed statistical charts and appraisals will be implemented here.
         </p>
       </div>
     </DashboardPageLayout>

@@ -25,7 +25,7 @@ export interface Lead {
   listingSources: string[];
 }
 
-export interface Report {
+export interface Appraisal {
   _id: string;
   vehicle: Vehicle;
   leads: Lead[];
@@ -39,8 +39,8 @@ export interface Report {
   updatedAt: string;
 }
 
-export interface ReportsResponse {
-  data: Report[];
+export interface AppraisalsResponse {
+  data: Appraisal[];
   total: number;
   page: number;
   limit: number;
@@ -48,22 +48,22 @@ export interface ReportsResponse {
 }
 
 // Query Keys
-export const reportQueryKeys = {
-  all: ["reports"] as const,
-  lists: () => [...reportQueryKeys.all, "list"] as const,
+export const appraisalQueryKeys = {
+  all: ["appraisals"] as const,
+  lists: () => [...appraisalQueryKeys.all, "list"] as const,
   list: (filters: Record<string, any>) =>
-    [...reportQueryKeys.lists(), { filters }] as const,
-  details: () => [...reportQueryKeys.all, "detail"] as const,
-  detail: (id: string) => [...reportQueryKeys.details(), id] as const,
+    [...appraisalQueryKeys.lists(), { filters }] as const,
+  details: () => [...appraisalQueryKeys.all, "detail"] as const,
+  detail: (id: string) => [...appraisalQueryKeys.details(), id] as const,
 };
 
 // API Functions
-async function fetchReports(params: {
+async function fetchAppraisals(params: {
   page?: number;
   limit?: number;
   isDraft?: "true" | "false";
   search?: string;
-}): Promise<ReportsResponse> {
+}): Promise<AppraisalsResponse> {
   const searchParams = new URLSearchParams();
 
   if (params.page) searchParams.set("page", params.page.toString());
@@ -71,11 +71,11 @@ async function fetchReports(params: {
   if (params.search) searchParams.set("search", params.search);
   if (params.isDraft) searchParams.set("isDraft", params.isDraft);
 
-  const response = await fetch(`/api/reports?${searchParams.toString()}`);
+  const response = await fetch(`/api/appraisals?${searchParams.toString()}`);
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch reports: ${response.status} ${response.statusText}`,
+      `Failed to fetch appraisals: ${response.status} ${response.statusText}`,
     );
   }
 
@@ -96,7 +96,7 @@ async function fetchReports(params: {
 }
 
 // Custom Hooks
-export interface UseReportsOptions {
+export interface UseAppraisalsOptions {
   page?: number;
   limit?: number;
   isDraft?: "true" | "false";
@@ -104,7 +104,7 @@ export interface UseReportsOptions {
   enabled?: boolean;
 }
 
-export function useReports(options: UseReportsOptions = {}) {
+export function useAppraisals(options: UseAppraisalsOptions = {}) {
   const {
     page = 1,
     limit = 10,
@@ -114,15 +114,15 @@ export function useReports(options: UseReportsOptions = {}) {
   } = options;
 
   return useQuery({
-    queryKey: reportQueryKeys.list({ page, limit, search, isDraft }),
-    queryFn: () => fetchReports({ page, limit, search, isDraft }),
+    queryKey: appraisalQueryKeys.list({ page, limit, search, isDraft }),
+    queryFn: () => fetchAppraisals({ page, limit, search, isDraft }),
     enabled,
     placeholderData: (previousData) => previousData,
     refetchInterval: 30000,
   });
 }
 
-export function useCreateDraftReport() {
+export function useCreateDraftAppraisal() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -131,7 +131,7 @@ export function useCreateDraftReport() {
       state: string;
       region: string;
     }) => {
-      const response = await fetch("/api/reports", {
+      const response = await fetch("/api/appraisals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,14 +141,14 @@ export function useCreateDraftReport() {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to create draft report: ${response.status} ${response.statusText}`,
+          `Failed to create draft appraisal: ${response.status} ${response.statusText}`,
         );
       }
 
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: reportQueryKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
     },
   });
 }

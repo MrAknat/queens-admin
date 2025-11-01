@@ -1,5 +1,5 @@
+import { AppraisalsTable } from "@/components/appraisals/AppraisalsTable";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { ReportsTable } from "@/components/reports/ReportsTable";
 
 export default function PastAppraisalsPage() {
   return (
@@ -7,7 +7,7 @@ export default function PastAppraisalsPage() {
       title="Past Appraisals"
       description="Monitor and manage past appraisals."
     >
-      <ReportsTable />
+      <AppraisalsTable />
     </DashboardPageLayout>
   );
 }

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     const response = await fetch(
-      `${API_BASE_URL}/api/v1/reports?${searchParams}`,
+      `${API_BASE_URL}/api/v1/appraisals?${searchParams}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -27,10 +27,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Reports API error:", error);
+    console.error("Appraisals API error:", error);
 
     return NextResponse.json(
-      { error: "Failed to fetch reports" },
+      { error: "Failed to fetch appraisals" },
       { status: 500 },
     );
   }
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const response = await fetch(`${API_BASE_URL}/api/v1/reports`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/appraisals`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,10 +60,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    console.error("Reports API error:", error);
+    console.error("Appraisals API error:", error);
 
     return NextResponse.json(
-      { error: "Failed to create report" },
+      { error: "Failed to create appraisal" },
       { status: 500 },
     );
   }

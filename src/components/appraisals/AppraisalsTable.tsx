@@ -15,14 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useReports } from "@/hooks/use-reports";
+import { useAppraisals } from "@/hooks/useAppraisals";
 import { Loader } from "../ui";
 
-interface ReportsTableProps {
+interface AppraisalsTableProps {
   showDraftsOnly?: boolean;
 }
 
-export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
+export function AppraisalsTable({
+  showDraftsOnly = false,
+}: AppraisalsTableProps) {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,20 +42,20 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
   }, [searchTerm]);
 
   const {
-    data: reportsResponse,
+    data: appraisalsResponse,
     error,
     isLoading,
     isRefetching,
     isError,
     refetch,
-  } = useReports({
+  } = useAppraisals({
     page,
     limit,
     search: debouncedSearchTerm,
     isDraft: showDraftsOnly ? "true" : "false",
   });
 
-  const reports = reportsResponse?.data || [];
+  const appraisals = appraisalsResponse?.data || [];
 
   const formatCurrency = (amount: number | null) => {
     if (amount === null) return "N/A";
@@ -85,7 +87,7 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
     return (
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold">Reports</h3>
+          <h3 className="text-lg font-semibold">Appraisals</h3>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -108,12 +110,12 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
     return (
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold">Reports</h3>
+          <h3 className="text-lg font-semibold">Appraisals</h3>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
             <p className="text-muted-foreground">
-              Error loading reports: {error?.message || "Unknown error"}
+              Error loading appraisals: {error?.message || "Unknown error"}
             </p>
             <button
               type="button"
@@ -132,13 +134,15 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
     <Card>
       <CardHeader className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h3 className="text-lg font-semibold">Reports ({reports.length})</h3>
+          <h3 className="text-lg font-semibold">
+            Appraisals ({appraisals.length})
+          </h3>
           {isRefetching && <Loader size="sm" />}
         </div>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search reports..."
+            placeholder="Search appraisals..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-8"
@@ -146,12 +150,12 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {reports.length === 0 ? (
+        {appraisals.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">
               {searchTerm
-                ? "No reports match your search."
-                : "No reports found."}
+                ? "No appraisals match your search."
+                : "No appraisals found."}
             </p>
           </div>
         ) : (
@@ -168,7 +172,7 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {reports.map((report) => (
+                  {appraisals.map((report) => (
                     <TableRow key={report._id} className="hover:bg-muted/50">
                       <TableCell>
                         <div className="font-medium">
@@ -223,12 +227,12 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
             </div>
 
             {/* Pagination Controls */}
-            {reportsResponse && reportsResponse.totalPages > 1 && (
+            {appraisalsResponse && appraisalsResponse.totalPages > 1 && (
               <div className="flex items-center justify-between px-2 py-4">
                 <div className="text-sm text-muted-foreground">
                   Showing {(page - 1) * limit + 1} to{" "}
-                  {Math.min(page * limit, reportsResponse.total)} of{" "}
-                  {reportsResponse.total} results
+                  {Math.min(page * limit, appraisalsResponse.total)} of{" "}
+                  {appraisalsResponse.total} results
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
@@ -240,16 +244,16 @@ export function ReportsTable({ showDraftsOnly = false }: ReportsTableProps) {
                     Previous
                   </button>
                   <span className="text-sm">
-                    Page {page} of {reportsResponse.totalPages}
+                    Page {page} of {appraisalsResponse.totalPages}
                   </span>
                   <button
                     type="button"
                     onClick={() =>
                       setPage((p) =>
-                        Math.min(reportsResponse.totalPages, p + 1),
+                        Math.min(appraisalsResponse.totalPages, p + 1),
                       )
                     }
-                    disabled={page >= reportsResponse.totalPages}
+                    disabled={page >= appraisalsResponse.totalPages}
                     className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
                   >
                     Next

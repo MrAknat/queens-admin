@@ -27,10 +27,10 @@ export interface DashboardPageLayoutProps {
  * ```tsx
  * <DashboardPageLayout
  *   title="Pending Evaluations"
- *   description="Monitor and manage pending vehicle evaluation reports."
+ *   description="Monitor and manage pending vehicle evaluation appraisals."
  *   actions={<Button>Add New</Button>}
  * >
- *   <ReportsTable />
+ *   <AppraisalsTable />
  * </DashboardPageLayout>
  * ```
  */
