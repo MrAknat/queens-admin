@@ -205,7 +205,7 @@ export function AppraisalsTable({
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">
-                          {formatCurrency(report.tradeInEstimate)}
+                          {formatCurrency(report.maxOffer || null)}
                         </div>
                       </TableCell>
                       <TableCell>

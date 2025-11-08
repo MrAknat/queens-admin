@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -106,6 +107,8 @@ export function UnsavedChangesModal({
 
 // Hook for managing unsaved changes navigation
 export function useUnsavedChanges(hasUnsavedChanges: boolean) {
+  const router = useRouter();
+
   const [showModal, setShowModal] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<
     (() => void) | null
@@ -120,9 +123,29 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean) {
       }
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [hasUnsavedChanges]);
+    const handlePopState = (e: PopStateEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        // Push the current state back to prevent navigation
+        window.history.pushState(null, "", window.location.href);
+        setShowModal(true);
+        setPendingNavigation(() => () => router.back());
+      }
+    };
+
+    if (hasUnsavedChanges) {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      window.addEventListener("popstate", handlePopState);
+
+      // Prevent the initial popstate from navigating
+      window.history.pushState(null, "", window.location.href);
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [hasUnsavedChanges, router]);
 
   const handleNavigation = (navigationFn: () => void) => {
     if (hasUnsavedChanges) {

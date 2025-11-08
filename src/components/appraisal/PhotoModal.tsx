@@ -32,7 +32,6 @@ export function PhotoModal({
 }: PhotoModalProps) {
   const [mounted, setMounted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  console.log("🚀 ~ PhotoModal ~ currentIndex:", currentIndex);
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });

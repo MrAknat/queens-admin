@@ -1,17 +1,16 @@
 "use client";
 
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { LeadsTable } from "@/components/appraisal/LeadsTable";
 import { PhotoCarousel } from "@/components/appraisal/PhotoCarousel";
-import { ReconditioningForm } from "@/components/appraisal/ReconditioningForm";
 import type {
   AppraisalFormData,
   PhotoData,
 } from "@/components/appraisal/types";
-import { VehicleInfoCard } from "@/components/appraisal/VehicleInfoCard";
+import { UpdateFormPanel } from "@/components/appraisal/UpdateSidePanel";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
 import {
   UnsavedChangesModal,
@@ -20,11 +19,16 @@ import {
 import { Loader, LoadingButton } from "@/components/ui";
 import type { BreadcrumbItem } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/button";
-import { useAppraisal } from "@/hooks/useAppraisals";
+import {
+  useAppraisal,
+  useCompleteAppraisal,
+  useUpdateAppraisal,
+} from "@/hooks/useAppraisals";
 
 export default function TodaysAppraisalEditPage() {
   const params = useParams();
   const router = useRouter();
+
   const appraisalId = params.id as string;
 
   const {
@@ -33,32 +37,54 @@ export default function TodaysAppraisalEditPage() {
     isRefetching,
   } = useAppraisal(appraisalId);
 
+  const { mutate: updateAppraisal } = useUpdateAppraisal(appraisalId);
+  const { mutate: completeAppraisal } = useCompleteAppraisal(appraisalId);
+
+  const initialFormData: AppraisalFormData = useMemo(
+    () => ({
+      odometer: appraisal?.lastOdometer || 0,
+      maxOffer: appraisal?.maxOffer || 0,
+      detail: appraisal?.reconditioningData?.detail || "",
+      paintPanel: appraisal?.reconditioningData?.paintPanel || "",
+      rwc: appraisal?.reconditioningData?.rwc || "",
+      registration: appraisal?.reconditioningData?.registration || "",
+    }),
+    [appraisal],
+  );
+
   const {
     control,
     handleSubmit,
-    formState: { isValid, isDirty: hasUnsavedChanges },
+    formState: { isValid, isDirty: hasUnsavedChanges, isSubmitting },
     reset,
   } = useForm<AppraisalFormData>({
     mode: "onChange",
-    defaultValues: {
-      odometer: 0,
-      maxOffer: 0,
-      detail: "",
-      paintPanel: "",
-      rwc: "",
-      registration: "",
-    },
+    values: initialFormData,
+    defaultValues: initialFormData,
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const {
-    showModal,
-    handleNavigation,
-    handleConfirmNavigation,
-    handleCancelNavigation,
-  } = useUnsavedChanges(hasUnsavedChanges);
+  useEffect(() => {
+    reset(initialFormData);
+  }, [reset, initialFormData]);
 
-  // Custom breadcrumbs for this detail page
+  const onSubmit = async (data: AppraisalFormData) => {
+    try {
+      updateAppraisal(data);
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
+  };
+
+  const handleOkeyDraft = () => {
+    try {
+      completeAppraisal();
+
+      router.back();
+    } catch (error) {
+      console.error("Okey Draft error:", error);
+    }
+  };
+
   const breadcrumbs: BreadcrumbItem[] = [
     {
       label: "Today's Appraisals",
@@ -111,39 +137,12 @@ export default function TodaysAppraisalEditPage() {
     },
   ];
 
-  // Update form when appraisal data loads
-  useEffect(() => {
-    if (appraisal) {
-      reset({
-        odometer: appraisal.vehicle.odometer || 0,
-        maxOffer: 0, // This would come from appraisal data
-        detail: "",
-        paintPanel: "",
-        rwc: "",
-        registration: "",
-      });
-    }
-  }, [appraisal, reset]);
-
-  const onSubmit = async (data: AppraisalFormData) => {
-    setIsSubmitting(true);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Form submitted:", data);
-
-      // Reset form dirty state after successful submission
-      reset(data);
-
-      // Show success message or redirect
-      alert("Appraisal updated successfully!");
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("Error updating appraisal. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const {
+    showModal,
+    handleNavigation,
+    handleConfirmNavigation,
+    handleCancelNavigation,
+  } = useUnsavedChanges(hasUnsavedChanges);
 
   const handleBackNavigation = () => {
     handleNavigation(() => router.back());
@@ -181,22 +180,15 @@ export default function TodaysAppraisalEditPage() {
     );
   }
 
+  const appraisalTitle = `${appraisal?.vehicle.description} • ${appraisal?.vehicle.rego} • ${appraisal?.vehicle.vin}`;
+
   return (
     <DashboardPageLayout
-      title={`Edit Appraisal`}
+      title={appraisalTitle}
       description="Complete the vehicle appraisal by updating the information below."
       breadcrumbs={breadcrumbs}
-    >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <VehicleInfoCard control={control} vehicle={appraisal.vehicle} />
-
-        <PhotoCarousel photos={mockPhotos} />
-
-        <ReconditioningForm control={control} />
-
-        <LeadsTable leads={appraisal.leads} />
-
-        <div className="flex items-center justify-between pt-6 border-t">
+      actions={
+        <div className="flex items-center justify-between gap-2">
           <Button
             type="button"
             variant="outline"
@@ -206,24 +198,37 @@ export default function TodaysAppraisalEditPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Appraisals
           </Button>
-
-          <div className="flex items-center gap-3">
-            {hasUnsavedChanges && (
-              <span className="text-sm text-amber-600">
-                You have unsaved changes
-              </span>
-            )}
-            <LoadingButton
-              type="submit"
-              loading={isSubmitting}
-              loadingText="Saving..."
-              disabled={!isValid || isSubmitting}
-              icon={Save}
-              label="Save Appraisal"
-            />
-          </div>
+          <LoadingButton
+            type="button"
+            onClick={handleOkeyDraft}
+            variant="primary"
+            loading={isSubmitting}
+            loadingText="Okey Draft"
+            disabled={
+              !appraisal?.lastOdometer ||
+              !appraisal?.maxOffer ||
+              hasUnsavedChanges
+            }
+            icon={Check}
+            label="Okey Draft"
+          />
         </div>
-      </form>
+      }
+    >
+      <div className="flex flex-col xl:flex-row gap-6">
+        <section className="flex-1 flex flex-col gap-6">
+          <LeadsTable leads={appraisal?.leads} />
+
+          <PhotoCarousel photos={mockPhotos} />
+        </section>
+        <UpdateFormPanel
+          onSubmit={handleSubmit(onSubmit)}
+          control={control}
+          isSubmitting={isSubmitting}
+          isValid={isValid}
+          hasUnsavedChanges={hasUnsavedChanges}
+        />
+      </div>
 
       <UnsavedChangesModal
         isOpen={showModal}

@@ -34,6 +34,7 @@ export interface Appraisal {
   lastOdometer: number | null;
   estimatedRetail: number | null;
   tradeInEstimate: number | null;
+  maxOffer: number | null;
   isDraft: boolean;
   createdAt: string;
   updatedAt: string;
@@ -168,5 +169,64 @@ export function useAppraisal(id: string) {
       return response.json();
     },
     enabled: !!id,
+  });
+}
+
+export function useUpdateAppraisal(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: Partial<Appraisal>) => {
+      const response = await fetch(`/api/appraisals/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update appraisal: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(id),
+      });
+      queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
+    },
+  });
+}
+
+export function useCompleteAppraisal(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/appraisals/complete/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to complete appraisal: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(id),
+      });
+      queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
+    },
   });
 }

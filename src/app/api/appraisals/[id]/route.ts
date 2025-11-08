@@ -38,3 +38,37 @@ export async function GET(
     );
   }
 }
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<Params> },
+) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+
+    const response = await fetch(`${API_BASE_URL}/api/v1/appraisals/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: request.headers.get("cookie") || "",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (error) {
+    console.error("Appraisal API error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to update appraisal" },
+      { status: 500 },
+    );
+  }
+}

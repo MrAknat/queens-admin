@@ -1,9 +1,9 @@
 import type { LucideIcon } from "lucide-react";
-import { type ButtonHTMLAttributes, forwardRef } from "react";
-import { Button } from "./button";
+import { forwardRef } from "react";
+import { Button, type ButtonProps } from "./button";
 import { Loader } from "./loader";
 
-interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface LoadingButtonProps extends ButtonProps {
   loading?: boolean;
   loadingText?: string;
   icon?: LucideIcon;
