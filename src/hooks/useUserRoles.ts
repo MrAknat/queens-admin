@@ -24,5 +24,12 @@ export const useUserRoles = () => {
     requiresAdminRole: (roles: string[]) => {
       return roles.includes("admin");
     },
+    requiresAnyNonAdminRole: (roles: string[]) => {
+      if (!roles || roles.length === 0) {
+        return true;
+      }
+
+      return roles.some((role) => role !== "admin");
+    },
   };
 };

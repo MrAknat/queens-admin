@@ -61,8 +61,12 @@ export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, toggleSidebar, isMobile } = useUIStore();
   const { isAdminModeActive } = useAdminContent();
   const user = useUser();
-  const { hasAnyRole, requiresAdminRole, hasRole, hasAdminRole } =
-    useUserRoles();
+  const {
+    hasAnyRole,
+    requiresAdminRole,
+    hasAdminRole,
+    requiresAnyNonAdminRole,
+  } = useUserRoles();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -144,7 +148,7 @@ export const Sidebar: React.FC = () => {
             (isAdminModeActive &&
               requiresAdminRole(item.roles) &&
               hasAdminRole()) ||
-            (hasAnyRole(item.roles) && !requiresAdminRole(item.roles)) ? (
+            (hasAnyRole(item.roles) && requiresAnyNonAdminRole(item.roles)) ? (
               <NavItem
                 key={item.href}
                 href={item.href}
