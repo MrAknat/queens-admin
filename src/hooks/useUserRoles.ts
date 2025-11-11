@@ -21,5 +21,8 @@ export const useUserRoles = () => {
     hasAdminRole: () => {
       return user?.roles?.includes("admin") ?? false;
     },
+    requiresAdminRole: (roles: string[]) => {
+      return roles.includes("admin");
+    },
   };
 };

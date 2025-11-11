@@ -60,8 +60,9 @@ const navigationItems = [
 export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, toggleSidebar, isMobile } = useUIStore();
   const { isAdminModeActive } = useAdminContent();
-  const { hasAnyRole } = useUserRoles();
   const user = useUser();
+  const { hasAnyRole, requiresAdminRole, hasRole, hasAdminRole } =
+    useUserRoles();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -139,18 +140,20 @@ export const Sidebar: React.FC = () => {
         <Separator />
 
         <nav className="flex-1 space-y-1 p-4">
-          {navigationItems.map(
-            (item) =>
-              hasAnyRole(item.roles) && (
-                <NavItem
-                  key={item.href}
-                  href={item.href}
-                  icon={item.icon}
-                  label={item.label}
-                  collapsed={sidebarCollapsed}
-                  onClick={handleNavClick}
-                />
-              ),
+          {navigationItems.map((item) =>
+            (isAdminModeActive &&
+              requiresAdminRole(item.roles) &&
+              hasAdminRole()) ||
+            (hasAnyRole(item.roles) && !requiresAdminRole(item.roles)) ? (
+              <NavItem
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={item.label}
+                collapsed={sidebarCollapsed}
+                onClick={handleNavClick}
+              />
+            ) : null,
           )}
         </nav>
 
