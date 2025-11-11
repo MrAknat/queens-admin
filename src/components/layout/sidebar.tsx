@@ -37,6 +37,12 @@ const navigationItems = [
     roles: [],
   },
   {
+    href: "/max-offer-configurator",
+    icon: Wrench,
+    label: "Max Offer Configurator",
+    roles: ["admin", "manager"],
+  },
+  {
     href: "/users",
     icon: Users,
     label: "Users",
