@@ -23,7 +23,7 @@ export default function DashboardLayout({
       <div
         className={cn(
           "transition-all duration-300 ease-in-out",
-          sidebarCollapsed ? "lg:ml-16" : "lg:ml-60",
+          sidebarCollapsed ? "md:ml-16" : "md:ml-60",
           isMobile && "ml-0",
         )}
       >
