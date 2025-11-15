@@ -32,7 +32,9 @@ export interface Appraisal {
   slope: number | null;
   intercept: number | null;
   lastOdometer: number | null;
+  avgLeadsOdometer: number | null;
   estimatedRetail: number | null;
+  avgLeadsEstimatedRetail: number | null;
   tradeInEstimate: number | null;
   maxOffer: number | null;
   isDraft: boolean;

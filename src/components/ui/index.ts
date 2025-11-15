@@ -12,6 +12,8 @@ export { Checkbox } from "./checkbox";
 export { FormField } from "./form-field";
 export { FormGrid } from "./form-grid";
 export { FormSection } from "./form-section";
+// Icons
+export { AvgIcon } from "./icons/AvgIcon";
 export { Input } from "./input";
 export { Label } from "./label";
 export { Loader, type LoaderProps, type LoaderSize } from "./loader";

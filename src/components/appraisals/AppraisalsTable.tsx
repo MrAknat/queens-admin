@@ -16,7 +16,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppraisals } from "@/hooks/useAppraisals";
-import { Loader } from "../ui";
+import { formatCurrency } from "@/lib/utils";
+import { AvgIcon, Loader } from "../ui";
+import { EstimatedRetailCell } from "./EstimatedRetailCell";
 
 interface AppraisalsTableProps {
   showDraftsOnly?: boolean;
@@ -56,17 +58,6 @@ export function AppraisalsTable({
   });
 
   const appraisals = appraisalsResponse?.data || [];
-
-  const formatCurrency = (amount: number | null) => {
-    if (amount === null) return "N/A";
-
-    return new Intl.NumberFormat("en-AU", {
-      style: "currency",
-      currency: "AUD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-AU", {
@@ -173,50 +164,55 @@ export function AppraisalsTable({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {appraisals.map((report) => (
-                    <TableRow key={report._id} className="hover:bg-muted/50">
+                  {appraisals.map((appraisal) => (
+                    <TableRow key={appraisal._id} className="hover:bg-muted/50">
                       <TableCell>
                         <div className="font-medium">
-                          {report.vehicle.description}
+                          {appraisal.vehicle.description}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {`${report.vehicle.rego}${
-                            report.lastOdometer
-                              ? ` • ${report.lastOdometer} km`
+                          {`${appraisal.vehicle.rego}${
+                            appraisal.lastOdometer
+                              ? ` • ${appraisal.lastOdometer} km`
                               : ""
                           }`}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {report.vehicle.vin}
+                          {appraisal.vehicle.vin}
                         </div>
                       </TableCell>
                       <TableCell className="text-sm">
                         <div className="font-medium">
-                          {formatDate(report.createdAt)}
+                          {formatDate(appraisal.createdAt)}
                         </div>
                         <div className="text-sm">
-                          {formatTime(report.createdAt)}
+                          {formatTime(appraisal.createdAt)}
                         </div>
                       </TableCell>
+                      <EstimatedRetailCell
+                        value={appraisal.estimatedRetail}
+                        fallbackValue={appraisal.avgLeadsEstimatedRetail}
+                      />
                       <TableCell>
-                        <div className="font-medium">
-                          {formatCurrency(report.estimatedRetail)}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-medium">
-                          {formatCurrency(report.maxOffer || null)}
-                        </div>
+                        {appraisal.maxOffer ? (
+                          <div className="font-medium">
+                            {formatCurrency(appraisal.maxOffer)}
+                          </div>
+                        ) : (
+                          <span className="font-medium text-muted-foreground">
+                            N/A
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={report.isDraft ? "secondary" : "default"}
+                          variant={appraisal.isDraft ? "secondary" : "default"}
                           className="cursor-pointer"
                           onClick={() =>
-                            router.push(`todays-appraisals/${report._id}`)
+                            router.push(`todays-appraisals/${appraisal._id}`)
                           }
                         >
-                          {report.isDraft ? "Draft" : "Drafted"}
+                          {appraisal.isDraft ? "Draft" : "Drafted"}
                         </Badge>
                       </TableCell>
                     </TableRow>
