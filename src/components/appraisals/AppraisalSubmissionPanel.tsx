@@ -16,6 +16,7 @@ interface AppraisalFormData {
   rego: string;
   region: string;
   state: string;
+  lastOdometer?: string;
 }
 
 export function AppraisalSubmissionPanel() {
@@ -55,6 +56,7 @@ export function ManualAppraisalSubmissionForm() {
     defaultValues: {
       region: "au",
       state: "QLD",
+      lastOdometer: "",
     },
   });
 
@@ -64,7 +66,12 @@ export function ManualAppraisalSubmissionForm() {
     setIsSubmitting(true);
 
     mutate(
-      { plateNumber: data.rego, region: data.region, state: data.state },
+      {
+        plateNumber: data.rego,
+        region: data.region,
+        state: data.state,
+        lastOdometer: data.lastOdometer,
+      },
       {
         onSuccess: () => {
           reset();
@@ -125,6 +132,19 @@ export function ManualAppraisalSubmissionForm() {
               })}
               placeholder="Enter state"
               className={errors.state ? "border-destructive" : ""}
+            />
+          </FormField>
+
+          <FormField
+            id="lastOdometer"
+            label="Last Known Odometer"
+            error={errors.lastOdometer?.message}
+          >
+            <Input
+              id="lastOdometer"
+              {...register("lastOdometer")}
+              placeholder="Enter odometer readings"
+              className={errors.lastOdometer ? "border-destructive" : ""}
             />
           </FormField>
         </FormGrid>

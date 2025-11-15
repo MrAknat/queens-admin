@@ -133,6 +133,7 @@ export function useCreateDraftAppraisal() {
       plateNumber: string;
       state: string;
       region: string;
+      lastOdometer?: string;
     }) => {
       const response = await fetch("/api/appraisals", {
         method: "POST",

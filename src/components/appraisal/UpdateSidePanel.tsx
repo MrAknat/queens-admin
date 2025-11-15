@@ -33,7 +33,7 @@ export function UpdateFormPanel({
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="flex flex-col gap-4">
             <Controller
-              name="odometer"
+              name="lastOdometer"
               control={control}
               rules={{
                 validate: {
@@ -47,7 +47,7 @@ export function UpdateFormPanel({
               }}
               render={({ field, fieldState: { error } }) => (
                 <FormField
-                  id="odometer"
+                  id="lastOdometer"
                   label="Odometer (km)"
                   error={error?.message}
                 >
