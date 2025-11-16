@@ -37,6 +37,7 @@ export interface Appraisal {
   avgLeadsEstimatedRetail: number | null;
   tradeInEstimate: number | null;
   maxOffer: number | null;
+  managerMaxOffer: number | null;
   isDraft: boolean;
   createdAt: string;
   updatedAt: string;

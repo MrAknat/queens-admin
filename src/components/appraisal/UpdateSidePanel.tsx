@@ -4,9 +4,16 @@ import { Car, Construction, Save } from "lucide-react";
 import { type Control, Controller } from "react-hook-form";
 import { FormField, Input, LoadingButton, Textarea } from "@/components/ui";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { formatCurrency } from "@/lib/utils";
 import type { AppraisalFormData } from "./types";
 
+interface StaticData {
+  maxOffer?: number | null;
+  estimatedRetail?: number | null;
+}
+
 interface ControlSidePanelProps {
+  data: StaticData;
   onSubmit: (e: React.FormEvent) => void;
   control: Control<AppraisalFormData>;
   isSubmitting: boolean;
@@ -15,6 +22,7 @@ interface ControlSidePanelProps {
 }
 
 export function UpdateFormPanel({
+  data,
   onSubmit,
   control,
   isSubmitting,
@@ -30,6 +38,22 @@ export function UpdateFormPanel({
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="flex">
+          <div className="text-sm flex-1 flex flex-col border-b-4 !border-warning">
+            <span>Est. retail</span>
+            <span className="">
+              {data.estimatedRetail
+                ? formatCurrency(data.estimatedRetail)
+                : "N/A"}
+            </span>
+          </div>
+          <div className="text-sm flex-1 flex flex-col border-b-4 !border-accent">
+            <span>Max Offer</span>
+            <span className="">
+              {data.maxOffer ? formatCurrency(data.maxOffer) : "N/A"}
+            </span>
+          </div>
+        </div>
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="flex flex-col gap-4">
             <Controller
@@ -67,7 +91,7 @@ export function UpdateFormPanel({
               )}
             />
             <Controller
-              name="maxOffer"
+              name="managerMaxOffer"
               control={control}
               rules={{
                 validate: {
@@ -81,8 +105,8 @@ export function UpdateFormPanel({
               }}
               render={({ field, fieldState: { error } }) => (
                 <FormField
-                  id="maxOffer"
-                  label="Maximum Offer ($)"
+                  id="managerMaxOffer"
+                  label="Manager's Max Offer ($)"
                   error={error?.message}
                 >
                   <Input

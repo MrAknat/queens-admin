@@ -43,7 +43,7 @@ export default function TodaysAppraisalEditPage() {
   const initialFormData: AppraisalFormData = useMemo(
     () => ({
       lastOdometer: appraisal?.lastOdometer || 0,
-      maxOffer: appraisal?.maxOffer || 0,
+      managerMaxOffer: appraisal?.managerMaxOffer || 0,
       detail: appraisal?.reconditioningData?.detail || "",
       paintPanel: appraisal?.reconditioningData?.paintPanel || "",
       rwc: appraisal?.reconditioningData?.rwc || "",
@@ -206,7 +206,7 @@ export default function TodaysAppraisalEditPage() {
             loadingText="Okey Draft"
             disabled={
               !appraisal?.lastOdometer ||
-              !appraisal?.maxOffer ||
+              !appraisal?.managerMaxOffer ||
               hasUnsavedChanges
             }
             icon={Check}
@@ -222,6 +222,10 @@ export default function TodaysAppraisalEditPage() {
           <PhotoCarousel photos={mockPhotos} />
         </section>
         <UpdateFormPanel
+          data={{
+            maxOffer: appraisal.maxOffer,
+            estimatedRetail: appraisal.estimatedRetail,
+          }}
           onSubmit={handleSubmit(onSubmit)}
           control={control}
           isSubmitting={isSubmitting}

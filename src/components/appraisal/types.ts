@@ -3,7 +3,7 @@ import { Appraisal } from "@/hooks/useAppraisals";
 export interface AppraisalFormData {
   // Vehicle editable fields
   lastOdometer: number;
-  maxOffer: number;
+  managerMaxOffer: number;
 
   // Reconditioning fields
   detail: string;
