@@ -34,6 +34,7 @@ export interface LeadData {
   driveAwayPrice: number;
   kms: number;
   listingSources: string[];
+  color: string;
 }
 
 export interface PhotoData {

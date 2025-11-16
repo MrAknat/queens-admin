@@ -1,6 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
+import moment from "moment";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import {
@@ -25,14 +26,6 @@ export function LeadsTable({ leads }: LeadsTableProps) {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-AU", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
   };
 
   const formatKms = (kms: number) => {
@@ -89,11 +82,12 @@ export function LeadsTable({ leads }: LeadsTableProps) {
             <TableHeader>
               <TableRow>
                 <TableHead>ID</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Kilometers</TableHead>
+                <TableHead>Drive Away</TableHead>
+                <TableHead>Kms</TableHead>
+                <TableHead>Color</TableHead>
+                <TableHead>Age</TableHead>
                 <TableHead>Seller Type</TableHead>
                 <TableHead>State</TableHead>
-                <TableHead>Listed Date</TableHead>
                 <TableHead>Sources</TableHead>
               </TableRow>
             </TableHeader>
@@ -102,7 +96,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                 <TableRow key={lead._id} className="hover:bg-muted/50">
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm">{index + 1}</span>
+                      <span className="text-sm">{index + 1}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -111,16 +105,21 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="font-mono whitespace-nowrap">
+                    <span className="whitespace-nowrap">
                       {formatKms(lead.kms)} km
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{lead.color}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {moment(lead.removedAt).diff(lead.listedAt, "days")}d
                     </span>
                   </TableCell>
                   <TableCell>{getSellerTypeBadge(lead.sellerType)}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{lead.state}</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm whitespace-nowrap">
-                    {formatDate(lead.listedAt)}
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
