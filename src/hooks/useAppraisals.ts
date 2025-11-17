@@ -34,6 +34,7 @@ export interface Appraisal {
   lastOdometer: number | null;
   avgLeadsOdometer: number | null;
   estimatedRetail: number | null;
+  estimatedTrade: number | null;
   avgLeadsEstimatedRetail: number | null;
   tradeInEstimate: number | null;
   maxOffer: number | null;

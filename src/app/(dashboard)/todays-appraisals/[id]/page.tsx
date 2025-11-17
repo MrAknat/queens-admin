@@ -225,6 +225,7 @@ export default function TodaysAppraisalEditPage() {
           data={{
             maxOffer: appraisal.maxOffer,
             estimatedRetail: appraisal.estimatedRetail,
+            estimatedTrade: appraisal.estimatedTrade,
           }}
           onSubmit={handleSubmit(onSubmit)}
           control={control}

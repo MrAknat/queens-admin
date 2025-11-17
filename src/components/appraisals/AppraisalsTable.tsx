@@ -16,9 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppraisals } from "@/hooks/useAppraisals";
-import { formatCurrency } from "@/lib/utils";
-import { AvgIcon, Loader } from "../ui";
-import { EstimatedRetailCell } from "./EstimatedRetailCell";
+import { Loader } from "../ui";
+import { PriceCell } from "./PriceCell";
 
 interface AppraisalsTableProps {
   showDraftsOnly?: boolean;
@@ -189,21 +188,14 @@ export function AppraisalsTable({
                           {formatTime(appraisal.createdAt)}
                         </div>
                       </TableCell>
-                      <EstimatedRetailCell
+                      <PriceCell
                         value={appraisal.estimatedRetail}
-                        fallbackValue={appraisal.avgLeadsEstimatedRetail}
+                        className="bg-badge-retail text-primary-foreground hover:bg-badge-retail/80"
                       />
-                      <TableCell>
-                        {appraisal.maxOffer ? (
-                          <div className="font-medium">
-                            {formatCurrency(appraisal.maxOffer)}
-                          </div>
-                        ) : (
-                          <span className="font-medium text-muted-foreground">
-                            N/A
-                          </span>
-                        )}
-                      </TableCell>
+                      <PriceCell
+                        value={appraisal.maxOffer}
+                        className="bg-badge-offer text-primary-foreground hover:bg-badge-offer/80"
+                      />
                       <TableCell>
                         <Badge
                           variant={appraisal.isDraft ? "secondary" : "default"}

@@ -10,6 +10,7 @@ import type { AppraisalFormData } from "./types";
 interface StaticData {
   maxOffer?: number | null;
   estimatedRetail?: number | null;
+  estimatedTrade?: number | null;
 }
 
 interface ControlSidePanelProps {
@@ -39,20 +40,21 @@ export function UpdateFormPanel({
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex">
-          <div className="text-sm flex-1 flex flex-col border-b-4 !border-warning">
-            <span>Est. retail</span>
-            <span className="">
-              {data.estimatedRetail
-                ? formatCurrency(data.estimatedRetail)
-                : "N/A"}
-            </span>
-          </div>
-          <div className="text-sm flex-1 flex flex-col border-b-4 !border-accent">
-            <span>Max Offer</span>
-            <span className="">
-              {data.maxOffer ? formatCurrency(data.maxOffer) : "N/A"}
-            </span>
-          </div>
+          <StaticValue
+            label="Max Offer"
+            color="!border-badge-offer"
+            value={data.maxOffer}
+          />
+          <StaticValue
+            label="Est. Trade"
+            color="!border-badge-trade"
+            value={data.estimatedTrade}
+          />
+          <StaticValue
+            label="Est. Retail"
+            color="!border-badge-retail"
+            value={data.estimatedRetail}
+          />
         </div>
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="flex flex-col gap-4">
@@ -217,3 +219,16 @@ export function UpdateFormPanel({
     </Card>
   );
 }
+
+interface StaticValueProps {
+  label: string;
+  color: "!border-badge-offer" | "!border-badge-retail" | "!border-badge-trade";
+  value?: number | null;
+}
+
+const StaticValue = ({ label, color, value }: StaticValueProps) => (
+  <div className={`text-sm flex-1 flex flex-col border-b-4 ${color}`}>
+    <span className="text-xs">{label}</span>
+    <span>{value ? formatCurrency(value) : "N/A"}</span>
+  </div>
+);
