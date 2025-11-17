@@ -129,10 +129,9 @@ export function MaxOfferConfiguratorForm() {
   };
 
   const handleReset = () => {
-    if (data?.data) {
-      reset(data.data);
+    if (data) {
+      reset(data);
     }
-    setLastSaved(null);
   };
 
   return (
