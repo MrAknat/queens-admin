@@ -10,7 +10,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     const response = await fetch(
-      `${API_BASE_URL}/api/v1/valuations/max-offer-configuration`,
+      `${API_BASE_URL}/api/v1/max-offer-configuration`,
       {
         method: "PUT",
         headers: {
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/v1/valuations/max-offer-configuration`,
+      `${API_BASE_URL}/api/v1/max-offer-configuration`,
       {
         headers: {
           Cookie: request.headers.get("cookie") || "",

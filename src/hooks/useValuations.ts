@@ -6,7 +6,7 @@ export function useUpdateMaxOfferConfiguration() {
 
   return useMutation({
     mutationFn: async (payload: MaxOfferConfiguration) => {
-      const response = await fetch(`/api/valuations/max-offer-configuration`, {
+      const response = await fetch(`/api/max-offer-configuration`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -22,10 +22,8 @@ export function useUpdateMaxOfferConfiguration() {
 
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["max-offer-configuration"],
-      });
+    onSuccess: (data) => {
+      queryClient.setQueryData(["max-offer-configuration"], data);
     },
   });
 }
@@ -34,7 +32,7 @@ export function useGetMaxOfferConfiguration() {
   return useQuery({
     queryKey: ["max-offer-configuration"],
     queryFn: async () => {
-      const response = await fetch(`/api/valuations/max-offer-configuration`, {
+      const response = await fetch(`/api/max-offer-configuration`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

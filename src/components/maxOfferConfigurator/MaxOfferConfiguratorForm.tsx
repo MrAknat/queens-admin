@@ -7,6 +7,7 @@ import {
   useGetMaxOfferConfiguration,
   useUpdateMaxOfferConfiguration,
 } from "@/hooks/useValuations";
+import { formatDateTime } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -18,19 +19,18 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Loader } from "../ui/loader";
-import { Select } from "../ui/select";
-
-interface ConfigItem {
-  amount: number;
-  type: "fixed" | "percentage";
-}
 
 export interface MaxOfferConfiguration {
-  reconditioning: ConfigItem;
-  profit_margin: ConfigItem;
-  lot: ConfigItem;
-  transport: ConfigItem;
-  admin: ConfigItem;
+  reconditioning_percentage: number;
+  reconditioning_fixed: number;
+  profit_margin_percentage: number;
+  profit_margin_fixed: number;
+  lot_percentage: number;
+  lot_fixed: number;
+  transport_percentage: number;
+  transport_fixed: number;
+  admin_percentage: number;
+  admin_fixed: number;
 }
 
 const CONFIG_SECTIONS = [
@@ -61,11 +61,6 @@ const CONFIG_SECTIONS = [
   },
 ];
 
-const TYPE_OPTIONS = [
-  { value: "fixed", label: "Fixed Amount ($)" },
-  { value: "percentage", label: "Percentage (%)" },
-];
-
 export function MaxOfferConfiguratorForm() {
   const [lastSaved, setLastSaved] = useState<string | null>(null);
 
@@ -76,19 +71,24 @@ export function MaxOfferConfiguratorForm() {
     control,
     handleSubmit,
     formState: { isDirty, isValid },
-    watch,
     reset,
   } = useForm<MaxOfferConfiguration>({
     mode: "onChange",
-    values: data?.data,
-    defaultValues: {
-      reconditioning: { amount: 0, type: "fixed" },
-      profit_margin: { amount: 0, type: "fixed" },
-      lot: { amount: 0, type: "fixed" },
-      transport: { amount: 0, type: "fixed" },
-      admin: { amount: 0, type: "fixed" },
-    },
+    defaultValues: data,
   });
+
+  useEffect(() => {
+    if (data && !isDirty) {
+      reset(data);
+
+      const date =
+        data.updatedAt || data.createdAt
+          ? formatDateTime(data.updatedAt || data.createdAt)
+          : null;
+
+      setLastSaved(date);
+    }
+  }, [data, reset, isDirty]);
 
   if (isDataLoading) {
     return (
@@ -104,10 +104,18 @@ export function MaxOfferConfiguratorForm() {
   const onSubmit = async (formData: MaxOfferConfiguration) => {
     try {
       mutate(formData, {
-        onSuccess: ({ data }) => {
-          setLastSaved(new Date().toLocaleTimeString());
+        onSuccess: (response) => {
+          const updatedData = response?.data || formData;
 
-          reset(data);
+          setLastSaved(
+            formatDateTime(
+              response?.data?.updatedAt ||
+                response?.data?.createdAt ||
+                new Date().toLocaleTimeString(),
+            ),
+          );
+
+          reset(updatedData, { keepValues: true });
 
           console.log("Configuration updated successfully");
         },
@@ -163,68 +171,74 @@ export function MaxOfferConfiguratorForm() {
 
                   <FormGrid columns={2} className="flex-0 basis-[50%]">
                     <Controller
-                      name={`${section.key}.type`}
+                      name={
+                        `${section.key}_percentage` as keyof MaxOfferConfiguration
+                      }
                       control={control}
-                      rules={{ required: "Type is required" }}
+                      rules={{
+                        required: "Percentage is required",
+                        min: {
+                          value: 0,
+                          message: "Percentage cannot be negative",
+                        },
+                        max: {
+                          value: 100,
+                          message: "Percentage cannot exceed 100%",
+                        },
+                      }}
                       render={({ field, fieldState: { error } }) => (
                         <FormField
-                          id={`${section.key}-type`}
-                          label="Type"
+                          id={`${section.key}-percentage`}
+                          label="Percentage (%)"
                           required
                           error={error?.message}
                         >
-                          <Select
+                          <Input
                             {...field}
-                            options={TYPE_OPTIONS}
-                            placeholder="Select type"
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            placeholder="0.0"
+                            onChange={(e) =>
+                              field.onChange(Number(e.target.value) || 0)
+                            }
                           />
                         </FormField>
                       )}
                     />
 
                     <Controller
-                      name={`${section.key}.amount`}
+                      name={
+                        `${section.key}_fixed` as keyof MaxOfferConfiguration
+                      }
                       control={control}
                       rules={{
-                        required: "Amount is required",
+                        required: "Fixed amount is required",
                         min: {
                           value: 0,
                           message: "Amount cannot be negative",
                         },
-                        max:
-                          watch(`${section.key}.type`) === "percentage"
-                            ? {
-                                value: 100,
-                                message: "Percentage cannot exceed 100%",
-                              }
-                            : undefined,
                       }}
-                      render={({ field, fieldState: { error } }) => {
-                        const isPercentage =
-                          watch(`${section.key}.type`) === "percentage";
-                        return (
-                          <FormField
-                            id={`${section.key}-amount`}
-                            label={
-                              isPercentage ? "Percentage (%)" : "Amount ($)"
+                      render={({ field, fieldState: { error } }) => (
+                        <FormField
+                          id={`${section.key}-fixed`}
+                          label="Fixed Amount ($)"
+                          required
+                          error={error?.message}
+                        >
+                          <Input
+                            {...field}
+                            type="number"
+                            step="1"
+                            min="0"
+                            placeholder="0"
+                            onChange={(e) =>
+                              field.onChange(Number(e.target.value) || 0)
                             }
-                            required
-                            error={error?.message}
-                          >
-                            <Input
-                              {...field}
-                              type="number"
-                              step={isPercentage ? "0.1" : "1"}
-                              min="0"
-                              max={isPercentage ? "100" : undefined}
-                              placeholder={isPercentage ? "0.0" : "0"}
-                              onChange={(e) =>
-                                field.onChange(Number(e.target.value))
-                              }
-                            />
-                          </FormField>
-                        );
-                      }}
+                          />
+                        </FormField>
+                      )}
                     />
                   </FormGrid>
 
@@ -264,12 +278,15 @@ export function MaxOfferConfiguratorForm() {
             </Button>
           </div>
 
-          <div className="text-xs text-muted-foreground bg-muted/20 p-3 rounded text-end">
+          <div className="text-xs text-muted-foreground bg-muted/20 p-3 rounded">
+            <p className="mb-2">
+              <strong>How it works:</strong> For each cost category, you can
+              specify both a percentage and a fixed amount.
+            </p>
             <p>
-              <strong>Fixed amounts</strong> are subtracted as absolute dollar
-              values.
-              <strong> Percentages</strong> are calculated as a percentage of
-              the vehicle's value.
+              The system will automatically use the{" "}
+              <strong>higher value</strong> between the percentage calculation
+              and the fixed amount when calculating the maximum offer.
             </p>
           </div>
         </form>
