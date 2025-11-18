@@ -191,10 +191,6 @@ export function MaxOfferConfiguratorForm() {
                           value: 0,
                           message: "Percentage cannot be negative",
                         },
-                        max: {
-                          value: 100,
-                          message: "Percentage cannot exceed 100%",
-                        },
                       }}
                       render={({ field, fieldState: { error } }) => (
                         <FormField
@@ -210,9 +206,26 @@ export function MaxOfferConfiguratorForm() {
                             min="0"
                             max="100"
                             placeholder="0.0"
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value) || 0)
-                            }
+                            onFocus={(e) => {
+                              if (field.value === 0) {
+                                e.target.value = "";
+                              }
+                            }}
+                            onBlur={(e) => {
+                              if (!field.value) {
+                                e.target.value = "0";
+                              }
+
+                              e.target.value = Number(
+                                e.target.value,
+                              ).toString();
+                            }}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              field.onChange(
+                                newValue === "" ? 0 : Number(newValue) || 0,
+                              );
+                            }}
                           />
                         </FormField>
                       )}
@@ -243,9 +256,26 @@ export function MaxOfferConfiguratorForm() {
                             step="1"
                             min="0"
                             placeholder="0"
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value) || 0)
-                            }
+                            onFocus={(e) => {
+                              if (field.value === 0) {
+                                e.target.value = "";
+                              }
+                            }}
+                            onBlur={(e) => {
+                              if (!field.value) {
+                                e.target.value = "0";
+                              }
+
+                              e.target.value = Number(
+                                e.target.value,
+                              ).toString();
+                            }}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              field.onChange(
+                                newValue === "" ? 0 : Number(newValue) || 0,
+                              );
+                            }}
                           />
                         </FormField>
                       )}
