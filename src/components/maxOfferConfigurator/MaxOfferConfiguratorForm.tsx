@@ -74,7 +74,18 @@ export function MaxOfferConfiguratorForm() {
     reset,
   } = useForm<MaxOfferConfiguration>({
     mode: "onChange",
-    defaultValues: data,
+    defaultValues: {
+      reconditioning_percentage: data?.reconditioning_percentage || 0,
+      reconditioning_fixed: data?.reconditioning_fixed || 0,
+      profit_margin_percentage: data?.profit_margin_percentage || 0,
+      profit_margin_fixed: data?.profit_margin_fixed || 0,
+      lot_percentage: data?.lot_percentage || 0,
+      lot_fixed: data?.lot_fixed || 0,
+      transport_percentage: data?.transport_percentage || 0,
+      transport_fixed: data?.transport_fixed || 0,
+      admin_percentage: data?.admin_percentage || 0,
+      admin_fixed: data?.admin_fixed || 0,
+    },
   });
 
   useEffect(() => {
