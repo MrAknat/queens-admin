@@ -31,7 +31,7 @@ export function UpdateFormPanel({
   hasUnsavedChanges,
 }: ControlSidePanelProps) {
   return (
-    <Card className="sticky top-22 space-y-6 h-fit max-h-[calc(100vh-7rem)] min-w-70 w-70 overflow-hidden">
+    <Card className="sticky top-22 space-y-6 h-fit min-w-70 w-70 overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Car className="h-4 w-4 text-primary" />

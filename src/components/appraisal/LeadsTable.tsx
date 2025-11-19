@@ -161,7 +161,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                   <TableRow
                     key={lead._id}
                     className={cn(
-                      "hover:bg-muted/50",
+                      "hover:bg-muted-foreground/10",
                       lead.removedAt && "bg-warning/10 hover:bg-warning/20",
                     )}
                   >
