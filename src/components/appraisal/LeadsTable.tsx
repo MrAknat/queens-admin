@@ -185,7 +185,12 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {moment(lead.removedAt).diff(lead.listedAt, "days")}d
+                        {lead.removedAt
+                          ? `${moment(lead.removedAt).diff(
+                              lead.listedAt,
+                              "days",
+                            )}d`
+                          : "-"}
                       </span>
                     </TableCell>
                     <TableCell>{getSellerTypeBadge(lead.sellerType)}</TableCell>
