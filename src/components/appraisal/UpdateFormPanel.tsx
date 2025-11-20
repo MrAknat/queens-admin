@@ -25,7 +25,7 @@ export function UpdateFormPanel({
   hasUnsavedChanges,
 }: UpdateFormPanelProps) {
   return (
-    <Card className="sticky top-22 space-y-6 h-fit min-w-70 w-70">
+    <Card className="block self-center xl:self-start xl:sticky top-22 space-y-6 h-fit min-w-70 w-70">
       <CardHeader>
         <Prices
           maxOffer={data.maxOffer}

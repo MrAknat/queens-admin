@@ -52,7 +52,7 @@ export function DashboardPageLayout({
           showHome
         />
 
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-6 xl:flex-row items-center xl:items-start justify-between">
           <div className="space-y-1">
             <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
             {description && (

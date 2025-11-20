@@ -215,7 +215,7 @@ export default function TodaysAppraisalEditPage() {
         </div>
       }
     >
-      <div className="flex flex-col xl:flex-row gap-6">
+      <div className="flex flex-col-reverse xl:flex-row gap-6">
         <section className="flex-1 flex flex-col gap-6">
           <LeadsTable leads={appraisal?.leads} />
 
