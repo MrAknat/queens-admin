@@ -15,10 +15,7 @@ interface CardProps {
 export const Card = ({ children, className }: CardProps) => {
   return (
     <div
-      className={cn(
-        "bg-card border border-border rounded-sm p-0 overflow-hidden",
-        className,
-      )}
+      className={cn("bg-card border border-border rounded-sm p-0", className)}
     >
       {children}
     </div>

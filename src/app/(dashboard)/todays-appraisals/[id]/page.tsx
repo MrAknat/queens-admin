@@ -10,7 +10,7 @@ import type {
   AppraisalFormData,
   PhotoData,
 } from "@/components/appraisal/types";
-import { UpdateFormPanel } from "@/components/appraisal/UpdateSidePanel";
+import { UpdateFormPanel } from "@/components/appraisal/UpdateFormPanel";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
 import {
   UnsavedChangesModal,
@@ -224,6 +224,7 @@ export default function TodaysAppraisalEditPage() {
         <UpdateFormPanel
           data={{
             maxOffer: appraisal.maxOffer,
+            maxOfferConfig: appraisal.appliedMaxOfferConfig,
             estimatedRetail: appraisal.estimatedRetail,
             estimatedTrade: appraisal.estimatedTrade,
           }}

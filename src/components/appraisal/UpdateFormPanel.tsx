@@ -4,17 +4,11 @@ import { Save } from "lucide-react";
 import { type Control, Controller } from "react-hook-form";
 import { FormField, Input, LoadingButton } from "@/components/ui";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
-import { Prices } from "../ui/Prices";
+import { Prices, type PricesProps } from "../ui/Prices";
 import type { AppraisalFormData } from "./types";
 
-interface StaticData {
-  maxOffer?: number | null;
-  estimatedRetail?: number | null;
-  estimatedTrade?: number | null;
-}
-
-interface ControlSidePanelProps {
-  data: StaticData;
+interface UpdateFormPanelProps {
+  data: PricesProps;
   onSubmit: (e: React.FormEvent) => void;
   control: Control<AppraisalFormData>;
   isSubmitting: boolean;
@@ -29,14 +23,15 @@ export function UpdateFormPanel({
   isSubmitting,
   isValid,
   hasUnsavedChanges,
-}: ControlSidePanelProps) {
+}: UpdateFormPanelProps) {
   return (
-    <Card className="sticky top-22 space-y-6 h-fit min-w-70 w-70 overflow-hidden">
+    <Card className="sticky top-22 space-y-6 h-fit min-w-70 w-70">
       <CardHeader>
         <Prices
           maxOffer={data.maxOffer}
           estimatedRetail={data.estimatedRetail}
           estimatedTrade={data.estimatedTrade}
+          maxOfferConfig={data.maxOfferConfig}
         />
       </CardHeader>
       <CardContent>
