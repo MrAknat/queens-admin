@@ -25,7 +25,7 @@ export const Prices = ({
   ] as const;
 
   const maxOfferConfigContent = maxOfferConfig ? (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 items-start">
       {configItems.map(({ label, key }) => {
         const percentage = maxOfferConfig[
           `${key}_percentage` as keyof MaxOfferConfiguration
@@ -34,11 +34,9 @@ export const Prices = ({
           `${key}_fixed` as keyof MaxOfferConfiguration
         ] as number | undefined;
 
-        if (percentage === undefined) return null;
-
         return (
           <div key={key}>
-            {label}: {percentage}%{fixed ? ` / ${formatCurrency(fixed)}` : ""}
+            {label}: {`${percentage || 0}% / ${formatCurrency(fixed || 0)}`}
           </div>
         );
       })}

@@ -190,7 +190,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                               lead.listedAt,
                               "days",
                             )}d`
-                          : "-"}
+                          : `${moment().diff(lead.listedAt, "days")}d`}
                       </span>
                     </TableCell>
                     <TableCell>{getSellerTypeBadge(lead.sellerType)}</TableCell>

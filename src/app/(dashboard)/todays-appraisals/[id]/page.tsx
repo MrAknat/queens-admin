@@ -42,8 +42,8 @@ export default function TodaysAppraisalEditPage() {
 
   const initialFormData: AppraisalFormData = useMemo(
     () => ({
-      lastOdometer: appraisal?.lastOdometer || 0,
-      managerMaxOffer: appraisal?.managerMaxOffer || 0,
+      lastOdometer: appraisal?.lastOdometer || null,
+      managerMaxOffer: appraisal?.managerMaxOffer || null,
       detail: appraisal?.reconditioningData?.detail || "",
       paintPanel: appraisal?.reconditioningData?.paintPanel || "",
       rwc: appraisal?.reconditioningData?.rwc || "",
