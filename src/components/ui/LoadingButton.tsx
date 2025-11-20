@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "./button";
 import { Loader } from "./loader";
 
@@ -31,7 +32,7 @@ export const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
       <Button
         ref={ref}
         disabled={disabled || loading}
-        className={`flex items-center gap-2 min-w-[140px] ${className || ""}`}
+        className={cn("flex items-center gap-2 min-w-[140px]", className)}
         {...props}
       >
         <>

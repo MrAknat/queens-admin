@@ -1,10 +1,10 @@
 "use client";
 
-import { Car, Construction, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { type Control, Controller } from "react-hook-form";
-import { FormField, Input, LoadingButton, Textarea } from "@/components/ui";
+import { FormField, Input, LoadingButton } from "@/components/ui";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
-import { formatCurrency } from "@/lib/utils";
+import { Prices } from "../ui/Prices";
 import type { AppraisalFormData } from "./types";
 
 interface StaticData {
@@ -33,30 +33,14 @@ export function UpdateFormPanel({
   return (
     <Card className="sticky top-22 space-y-6 h-fit min-w-70 w-70 overflow-hidden">
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <Car className="h-4 w-4 text-primary" />
-          <h3 className="font-medium">Update data</h3>
-        </div>
+        <Prices
+          maxOffer={data.maxOffer}
+          estimatedRetail={data.estimatedRetail}
+          estimatedTrade={data.estimatedTrade}
+        />
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="flex">
-          <StaticValue
-            label="Max Offer"
-            color="!border-badge-offer"
-            value={data.maxOffer}
-          />
-          <StaticValue
-            label="Est. Trade"
-            color="!border-badge-trade"
-            value={data.estimatedTrade}
-          />
-          <StaticValue
-            label="Est. Retail"
-            color="!border-badge-retail"
-            value={data.estimatedRetail}
-          />
-        </div>
-        <form onSubmit={onSubmit} className="space-y-6">
+      <CardContent>
+        <form onSubmit={onSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <Controller
               name="lastOdometer"
@@ -128,7 +112,7 @@ export function UpdateFormPanel({
             />
           </div>
 
-          <div className="border-t pt-6">
+          {/* <div className="border-t pt-6">
             <div className="flex flex-row gap-2 align-center">
               <Construction className="h-4 w-4 text-warning" />
               <h4 className="text-sm font-medium mb-4">Reconditioning</h4>
@@ -203,32 +187,20 @@ export function UpdateFormPanel({
                   </FormField>
                 )}
               />
-              <LoadingButton
-                type="submit"
-                variant="secondary"
-                loading={isSubmitting}
-                loadingText="Updating..."
-                disabled={!isValid || isSubmitting || !hasUnsavedChanges}
-                icon={Save}
-                label="Update data"
-              />
             </div>
-          </div>
+          </div> */}
+
+          <LoadingButton
+            type="submit"
+            variant="secondary"
+            loading={isSubmitting}
+            loadingText="Updating..."
+            disabled={!isValid || isSubmitting || !hasUnsavedChanges}
+            icon={Save}
+            label="Update data"
+          />
         </form>
       </CardContent>
     </Card>
   );
 }
-
-interface StaticValueProps {
-  label: string;
-  color: "!border-badge-offer" | "!border-badge-retail" | "!border-badge-trade";
-  value?: number | null;
-}
-
-const StaticValue = ({ label, color, value }: StaticValueProps) => (
-  <div className={`text-sm flex-1 flex flex-col border-b-4 ${color}`}>
-    <span className="text-xs">{label}</span>
-    <span>{value ? formatCurrency(value) : "N/A"}</span>
-  </div>
-);

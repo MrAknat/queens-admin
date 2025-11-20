@@ -15,9 +15,9 @@ export { FormSection } from "./form-section";
 // Icons
 export { AvgIcon } from "./icons/AvgIcon";
 export { Input } from "./input";
+export { LoadingButton } from "./LoadingButton";
 export { Label } from "./label";
 export { Loader, type LoaderProps, type LoaderSize } from "./loader";
-export { LoadingButton } from "./loading-button";
 export { Select, type SelectOption, type SelectProps } from "./select";
 export { Separator } from "./separator";
 export { Skeleton } from "./skeleton";

@@ -10,7 +10,7 @@ import { FormField } from "../ui/form-field";
 import { FormGrid } from "../ui/form-grid";
 import { FormSection } from "../ui/form-section";
 import { Input } from "../ui/input";
-import { LoadingButton } from "../ui/loading-button";
+import { LoadingButton } from "../ui/LoadingButton";
 
 interface AppraisalFormData {
   rego: string;
