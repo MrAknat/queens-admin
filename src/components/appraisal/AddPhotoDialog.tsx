@@ -83,7 +83,7 @@ export function AddPhotoDialog({
             <button
               type="button"
               className="border-2 border-dashed border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 transition-colors"
-              onKeyDown={() => fileInputRef.current?.click()}
+              onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="h-10 w-10 text-gray-400 mb-2" />
               <p className="text-sm text-gray-600 font-medium">
