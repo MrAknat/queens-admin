@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { PhotoData } from "@/components/appraisal/types";
 
 // Types
 export interface Vehicle {
@@ -42,6 +43,7 @@ export interface Appraisal {
   isDraft: boolean;
   createdAt: string;
   updatedAt: string;
+  photos: PhotoData[];
 }
 
 export interface AppraisalsResponse {
@@ -232,6 +234,69 @@ export function useCompleteAppraisal(id: string) {
         queryKey: appraisalQueryKeys.detail(id),
       });
       queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
+    },
+  });
+}
+
+export function useUploadPhoto(appraisalId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (formData: FormData) => {
+      formData.append("appraisalId", appraisalId);
+
+      const response = await fetch(`/api/photos/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to upload photo: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(appraisalId),
+      });
+    },
+  });
+}
+
+export function useUpdatePhoto(appraisalId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      photoId,
+      title,
+    }: {
+      photoId: string;
+      title: string;
+    }) => {
+      const response = await fetch(`/api/photos/${photoId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update photo: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(appraisalId),
+      });
     },
   });
 }

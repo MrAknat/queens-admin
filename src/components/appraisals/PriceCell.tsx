@@ -10,7 +10,7 @@ export const PriceCell = ({ value, className }: PriceCellProps) => {
   if (value != null) {
     return (
       <TableCell>
-        <Badge className={cn("text-xs", className)}>
+        <Badge className={cn("text-xs !text-background", className)}>
           {formatCurrency(value)}
         </Badge>
       </TableCell>

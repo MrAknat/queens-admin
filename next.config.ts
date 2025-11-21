@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "picsum.photos",
+        hostname: "www.dropbox.com",
+      },
+      {
+        protocol: "https",
+        hostname: "dl.dropboxusercontent.com",
       },
     ],
   },

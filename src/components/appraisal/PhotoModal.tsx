@@ -175,12 +175,11 @@ export function PhotoModal({
 
   const modal = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-95">
-      {/* Header with controls */}
       <div className="absolute top-0 left-0 right-0 z-10 bg-black bg-opacity-50 backdrop-blur-sm">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-4">
             <h3 className="text-white font-medium">
-              {currentPhoto.caption || `Photo ${currentIndex + 1}`}
+              {currentPhoto.title || `Photo ${currentIndex + 1}`}
             </h3>
             <span className="text-white text-sm opacity-75">
               {currentIndex + 1} of {photos.length}
@@ -188,7 +187,6 @@ export function PhotoModal({
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Zoom controls */}
             <Button
               variant="ghost"
               onClick={handleZoomOut}
@@ -209,7 +207,6 @@ export function PhotoModal({
               <ZoomIn className="h-4 w-4" />
             </Button>
 
-            {/* Rotate CCW */}
             <Button
               variant="ghost"
               onClick={() => handleRotate("ccw")}
@@ -218,7 +215,6 @@ export function PhotoModal({
               <RotateCcw className="h-4 w-4" />
             </Button>
 
-            {/* Rotate CW */}
             <Button
               variant="ghost"
               onClick={() => handleRotate("cw")}
@@ -227,7 +223,6 @@ export function PhotoModal({
               <RotateCw className="h-4 w-4" />
             </Button>
 
-            {/* Download */}
             <Button
               variant="ghost"
               onClick={handleDownload}
@@ -236,7 +231,6 @@ export function PhotoModal({
               <Download className="h-4 w-4" />
             </Button>
 
-            {/* Close */}
             <Button
               variant="ghost"
               onClick={handleCloseModal}
@@ -248,7 +242,6 @@ export function PhotoModal({
         </div>
       </div>
 
-      {/* Navigation arrows */}
       {photos.length > 1 && (
         <>
           <button
@@ -270,12 +263,11 @@ export function PhotoModal({
         </>
       )}
 
-      {/* Main image container */}
       <div className="relative w-[50%] h-[50%] flex items-center justify-center">
         <Image
           fill
           src={currentPhoto.url}
-          alt={currentPhoto.alt}
+          alt={currentPhoto.title || "Photo"}
           className="max-w-full max-h-full object-contain transition-transform duration-200"
           style={{
             transform: `scale(${zoom}) rotate(${rotation}deg) translate(${panPosition.x / zoom}px, ${panPosition.y / zoom}px)`,
@@ -285,14 +277,13 @@ export function PhotoModal({
         />
       </div>
 
-      {/* Bottom thumbnail strip */}
       {photos.length > 1 && (
         <div className="absolute bottom-0 left-0 right-0 z-10 bg-black opacity-80 hover:opacity-100 transition-opacity duration-200">
           <div className="flex items-center gap-2 p-4 overflow-x-auto">
             {photos.map((photo, index) => (
               <button
                 type="button"
-                key={photo.id}
+                key={photo._id}
                 onClick={() => {
                   setCurrentIndex(index);
                   resetTransformations();
@@ -305,7 +296,7 @@ export function PhotoModal({
                 <Image
                   fill
                   src={photo.url}
-                  alt={photo.alt}
+                  alt={photo.title || "Thumbnail"}
                   className="w-full h-full object-cover"
                 />
               </button>
@@ -314,7 +305,6 @@ export function PhotoModal({
         </div>
       )}
 
-      {/* Instructions overlay */}
       <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white text-sm px-4 py-2 rounded-lg">
         <div className="flex items-center gap-4 text-xs opacity-75">
           <span>← → Navigate</span>

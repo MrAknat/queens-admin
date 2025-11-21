@@ -6,10 +6,7 @@ import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { LeadsTable } from "@/components/appraisal/LeadsTable";
 import { PhotoCarousel } from "@/components/appraisal/PhotoCarousel";
-import type {
-  AppraisalFormData,
-  PhotoData,
-} from "@/components/appraisal/types";
+import type { AppraisalFormData } from "@/components/appraisal/types";
 import { UpdateFormPanel } from "@/components/appraisal/UpdateFormPanel";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
 import {
@@ -97,46 +94,6 @@ export default function TodaysAppraisalEditPage() {
     },
   ];
 
-  // Mock data for demonstration
-  const mockPhotos: PhotoData[] = [
-    {
-      id: "1",
-      url: "https://picsum.photos/800/600?random=1",
-      alt: "Vehicle exterior front view",
-      caption: "Front exterior view",
-    },
-    {
-      id: "2",
-      url: "https://picsum.photos/800/600?random=2",
-      alt: "Vehicle interior dashboard",
-      caption: "Dashboard and interior",
-    },
-    {
-      id: "3",
-      url: "https://picsum.photos/800/600?random=3",
-      alt: "Vehicle rear view",
-      caption: "Rear exterior view",
-    },
-    {
-      id: "4",
-      url: "https://picsum.photos/800/600?random=4",
-      alt: "Engine bay",
-      caption: "Engine compartment",
-    },
-    {
-      id: "5",
-      url: "https://picsum.photos/800/600?random=5",
-      alt: "Trunk space",
-      caption: "Spacious trunk",
-    },
-    {
-      id: "6",
-      url: "https://picsum.photos/800/600?random=6",
-      alt: "Side profile",
-      caption: "Vehicle side profile",
-    },
-  ];
-
   const {
     showModal,
     handleNavigation,
@@ -219,7 +176,10 @@ export default function TodaysAppraisalEditPage() {
         <section className="flex-1 flex flex-col gap-6">
           <LeadsTable leads={appraisal?.leads} />
 
-          <PhotoCarousel photos={mockPhotos} />
+          <PhotoCarousel
+            photos={appraisal?.photos || []}
+            appraisalId={appraisalId}
+          />
         </section>
         <UpdateFormPanel
           data={{

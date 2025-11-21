@@ -38,8 +38,10 @@ export interface LeadData {
 }
 
 export interface PhotoData {
-  id: string;
+  _id: string;
   url: string;
-  alt: string;
-  caption?: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  uploadedBy: string;
 }

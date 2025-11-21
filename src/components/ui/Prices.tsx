@@ -85,9 +85,9 @@ const StaticValue = ({
   renderTooltip,
 }: StaticValueProps) => {
   return (
-    <div className={cn("text-sm flex-1 flex flex-col border-b-4", color)}>
-      <div className="flex items-center gap-1 min-h-5">
-        <span className="text-xs">{label}</span>
+    <div className={cn("text-sm flex-1 flex flex-col border-b-4 pb-1", color)}>
+      <div className="flex items-center gap-1 min-h-5 mr-3 last:mr-0">
+        <span className="text-xs whitespace-nowrap">{label}</span>
         {renderTooltip ? (
           <SimpleTooltip
             trigger={<Info className="h-3 w-3 text-warning" />}
