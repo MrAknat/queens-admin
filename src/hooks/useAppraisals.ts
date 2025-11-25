@@ -24,6 +24,7 @@ export interface Lead {
   driveAwayPrice: number;
   kms: number;
   listingSources: string[];
+  color: string;
 }
 
 export interface Appraisal {

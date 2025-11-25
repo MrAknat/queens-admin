@@ -10,66 +10,143 @@ import type { Appraisal } from "@/hooks/useAppraisals";
 
 const styles = StyleSheet.create({
   page: {
-    flexDirection: "column",
-    backgroundColor: "#FFFFFF",
-    padding: 30,
+    backgroundColor: "#F5E6D3",
     fontFamily: "Helvetica",
+    padding: 0,
   },
-  header: {
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#CCCCCC",
-    paddingBottom: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: "#666666",
-  },
-  section: {
-    margin: 10,
+  headerBanner: {
+    backgroundColor: "#F5A623",
     padding: 10,
   },
-  sectionTitle: {
+  headerText: {
+    color: "#000000",
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 10,
-    backgroundColor: "#F0F0F0",
-    padding: 5,
+    letterSpacing: 0.5,
   },
-  row: {
+  content: {
+    flex: 1,
+  },
+  section: {
+    height: "33.33%",
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+  },
+  topSection: {
     flexDirection: "row",
+    marginBottom: 10,
+  },
+  infoSection: {
+    flex: 1,
+  },
+  qrSection: {
+    width: 100,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingTop: 10,
+  },
+  qrPlaceholder: {
+    width: 80,
+    height: 80,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#000000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  qrText: {
+    fontSize: 8,
+    textAlign: "center",
+  },
+  introText: {
+    fontSize: 9,
+    marginBottom: 10,
+    lineHeight: 1.4,
+  },
+  numberedItem: {
+    fontSize: 9,
+    marginBottom: 8,
+    lineHeight: 1.4,
+  },
+  numberedItemTitle: {
+    fontWeight: "bold",
+  },
+  numberedItemContent: {
+    marginLeft: 12,
+    marginTop: 2,
+  },
+  noteText: {
+    fontSize: 9,
+    marginTop: 10,
     marginBottom: 5,
   },
-  label: {
-    width: 150,
+  bold: {
     fontWeight: "bold",
-    fontSize: 12,
   },
-  value: {
-    flex: 1,
-    fontSize: 12,
+  italic: {
+    fontStyle: "italic",
   },
-  price: {
+  sectionHeader: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#2E7D32",
+    marginTop: 15,
+    marginBottom: 5,
   },
-  footer: {
-    position: "absolute",
-    bottom: 30,
-    left: 30,
-    right: 30,
+  sectionSubtitle: {
+    fontSize: 8,
+    fontStyle: "italic",
+    marginBottom: 10,
+  },
+  tableContainer: {
+    marginBottom: 15,
+  },
+  table: {
+    width: "100%",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#E8D4BC",
+    padding: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#000000",
+    marginBottom: 3,
+  },
+  tableHeaderText: {
+    fontSize: 8,
+    fontWeight: "bold",
     textAlign: "center",
-    fontSize: 10,
-    color: "#999999",
-    borderTopWidth: 1,
-    borderTopColor: "#CCCCCC",
-    paddingTop: 10,
+  },
+  tableRow: {
+    flexDirection: "row",
+    padding: 4,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#D4C4B0",
+    minHeight: 16,
+  },
+  tableCell: {
+    fontSize: 7,
+    textAlign: "center",
+    lineHeight: 1.3,
+  },
+  vehicleBar: {
+    backgroundColor: "#000000",
+    color: "#FFFFFF",
+    fontSize: 7,
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 20,
+    transform: "rotate(-90deg)",
+    transformOrigin: "center",
+    position: "absolute",
+    left: -40,
+    width: 150,
+  },
+  noData: {
+    fontSize: 9,
+    fontStyle: "italic",
+    color: "#666666",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 
@@ -78,87 +155,261 @@ interface AppraisalPdfProps {
 }
 
 export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
+  console.log(appraisal);
+
+  const formatCurrency = (amount: number | null) => {
+    if (amount === null || amount === undefined) return "N/A";
+    return `$${amount.toLocaleString("en-AU")}`;
+  };
+
   const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-AU", {
       day: "2-digit",
-      month: "long",
+      month: "short",
       year: "numeric",
     });
   };
 
-  const formatCurrency = (amount: number | null) => {
-    if (amount === null) return "N/A";
-    return new Intl.NumberFormat("en-AU", {
-      style: "currency",
-      currency: "AUD",
-    }).format(amount);
+  const formatKms = (kms: number | null) => {
+    if (kms === null || kms === undefined) return "N/A";
+    return `${kms.toLocaleString()} km`;
   };
+
+  // Separate active and delisted leads
+  const activeLeads = appraisal.leads.filter((lead) => !lead.removedAt);
+  const delistedLeads = appraisal.leads.filter((lead) => lead.removedAt);
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Vehicle Appraisal Report</Text>
-          <Text style={styles.subtitle}>
-            Generated on {new Date().toLocaleDateString("en-AU")}
-          </Text>
+      <Page size="A4" style={styles.page} orientation="portrait">
+        {/* Header Banner */}
+        <View style={styles.headerBanner}>
+          <Text style={styles.headerText}>HOW TO READ THIS SNAPSHOT</Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Vehicle Details</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Description:</Text>
-            <Text style={styles.value}>{appraisal.vehicle.description}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Registration:</Text>
-            <Text style={styles.value}>{appraisal.vehicle.rego}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>VIN:</Text>
-            <Text style={styles.value}>{appraisal.vehicle.vin}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Odometer:</Text>
-            <Text style={styles.value}>
-              {appraisal.lastOdometer
-                ? `${appraisal.lastOdometer.toLocaleString()} km`
-                : "N/A"}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Appraisal Date:</Text>
-            <Text style={styles.value}>{formatDate(appraisal.createdAt)}</Text>
-          </View>
-        </View>
+        {/* Main Content - 3 Equal Sections */}
+        <View style={styles.content}>
+          {/* First Section: Instructions and QR Code */}
+          <View style={styles.section}>
+            <View style={styles.topSection}>
+              <View style={styles.infoSection}>
+                <Text style={styles.introText}>
+                  We've pulled live market data to give you a clear, unbiased
+                  snapshot of your vehicle's current position:
+                </Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Valuation Summary</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Estimated Retail:</Text>
-            <Text style={[styles.value, styles.price]}>
-              {formatCurrency(appraisal.estimatedRetail)}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Trade-In Estimate:</Text>
-            <Text style={[styles.value, styles.price]}>
-              {formatCurrency(appraisal.tradeInEstimate)}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Manager Max Offer:</Text>
-            <Text style={[styles.value, styles.price]}>
-              {formatCurrency(appraisal.managerMaxOffer)}
-            </Text>
-          </View>
-        </View>
+                <View style={styles.numberedItem}>
+                  <Text style={styles.numberedItemTitle}>1. Your Car</Text>
+                  <Text style={styles.numberedItemContent}>
+                    We matched your make, model, and kms to similar cars on the
+                    market.
+                  </Text>
+                </View>
 
-        <View style={styles.footer}>
-          <Text>
-            Queens • 123 Car Street, Auto City • (02) 1234 5678 •
-            www.queens.com.au
-          </Text>
+                <View style={styles.numberedItem}>
+                  <Text style={styles.numberedItemTitle}>2. Real Prices.</Text>
+                  <Text style={styles.numberedItemContent}>
+                    We show what others sold for — not guesses.
+                  </Text>
+                </View>
+
+                <View style={styles.numberedItem}>
+                  <Text style={styles.numberedItemTitle}>
+                    3. Today's Value.
+                  </Text>
+                  <Text style={styles.numberedItemContent}>
+                    You'll see what yours could retail for — and what a dealer
+                    might offer in trade.
+                  </Text>
+                </View>
+
+                <Text style={styles.noteText}>
+                  No obligations. No pressure. Just useful info.
+                </Text>
+
+                <Text style={[styles.noteText, styles.italic]}>
+                  *Offers are valid for 30 days from the print date.
+                </Text>
+              </View>
+
+              {/* QR Code Section */}
+              <View style={styles.qrSection}>
+                <View style={styles.qrPlaceholder}>
+                  <Text style={styles.qrText}>QR CODE</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Second Section: What's Been Selling */}
+          <View style={styles.section}>
+            <View style={styles.tableContainer}>
+              <Text style={styles.sectionHeader}>WHAT'S BEEN SELLING</Text>
+              <Text style={styles.sectionSubtitle}>
+                {delistedLeads.length} cars like yours sold in the last 60 days
+              </Text>
+
+              {delistedLeads.length > 0 ? (
+                <View style={styles.table}>
+                  {/* Table Header */}
+                  <View style={styles.tableHeader}>
+                    <Text style={[styles.tableHeaderText, { width: "6%" }]}>
+                      ID
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "14%" }]}>
+                      Drive Away
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Kms
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Color
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "8%" }]}>
+                      Age
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Seller
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "10%" }]}>
+                      State
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "26%" }]}>
+                      Sources
+                    </Text>
+                  </View>
+
+                  {/* Table Rows */}
+                  {delistedLeads.slice(0, 8).map((lead, index) => {
+                    const daysToSell = lead.removedAt
+                      ? Math.floor(
+                          (new Date(lead.removedAt).getTime() -
+                            new Date(lead.listedAt).getTime()) /
+                            (1000 * 60 * 60 * 24),
+                        )
+                      : null;
+
+                    return (
+                      <View key={lead._id || index} style={styles.tableRow}>
+                        <Text style={[styles.tableCell, { width: "6%" }]}>
+                          {index + 1}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "14%" }]}>
+                          {formatCurrency(lead.driveAwayPrice)}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {formatKms(lead.kms)}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {lead.color || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "8%" }]}>
+                          {daysToSell ? `${daysToSell}d` : "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {lead.sellerType || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "10%" }]}>
+                          {lead.state || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "26%" }]}>
+                          {lead.listingSources?.join(", ") || "N/A"}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <Text style={styles.noData}>
+                  No recent sales data available
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {/* Third Section: What's on the Market */}
+          <View style={styles.section}>
+            <View style={styles.tableContainer}>
+              <Text style={styles.sectionHeader}>WHAT'S ON THE MARKET</Text>
+              <Text style={styles.sectionSubtitle}>
+                {activeLeads.length} cars currently live across Carsales,
+                Gumtree, Autotrader, etc.
+              </Text>
+
+              {activeLeads.length > 0 ? (
+                <View style={styles.table}>
+                  {/* Table Header */}
+                  <View style={styles.tableHeader}>
+                    <Text style={[styles.tableHeaderText, { width: "6%" }]}>
+                      ID
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "14%" }]}>
+                      Drive Away
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Kms
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Color
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "8%" }]}>
+                      Age
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "12%" }]}>
+                      Seller
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "10%" }]}>
+                      State
+                    </Text>
+                    <Text style={[styles.tableHeaderText, { width: "26%" }]}>
+                      Sources
+                    </Text>
+                  </View>
+
+                  {/* Table Rows */}
+                  {activeLeads.slice(0, 8).map((lead, index) => {
+                    const daysListed = Math.floor(
+                      (new Date().getTime() -
+                        new Date(lead.listedAt).getTime()) /
+                        (1000 * 60 * 60 * 24),
+                    );
+
+                    return (
+                      <View key={lead._id || index} style={styles.tableRow}>
+                        <Text style={[styles.tableCell, { width: "6%" }]}>
+                          {index + 1}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "14%" }]}>
+                          {formatCurrency(lead.driveAwayPrice)}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {formatKms(lead.kms)}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {lead.color || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "8%" }]}>
+                          {daysListed}d
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "12%" }]}>
+                          {lead.sellerType || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "10%" }]}>
+                          {lead.state || "N/A"}
+                        </Text>
+                        <Text style={[styles.tableCell, { width: "26%" }]}>
+                          {lead.listingSources?.join(", ") || "N/A"}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <Text style={styles.noData}>No active listings available</Text>
+              )}
+            </View>
+          </View>
         </View>
       </Page>
     </Document>
