@@ -1,8 +1,6 @@
 "use client";
 
-import { Activity, Calendar, Clock } from "lucide-react";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import {
   Table,
   TableBody,
