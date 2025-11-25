@@ -1,5 +1,6 @@
 "use client";
 
+import { pdf } from "@react-pdf/renderer";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import { useAppraisals } from "@/hooks/useAppraisals";
 import { Loader } from "../ui";
+import { AppraisalPdf } from "./AppraisalPdf";
 import { PriceCell } from "./PriceCell";
 
 interface AppraisalsTableProps {
@@ -205,9 +207,19 @@ export function AppraisalsTable({
                         <Badge
                           variant={appraisal.isDraft ? "secondary" : "default"}
                           className="cursor-pointer"
-                          onClick={() =>
-                            router.push(`todays-appraisals/${appraisal._id}`)
-                          }
+                          onClick={async () => {
+                            if (!appraisal.isDraft) {
+                              const blob = await pdf(
+                                <AppraisalPdf appraisal={appraisal} />,
+                              ).toBlob();
+
+                              const url = URL.createObjectURL(blob);
+
+                              window.open(url, "_blank");
+                            } else {
+                              router.push(`todays-appraisals/${appraisal._id}`);
+                            }
+                          }}
                         >
                           {appraisal.isDraft ? "Draft" : "Drafted"}
                         </Badge>
