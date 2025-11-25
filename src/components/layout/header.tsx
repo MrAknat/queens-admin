@@ -5,6 +5,7 @@ import { AdminModeToggle } from "@/components/admin-mode-toggle";
 import { LogoutButton } from "@/components/logoutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import { useUIStore } from "@/stores/ui-store";
 
 interface HeaderProps {
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
   const { isMobile, setSidebarCollapsed } = useUIStore();
+  const { hasAdminRole } = useUserRoles();
 
   const handleMenuClick = () => {
     setSidebarCollapsed(false);
@@ -46,9 +48,11 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
           </Button>
 
           {/* TODO: Remove container divs passing className string to components directly */}
-          <div className="hidden lg:block">
-            <AdminModeToggle />
-          </div>
+          {hasAdminRole() && (
+            <div className="hidden lg:block">
+              <AdminModeToggle />
+            </div>
+          )}
           {/* TODO: Remove container divs passing className string to components directly */}
           <div className="hidden lg:block">
             <ThemeToggle />
