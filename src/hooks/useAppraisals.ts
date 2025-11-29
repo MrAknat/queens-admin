@@ -7,6 +7,9 @@ export interface Vehicle {
   modelId: string;
   vin: string;
   rego: string;
+  colour: string;
+  make: string;
+  model: string;
   odometer: number | null;
   description: string;
   createdAt: string;

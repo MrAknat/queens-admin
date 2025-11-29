@@ -17,6 +17,9 @@ export interface VehicleData {
   description: string;
   rego: string;
   vin: string;
+  colour: string;
+  make: string;
+  model: string;
   modelId: string;
   odometer: number;
   createdAt: string;

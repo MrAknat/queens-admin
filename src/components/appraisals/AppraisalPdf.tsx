@@ -251,17 +251,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#2B5A8E",
     padding: 4,
   },
+  vehicleRego: {
+    backgroundColor: "#000",
+    padding: 4,
+  },
   vehicleInfoText: {
     color: "#FFFFFF",
     fontSize: 8,
     fontWeight: "bold",
   },
   dateInfo: {
-    backgroundColor: "#A0A0A0",
     padding: 4,
   },
   dateInfoText: {
     fontSize: 8,
+    fontWeight: "bold",
   },
   logoSection: {
     alignItems: "flex-end",
@@ -613,16 +617,23 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
 
           {/* Footer Section */}
           <View style={styles.footerSection}>
-            <View style={{ flexDirection: "row", marginBottom: 3 }}>
+            <View style={{ flexDirection: "column", marginBottom: 3 }}>
               <View style={styles.vehicleInfo}>
                 <Text style={styles.vehicleInfoText}>
-                  {appraisal.vehicle.rego.toUpperCase()}
+                  {`${appraisal.vehicle.colour} ${appraisal.vehicle.make} ${appraisal.vehicle.model}`}
                 </Text>
               </View>
-              <View style={styles.dateInfo}>
-                <Text style={styles.dateInfoText}>
-                  {formatDate(appraisal.createdAt)}
-                </Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={styles.vehicleRego}>
+                  <Text style={styles.vehicleInfoText}>
+                    {appraisal.vehicle.rego.toUpperCase()}
+                  </Text>
+                </View>
+                <View style={styles.dateInfo}>
+                  <Text style={styles.dateInfoText}>
+                    {formatDate(appraisal.createdAt)}
+                  </Text>
+                </View>
               </View>
             </View>
             <View style={styles.logoSection}>
