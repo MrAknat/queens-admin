@@ -76,7 +76,7 @@ export default function TodaysAppraisalEditPage() {
     try {
       completeAppraisal();
 
-      router.back();
+      router.push("/past-appraisals");
     } catch (error) {
       console.error("Okey Draft error:", error);
     }
@@ -102,7 +102,7 @@ export default function TodaysAppraisalEditPage() {
   } = useUnsavedChanges(hasUnsavedChanges);
 
   const handleBackNavigation = () => {
-    handleNavigation(() => router.back());
+    handleNavigation(() => router.push("/todays-appraisals"));
   };
 
   if (isLoading) {
