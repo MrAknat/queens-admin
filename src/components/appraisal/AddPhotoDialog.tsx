@@ -1,4 +1,5 @@
-import { Upload, X } from "lucide-react";
+import imageCompression from "browser-image-compression";
+import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -25,16 +26,48 @@ export function AddPhotoDialog({
 }: AddPhotoDialogProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isCompressing, setIsCompressing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: uploadPhoto, isPending } = useUploadPhoto(appraisalId);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
+
     if (file) {
-      setSelectedFile(file);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      setIsCompressing(true);
+
+      try {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+
+        const compressedFile = await imageCompression(file, options);
+
+        const finalFile = new File([compressedFile], file.name, {
+          type: compressedFile.type,
+        });
+
+        setSelectedFile(finalFile);
+
+        const url = URL.createObjectURL(compressedFile);
+
+        setPreviewUrl(url);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+
+        setSelectedFile(file);
+
+        const url = URL.createObjectURL(file);
+
+        setPreviewUrl(url);
+      } finally {
+        setIsCompressing(false);
+      }
     }
   };
 
@@ -123,6 +156,11 @@ export function AddPhotoDialog({
                 <p className="text-xs text-gray-500">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                 </p>
+                {isCompressing && (
+                  <div className="absolute inset-0 bg-background/50 flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -134,7 +172,7 @@ export function AddPhotoDialog({
           </Button>
           <Button
             onClick={handleUpload}
-            disabled={!selectedFile || isPending}
+            disabled={!selectedFile || isPending || isCompressing}
             className="gap-2"
           >
             {isPending && <Upload className="h-4 w-4 animate-pulse" />}
