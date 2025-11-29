@@ -1,7 +1,7 @@
 "use client";
 
 import { pdf } from "@react-pdf/renderer";
-import { Search } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useAppraisals } from "@/hooks/useAppraisals";
+import { useAppraisals, useDeleteAppraisal } from "@/hooks/useAppraisals";
+import { useIsAdminModeActive } from "@/stores/admin-store";
 import { Loader } from "../ui";
 import { AppraisalPdf } from "./AppraisalPdf";
 import { PriceCell } from "./PriceCell";
@@ -29,6 +30,7 @@ export function AppraisalsTable({
   showDraftsOnly = false,
 }: AppraisalsTableProps) {
   const router = useRouter();
+  const isAdminModeActive = useIsAdminModeActive();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -57,6 +59,9 @@ export function AppraisalsTable({
     search: debouncedSearchTerm,
     isDraft: showDraftsOnly ? "true" : "false",
   });
+
+  const { mutateAsync: deleteAppraisal, isPending: isDeleting } =
+    useDeleteAppraisal();
 
   const appraisals = appraisalsResponse?.data || [];
 
@@ -163,6 +168,9 @@ export function AppraisalsTable({
                     <TableHead>Max Offer</TableHead>
                     <TableHead>Man. Max Offer</TableHead>
                     <TableHead>Status</TableHead>
+                    {isAdminModeActive && (
+                      <TableHead className="w-[50px]"></TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -224,6 +232,35 @@ export function AppraisalsTable({
                           {appraisal.isDraft ? "Draft" : "Drafted"}
                         </Badge>
                       </TableCell>
+                      {isAdminModeActive && (
+                        <TableCell>
+                          <button
+                            type="button"
+                            disabled={isDeleting}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this appraisal? This action cannot be undone.",
+                                )
+                              ) {
+                                try {
+                                  await deleteAppraisal(appraisal._id);
+                                } catch (error) {
+                                  console.error(
+                                    "Failed to delete appraisal:",
+                                    error,
+                                  );
+                                }
+                              }
+                            }}
+                            className="p-2 text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50 cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

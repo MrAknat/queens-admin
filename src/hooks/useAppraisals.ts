@@ -301,3 +301,23 @@ export function useUpdatePhoto(appraisalId: string) {
     },
   });
 }
+export function useDeleteAppraisal() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch(`/api/appraisals/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete appraisal: ${response.status} ${response.statusText}`,
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
+    },
+  });
+}
