@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PhotoData } from "@/components/appraisal/types";
+import type { ListingSource } from "@/lib/constants";
 
 // Types
 export interface Vehicle {
@@ -26,7 +27,7 @@ export interface Lead {
   state: string;
   driveAwayPrice: number;
   kms: number;
-  listingSources: string[];
+  listingSources: ListingSource[];
   color: string;
 }
 
