@@ -26,6 +26,11 @@ const styles = StyleSheet.create({
   page: {
     fontFamily: "Helvetica",
     padding: 7,
+    transform: "rotate(-180deg)",
+  },
+  coverPage: {
+    fontFamily: "Helvetica",
+    padding: 7,
   },
   headerBanner: {
     display: "flex",
@@ -605,7 +610,7 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
       </Page>
 
       {/* Second Page: Summary */}
-      <Page size="A4" style={styles.page} orientation="portrait">
+      <Page size="A4" style={styles.coverPage} orientation="portrait">
         {/* First Third: Summary Information */}
         <View style={styles.secondPageSection}>
           {/* Summary Header */}
