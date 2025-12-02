@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, TrendingUp } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -20,12 +20,24 @@ import {
   DAYS_FILTER_OPTIONS,
   SELLER_TYPE_OPTIONS,
 } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { LeadData } from "./types";
 
 interface LeadsTableProps {
   leads: LeadData[];
 }
+
+type SortColumn =
+  | "released"
+  | "priceEgc"
+  | "driveAway"
+  | "kms"
+  | "color"
+  | "age"
+  | "delisted"
+  | "sellerType"
+  | "state";
+type SortDirection = "asc" | "desc";
 
 export function LeadsTable({ leads }: LeadsTableProps) {
   const [showActive, setShowActive] = useState(true);
@@ -33,6 +45,8 @@ export function LeadsTable({ leads }: LeadsTableProps) {
   const [selectedDays, setSelectedDays] = useState<number>(60);
   const [selectedSellerType, setSelectedSellerType] = useState<string>("All");
   const [selectedState, setSelectedState] = useState<string>("All States");
+  const [sortColumn, setSortColumn] = useState<SortColumn>("priceEgc");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const handleActiveChange = (checked: boolean) => {
     if (!checked && !showDelisted) {
@@ -50,6 +64,27 @@ export function LeadsTable({ leads }: LeadsTableProps) {
     } else {
       setShowDelisted(checked);
     }
+  };
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("desc");
+    }
+  };
+
+  const SortIcon = ({ column }: { column: SortColumn }) => {
+    if (sortColumn !== column) {
+      return <ArrowUpDown className="h-3 w-3 min-w-3 min-h-3 opacity-30" />;
+    }
+
+    return sortDirection === "asc" ? (
+      <ArrowUp className="h-3 w-3 min-w-3 min-h-3" />
+    ) : (
+      <ArrowDown className="h-3 w-3 min-w-3 min-h-3" />
+    );
   };
 
   const filteredLeads = leads.filter((lead) => {
@@ -98,14 +133,44 @@ export function LeadsTable({ leads }: LeadsTableProps) {
     return true;
   });
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-AU", {
-      style: "currency",
-      currency: "AUD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+  const sortedLeads = [...filteredLeads].sort((a, b) => {
+    const multiplier = sortDirection === "asc" ? 1 : -1;
+
+    switch (sortColumn) {
+      case "released":
+        return multiplier * moment(a.listedAt).diff(moment(b.listedAt));
+      case "priceEgc":
+        return (
+          multiplier * (a.priceBeforeGovtCharges - b.priceBeforeGovtCharges)
+        );
+      case "driveAway":
+        return multiplier * (a.driveAwayPrice - b.driveAwayPrice);
+      case "kms":
+        return multiplier * (a.kms - b.kms);
+      case "color":
+        return multiplier * a.color.localeCompare(b.color);
+      case "age": {
+        const ageA = a.removedAt
+          ? moment(a.removedAt).diff(a.listedAt, "days")
+          : moment().diff(a.listedAt, "days");
+        const ageB = b.removedAt
+          ? moment(b.removedAt).diff(b.listedAt, "days")
+          : moment().diff(b.listedAt, "days");
+        return multiplier * (ageA - ageB);
+      }
+      case "delisted": {
+        const delistedA = a.removedAt ? moment(a.removedAt).valueOf() : 0;
+        const delistedB = b.removedAt ? moment(b.removedAt).valueOf() : 0;
+        return multiplier * (delistedA - delistedB);
+      }
+      case "sellerType":
+        return multiplier * a.sellerType.localeCompare(b.sellerType);
+      case "state":
+        return multiplier * a.state.localeCompare(b.state);
+      default:
+        return 0;
+    }
+  });
 
   const formatKms = (kms: number) => {
     return new Intl.NumberFormat("en-AU").format(kms);
@@ -136,9 +201,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
         <div className="flex w-full items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-primary" />
-            <h3 className="font-medium">
-              Market Leads ({filteredLeads.length})
-            </h3>
+            <h3 className="font-medium">Market Leads ({sortedLeads.length})</h3>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
@@ -186,7 +249,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {filteredLeads.length === 0 ? (
+        {sortedLeads.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-32 text-gray-500">
             <TrendingUp className="h-8 w-8 mb-2 text-gray-400" />
             <p>No market leads match the selected filters</p>
@@ -197,20 +260,83 @@ export function LeadsTable({ leads }: LeadsTableProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
-                  <TableHead>Released</TableHead>
-                  <TableHead>Price EGC</TableHead>
-                  <TableHead>Drive Away</TableHead>
-                  <TableHead>Kms</TableHead>
-                  <TableHead>Color</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Delisted</TableHead>
-                  <TableHead>S</TableHead>
-                  <TableHead>State</TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("released")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Released <SortIcon column="released" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("priceEgc")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Price EGC <SortIcon column="priceEgc" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("driveAway")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Drive Away <SortIcon column="driveAway" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("kms")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Kms <SortIcon column="kms" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("color")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Color <SortIcon column="color" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("age")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Age <SortIcon column="age" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("delisted")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Delisted <SortIcon column="delisted" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("sellerType")}
+                  >
+                    <div className="flex items-center gap-1">
+                      S <SortIcon column="sellerType" />
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleSort("state")}
+                  >
+                    <div className="flex items-center gap-1">
+                      State <SortIcon column="state" />
+                    </div>
+                  </TableHead>
                   <TableHead>Sources</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredLeads.map((lead, index) => (
+                {sortedLeads.map((lead, index) => (
                   <TableRow
                     key={lead._id}
                     className={cn(
