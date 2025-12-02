@@ -214,11 +214,14 @@ export function LeadsTable({ leads }: LeadsTableProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
+                  <TableHead>Released</TableHead>
+                  <TableHead>Price EGC</TableHead>
                   <TableHead>Drive Away</TableHead>
                   <TableHead>Kms</TableHead>
                   <TableHead>Color</TableHead>
                   <TableHead>Age</TableHead>
-                  <TableHead>Seller Type</TableHead>
+                  <TableHead>Delisted</TableHead>
+                  <TableHead>S</TableHead>
                   <TableHead>State</TableHead>
                   <TableHead>Sources</TableHead>
                 </TableRow>
@@ -232,9 +235,15 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                       lead.removedAt && "bg-warning/10 hover:bg-warning/20",
                     )}
                   >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <span className="text-sm">
+                        {moment(lead.listedAt).format("MMM YYYY")}
+                      </span>
+                    </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm">{index + 1}</span>
+                      <div className="font-medium">
+                        {formatCurrency(lead.priceBeforeGovtCharges)}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -247,7 +256,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                         {formatKms(lead.kms)} km
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <span className="text-sm">{lead.color}</span>
                     </TableCell>
                     <TableCell>
@@ -260,7 +269,18 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                           : `${moment().diff(lead.listedAt, "days")}d`}
                       </span>
                     </TableCell>
-                    <TableCell>{getSellerTypeBadge(lead.sellerType)}</TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {lead.removedAt
+                          ? moment(lead.removedAt).format("DD/MM/YYYY")
+                          : "-"}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm font-medium">
+                        {lead.sellerType.charAt(0).toUpperCase()}
+                      </span>
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline">{lead.state}</Badge>
                     </TableCell>

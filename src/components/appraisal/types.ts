@@ -34,6 +34,7 @@ export interface LeadData {
   removedAt: string;
   sellerType: string;
   state: string;
+  priceBeforeGovtCharges: number;
   driveAwayPrice: number;
   kms: number;
   listingSources: string[];
