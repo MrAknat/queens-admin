@@ -2,11 +2,12 @@
 
 import { PDFViewer } from "@react-pdf/renderer";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { AppraisalPdf } from "@/components/appraisals/AppraisalPdf";
 import { Loader } from "@/components/ui";
 import { useAppraisal } from "@/hooks/useAppraisals";
 
-export default function PdfPreviewPage() {
+function PdfPreviewContent() {
   const searchParams = useSearchParams();
   const appraisalId = searchParams.get("id");
 
@@ -54,5 +55,19 @@ export default function PdfPreviewPage() {
         <AppraisalPdf appraisal={appraisal} />
       </PDFViewer>
     </div>
+  );
+}
+
+export default function PdfPreviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+          <Loader className="w-8 h-8" />
+        </div>
+      }
+    >
+      <PdfPreviewContent />
+    </Suspense>
   );
 }
