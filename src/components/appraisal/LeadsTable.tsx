@@ -111,23 +111,6 @@ export function LeadsTable({ leads }: LeadsTableProps) {
     return new Intl.NumberFormat("en-AU").format(kms);
   };
 
-  const getSellerTypeBadge = (sellerType: string) => {
-    const variants: Record<
-      string,
-      "default" | "secondary" | "destructive" | "outline"
-    > = {
-      dealer: "default",
-      private: "secondary",
-      auction: "outline",
-    };
-
-    return (
-      <Badge variant={variants[sellerType.toLowerCase()] || "outline"}>
-        {sellerType}
-      </Badge>
-    );
-  };
-
   if (!leads || leads.length === 0) {
     return (
       <Card>
@@ -285,16 +268,24 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                       <Badge variant="outline">{lead.state}</Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {lead.listingSources.map((source, index) => (
-                          <Badge
-                            key={index}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {source}
+                      <div className="flex flex-nowrap gap-1">
+                        {lead.listingSources
+                          .slice(0, 3)
+                          .map((source, index) => (
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className="text-xs cursor-default"
+                              title={source}
+                            >
+                              {source.slice(0, 3).toUpperCase()}
+                            </Badge>
+                          ))}
+                        {lead.listingSources.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{lead.listingSources.length - 3}
                           </Badge>
-                        ))}
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
