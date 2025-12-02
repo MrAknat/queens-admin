@@ -31,14 +31,14 @@ export function AppraisalSubmissionPanel() {
         </CardContent>
       </Card>
 
-      <Card className="mt-6">
+      {/* <Card className="mt-6">
         <CardHeader variant="admin">
           <h3 className="text-lg font-semibold">Batch Appraisals Uploader</h3>
         </CardHeader>
         <CardContent>
           <BatchAppraisalsUploaderForm />
         </CardContent>
-      </Card>
+      </Card> */}
     </AdminSection>
   );
 }
