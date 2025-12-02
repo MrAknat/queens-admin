@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select } from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -14,6 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AUSTRALIAN_STATES,
+  DAYS_FILTER_OPTIONS,
+  SELLER_TYPE_OPTIONS,
+} from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { LeadData } from "./types";
 
@@ -24,6 +30,9 @@ interface LeadsTableProps {
 export function LeadsTable({ leads }: LeadsTableProps) {
   const [showActive, setShowActive] = useState(true);
   const [showDelisted, setShowDelisted] = useState(true);
+  const [selectedDays, setSelectedDays] = useState<number>(60);
+  const [selectedSellerType, setSelectedSellerType] = useState<string>("All");
+  const [selectedState, setSelectedState] = useState<string>("All States");
 
   const handleActiveChange = (checked: boolean) => {
     if (!checked && !showDelisted) {
@@ -47,19 +56,46 @@ export function LeadsTable({ leads }: LeadsTableProps) {
     const isDelisted = !!lead.removedAt;
     const isActive = !lead.removedAt;
 
+    let passesActiveFilter = false;
     if (showActive && showDelisted) {
-      return true;
+      passesActiveFilter = true;
+    } else if (showActive && isActive) {
+      passesActiveFilter = true;
+    } else if (showDelisted && isDelisted) {
+      passesActiveFilter = true;
     }
 
-    if (showActive && isActive) {
-      return true;
+    if (!passesActiveFilter) {
+      return false;
     }
 
-    if (showDelisted && isDelisted) {
-      return true;
+    if (lead.removedAt) {
+      const daysSinceRemoved = moment().diff(moment(lead.removedAt), "days");
+      if (daysSinceRemoved > selectedDays) {
+        return false;
+      }
     }
 
-    return false;
+    if (selectedSellerType !== "All") {
+      if (selectedSellerType === "P/D") {
+        if (
+          lead.sellerType.toLowerCase() !== "private" &&
+          lead.sellerType.toLowerCase() !== "dealer"
+        ) {
+          return false;
+        }
+      } else if (
+        lead.sellerType.toLowerCase() !== selectedSellerType.toLowerCase()
+      ) {
+        return false;
+      }
+    }
+
+    if (selectedState !== "All States" && lead.state !== selectedState) {
+      return false;
+    }
+
+    return true;
   });
 
   const formatCurrency = (amount: number) => {
@@ -121,17 +157,48 @@ export function LeadsTable({ leads }: LeadsTableProps) {
               Market Leads ({filteredLeads.length})
             </h3>
           </div>
-          <div className="flex items-center gap-4">
-            <Checkbox
-              label="Active"
-              checked={showActive}
-              onChange={(e) => handleActiveChange(e.target.checked)}
-            />
-            <Checkbox
-              label="Delisted"
-              checked={showDelisted}
-              onChange={(e) => handleDelistedChange(e.target.checked)}
-            />
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+              <Select
+                value={selectedDays.toString()}
+                onChange={(e) => setSelectedDays(Number(e.target.value))}
+                options={DAYS_FILTER_OPTIONS.map((days) => ({
+                  value: days.toString(),
+                  label: `${days} days`,
+                }))}
+                className="w-auto min-w-[120px] bg-card"
+              />
+              <Select
+                value={selectedSellerType}
+                onChange={(e) => setSelectedSellerType(e.target.value)}
+                options={SELLER_TYPE_OPTIONS.map((type) => ({
+                  value: type,
+                  label: type,
+                }))}
+                className="w-auto min-w-[100px] bg-card"
+              />
+              <Select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                options={AUSTRALIAN_STATES.map((state) => ({
+                  value: state,
+                  label: state,
+                }))}
+                className="w-auto min-w-[130px] bg-card"
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                label="Active"
+                checked={showActive}
+                onChange={(e) => handleActiveChange(e.target.checked)}
+              />
+              <Checkbox
+                label="Delisted"
+                checked={showDelisted}
+                onChange={(e) => handleDelistedChange(e.target.checked)}
+              />
+            </div>
           </div>
         </div>
       </CardHeader>

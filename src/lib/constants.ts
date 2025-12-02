@@ -22,3 +22,26 @@ export const LISTING_SOURCES: Record<ListingSource, string> = {
   "shopforcars.com.au": "shopforcars",
   "carsforcomm-bank.com.au": "carsforcomm-bank",
 };
+
+// Lead filter constants
+export const DAYS_FILTER_OPTIONS = [30, 60, 90, 180, 360] as const;
+
+export const SELLER_TYPE_OPTIONS = [
+  "All",
+  "P/D",
+  "Private",
+  "Dealer",
+  "New",
+] as const;
+
+export const AUSTRALIAN_STATES = [
+  "All States",
+  "QLD",
+  "NSW",
+  "VIC",
+  "WA",
+  "SA",
+  "TAS",
+  "ACT",
+  "NT",
+] as const;
