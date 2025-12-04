@@ -390,6 +390,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 10,
     fontWeight: "bold",
+    opacity: 0,
   },
 });
 
