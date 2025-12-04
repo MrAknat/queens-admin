@@ -166,7 +166,7 @@ export function AppraisalsTable({
                     <TableHead>Date</TableHead>
                     <TableHead>Est. Retail</TableHead>
                     <TableHead>Max Offer</TableHead>
-                    <TableHead>Man. Max Offer</TableHead>
+                    <TableHead>Manager's Offer</TableHead>
                     <TableHead>Status</TableHead>
                     {isAdminModeActive && (
                       <TableHead className="w-[50px]"></TableHead>
@@ -209,7 +209,7 @@ export function AppraisalsTable({
                       />
                       <PriceCell
                         value={appraisal.managerMaxOffer}
-                        className="bg-primary text-primary-foreground hover:bg-badge-trade/80"
+                        className="bg-badge-man-offer text-primary-foreground hover:bg-badge-man-offer/80"
                       />
                       <TableCell>
                         <Badge

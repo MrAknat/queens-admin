@@ -87,7 +87,7 @@ export function UpdateFormPanel({
               render={({ field, fieldState: { error } }) => (
                 <FormField
                   id="managerMaxOffer"
-                  label="Manager's Max Offer ($)"
+                  label="Manager's Offer ($)"
                   error={error?.message}
                 >
                   <Input

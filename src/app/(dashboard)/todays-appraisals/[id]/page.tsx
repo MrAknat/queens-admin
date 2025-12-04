@@ -76,7 +76,7 @@ export default function TodaysAppraisalEditPage() {
     try {
       completeAppraisal();
 
-      router.push("/past-appraisals");
+      router.push("/todays-appraisals");
     } catch (error) {
       console.error("Okey Draft error:", error);
     }
