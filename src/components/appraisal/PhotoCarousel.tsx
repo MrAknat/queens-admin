@@ -96,7 +96,7 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
               onClick={() => setIsAddPhotoOpen(true)}
             >
               <Plus className="h-4 w-4" />
-              Add Photo
+              Add Photos
             </Button>
           </div>
         </CardHeader>
@@ -107,7 +107,7 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
             <p className="text-sm text-gray-400 mb-4">
               Upload photos to document the vehicle condition
             </p>
-            <Button onClick={() => setIsAddPhotoOpen(true)}>Add Photo</Button>
+            <Button onClick={() => setIsAddPhotoOpen(true)}>Add Photos</Button>
           </div>
         </CardContent>
 
@@ -137,7 +137,7 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
             onClick={() => setIsAddPhotoOpen(true)}
           >
             <Plus className="h-4 w-4" />
-            Add Photo
+            Add Photos
           </Button>
         </div>
       </CardHeader>

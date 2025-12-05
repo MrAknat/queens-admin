@@ -24,8 +24,8 @@ export function AddPhotoDialog({
   isOpen,
   onClose,
 }: AddPhotoDialogProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isCompressing, setIsCompressing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,10 +34,12 @@ export function AddPhotoDialog({
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0];
+    const files = event.target.files;
 
-    if (file) {
+    if (files && files.length > 0) {
       setIsCompressing(true);
+      const newFiles: File[] = [];
+      const newUrls: string[] = [];
 
       try {
         const options = {
@@ -46,122 +48,136 @@ export function AddPhotoDialog({
           useWebWorker: true,
         };
 
-        const compressedFile = await imageCompression(file, options);
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          try {
+            const compressedFile = await imageCompression(file, options);
+            const finalFile = new File([compressedFile], file.name, {
+              type: compressedFile.type,
+            });
+            newFiles.push(finalFile);
+            newUrls.push(URL.createObjectURL(compressedFile));
+          } catch (error) {
+            console.error(`Error compressing image ${file.name}:`, error);
+            newFiles.push(file);
+            newUrls.push(URL.createObjectURL(file));
+          }
+        }
 
-        const finalFile = new File([compressedFile], file.name, {
-          type: compressedFile.type,
-        });
-
-        setSelectedFile(finalFile);
-
-        const url = URL.createObjectURL(compressedFile);
-
-        setPreviewUrl(url);
-      } catch (error) {
-        console.error("Error compressing image:", error);
-
-        setSelectedFile(file);
-
-        const url = URL.createObjectURL(file);
-
-        setPreviewUrl(url);
+        setSelectedFiles((prev) => [...prev, ...newFiles]);
+        setPreviewUrls((prev) => [...prev, ...newUrls]);
       } finally {
         setIsCompressing(false);
       }
     }
   };
 
-  const handleClearFile = () => {
-    setSelectedFile(null);
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
-    }
+  const handleClearFiles = () => {
+    previewUrls.forEach((url) => {
+      URL.revokeObjectURL(url);
+    });
+
+    setSelectedFiles([]);
+    setPreviewUrls([]);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
+  const handleRemoveFile = (index: number) => {
+    URL.revokeObjectURL(previewUrls[index]);
+
+    const newFiles = [...selectedFiles];
+    newFiles.splice(index, 1);
+    setSelectedFiles(newFiles);
+
+    const newUrls = [...previewUrls];
+    newUrls.splice(index, 1);
+    setPreviewUrls(newUrls);
+  };
+
   const handleUpload = () => {
-    if (!selectedFile) return;
+    if (selectedFiles.length === 0) return;
 
     const formData = new FormData();
-    formData.append("files", selectedFile);
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
 
     uploadPhoto(formData, {
       onSuccess: () => {
-        handleClearFile();
+        handleClearFiles();
         onClose();
       },
     });
   };
 
   const handleClose = () => {
-    handleClearFile();
+    handleClearFiles();
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Add Photo</DialogTitle>
+          <DialogTitle>Add Photos</DialogTitle>
           <DialogDescription>
-            Upload a new photo for this appraisal.
+            Upload one or more photos for this appraisal.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          {!selectedFile ? (
-            <button
-              type="button"
-              className="border-2 border-dashed border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 transition-colors"
-              onClick={() => fileInputRef.current?.click()}
+          <div className="flex items-center justify-center w-full">
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50"
             >
-              <Upload className="h-10 w-10 text-gray-400 mb-2" />
-              <p className="text-sm text-gray-600 font-medium">
-                Click to upload photo
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                JPG, PNG, GIF up to 10MB
-              </p>
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold">Click to upload</span>
+                </p>
+              </div>
               <input
                 ref={fileInputRef}
+                id="dropzone-file"
                 type="file"
-                accept="image/*"
                 className="hidden"
+                accept="image/*"
+                multiple
                 onChange={handleFileSelect}
               />
-            </button>
-          ) : (
-            <div className="relative rounded-lg overflow-hidden border border-gray-200">
-              <Image
-                width={64}
-                height={64}
-                src={previewUrl || ""}
-                alt="Preview"
-                className="w-full h-64 object-contain bg-background"
-              />
-              <button
-                type="button"
-                onClick={handleClearFile}
-                className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1 rounded-full transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              <div className="p-2 bg-background border-t border-gray-200">
-                <p className="text-sm font-medium truncate">
-                  {selectedFile.name}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-                {isCompressing && (
-                  <div className="absolute inset-0 bg-background/50 flex items-center justify-center">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                  </div>
-                )}
-              </div>
+            </label>
+          </div>
+
+          {isCompressing && (
+            <div className="flex items-center justify-center py-4">
+              <Loader2 className="w-6 h-6 animate-spin mr-2" />
+              <span>Compressing images...</span>
+            </div>
+          )}
+
+          {previewUrls.length > 0 && (
+            <div className="grid grid-cols-3 gap-4 max-h-[300px] overflow-y-auto">
+              {previewUrls.map((url, index) => (
+                <div key={index} className="relative aspect-video">
+                  <Image
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(index)}
+                    className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -172,11 +188,16 @@ export function AddPhotoDialog({
           </Button>
           <Button
             onClick={handleUpload}
-            disabled={!selectedFile || isPending || isCompressing}
-            className="gap-2"
+            disabled={selectedFiles.length === 0 || isPending || isCompressing}
           >
-            {isPending && <Upload className="h-4 w-4 animate-pulse" />}
-            {isPending ? "Uploading..." : "Upload Photo"}
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              `Upload ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ""}`
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
