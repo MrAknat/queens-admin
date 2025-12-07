@@ -38,3 +38,29 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+
+    await fetch(`${API_BASE_URL}/api/v1/photos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: request.headers.get("cookie") || "",
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Photo delete API error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to delete photo" },
+      { status: 500 },
+    );
+  }
+}

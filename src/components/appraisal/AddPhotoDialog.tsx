@@ -51,14 +51,29 @@ export function AddPhotoDialog({
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
           try {
-            const compressedFile = await imageCompression(file, options);
+            let fileToCompress = file;
+
+            if (!file.type || file.type === "") {
+              fileToCompress = new File([file], file.name, {
+                type: "image/jpeg",
+                lastModified: file.lastModified,
+              });
+            }
+
+            const compressedFile = await imageCompression(
+              fileToCompress,
+              options,
+            );
+
             const finalFile = new File([compressedFile], file.name, {
               type: compressedFile.type,
             });
+
             newFiles.push(finalFile);
             newUrls.push(URL.createObjectURL(compressedFile));
           } catch (error) {
             console.error(`Error compressing image ${file.name}:`, error);
+
             newFiles.push(file);
             newUrls.push(URL.createObjectURL(file));
           }

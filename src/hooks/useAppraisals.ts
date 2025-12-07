@@ -306,22 +306,42 @@ export function useUpdatePhoto(appraisalId: string) {
     },
   });
 }
+
+export function useDeletePhoto(appraisalId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await fetch(`/api/photos/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(appraisalId),
+      });
+    },
+    onError: () => {
+      queryClient.invalidateQueries({
+        queryKey: appraisalQueryKeys.detail(appraisalId),
+      });
+    },
+  });
+}
+
 export function useDeleteAppraisal() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const response = await fetch(`/api/appraisals/${id}`, {
+      await fetch(`/api/appraisals/${id}`, {
         method: "DELETE",
       });
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to delete appraisal: ${response.status} ${response.statusText}`,
-        );
-      }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
+    },
+    onError: () => {
       queryClient.invalidateQueries({ queryKey: appraisalQueryKeys.lists() });
     },
   });

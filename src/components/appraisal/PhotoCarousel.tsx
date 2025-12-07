@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Pencil,
   Plus,
+  Trash,
   ZoomIn,
 } from "lucide-react";
 import Image from "next/image";
@@ -15,7 +16,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/input";
-import { useUpdatePhoto } from "@/hooks/useAppraisals";
+import { useDeletePhoto, useUpdatePhoto } from "@/hooks/useAppraisals";
 import { cn } from "@/lib/utils";
 import { AddPhotoDialog } from "./AddPhotoDialog";
 import { PhotoModal } from "./PhotoModal";
@@ -44,6 +45,7 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
   const [editingTitle, setEditingTitle] = useState("");
 
   const { mutate: updatePhoto } = useUpdatePhoto(appraisalId);
+  const { mutate: deletePhoto } = useDeletePhoto(appraisalId);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -79,6 +81,11 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
   const handleTitleCancel = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     setEditingPhotoId(null);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, photo: PhotoData) => {
+    e.stopPropagation();
+    deletePhoto(photo._id);
   };
 
   if (!photos || photos.length === 0) {
@@ -198,13 +205,22 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
                           <p className="text-xs truncate flex-1">
                             {photo.title || "Untitled"}
                           </p>
-                          <button
-                            type="button"
-                            onClick={(e) => handleEditClick(e, photo)}
-                            className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={(e) => handleEditClick(e, photo)}
+                              className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteClick(e, photo)}
+                              className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
+                            >
+                              <Trash className="h-4 w-4" />
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>
