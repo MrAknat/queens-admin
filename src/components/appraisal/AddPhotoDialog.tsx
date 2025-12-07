@@ -43,8 +43,8 @@ export function AddPhotoDialog({
 
       try {
         const options = {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
+          maxSizeMB: 0.7,
+          maxWidthOrHeight: 1280,
           useWebWorker: true,
         };
 
