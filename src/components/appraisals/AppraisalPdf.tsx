@@ -539,17 +539,6 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
                     No recent sales data available
                   </Text>
                 </View>
-              ) : filteredAndSortedDelistedLeads.length > 16 ? (
-                <View style={styles.multiColumnTableContainer}>
-                  <AppraisalPdfLeadsTable
-                    leads={filteredAndSortedDelistedLeads.slice(0, 16)}
-                    numberFrom={1}
-                  />
-                  <AppraisalPdfLeadsTable
-                    leads={filteredAndSortedDelistedLeads.slice(16, 32)}
-                    numberFrom={17}
-                  />
-                </View>
               ) : (
                 <View style={styles.singleColumnTableContainer}>
                   <AppraisalPdfLeadsTable
@@ -585,17 +574,6 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
                   <Text style={styles.noData}>
                     No active listings available
                   </Text>
-                </View>
-              ) : activeLeads.length > 16 ? (
-                <View style={styles.multiColumnTableContainer}>
-                  <AppraisalPdfLeadsTable
-                    leads={activeLeads.slice(0, 16)}
-                    numberFrom={1}
-                  />
-                  <AppraisalPdfLeadsTable
-                    leads={activeLeads.slice(16, 32)}
-                    numberFrom={17}
-                  />
                 </View>
               ) : (
                 <View style={styles.singleColumnTableContainer}>
