@@ -1,7 +1,6 @@
 "use client";
 
-import { redirect } from "next/navigation";
-import * as React from "react";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useIsLoading, useLogin } from "@/stores/auth-store";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -30,6 +30,7 @@ export default function LoginPage() {
 
     if (!email || !password) {
       setError("Please enter email and password");
+
       return;
     }
 
@@ -38,7 +39,10 @@ export default function LoginPage() {
     if (!res.success) {
       setError(res.message || "Login failed");
     } else {
-      redirect("/dashboard");
+      setEmail("");
+      setPassword("");
+
+      router.push("/dashboard");
     }
   };
 
@@ -59,6 +63,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onSubmit={() => console.log("trying to login")}
             />
           </div>
 
