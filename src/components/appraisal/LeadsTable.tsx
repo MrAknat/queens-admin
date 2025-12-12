@@ -203,8 +203,8 @@ export function LeadsTable({ leads }: LeadsTableProps) {
             <TrendingUp className="h-4 w-4 text-primary" />
             <h3 className="font-medium">Market Leads ({sortedLeads.length})</h3>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col xl:flex-row xl:items-center gap-6">
+            <div className="flex flex-col xl:flex-row xl:items-center gap-3">
               <Select
                 value={selectedDays.toString()}
                 onChange={(e) => setSelectedDays(Number(e.target.value))}
@@ -212,7 +212,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                   value: days.toString(),
                   label: `${days} days`,
                 }))}
-                className="w-auto min-w-[120px] bg-card"
+                className="w-auto xl:min-w-[120px] bg-card"
               />
               <Select
                 value={selectedSellerType}
@@ -221,7 +221,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                   value: type,
                   label: type,
                 }))}
-                className="w-auto min-w-[100px] bg-card"
+                className="w-auto xl:min-w-[100px] bg-card"
               />
               <Select
                 value={selectedState}
@@ -230,10 +230,10 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                   value: state,
                   label: state,
                 }))}
-                className="w-auto min-w-[130px] bg-card"
+                className="w-auto xl:min-w-[130px] bg-card"
               />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col xl:flex-row xl:items-center gap-3">
               <Checkbox
                 label="Active"
                 checked={showActive}

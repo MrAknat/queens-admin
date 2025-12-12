@@ -137,15 +137,21 @@ export function Breadcrumbs({
     <nav
       aria-label="Breadcrumb"
       className={cn(
-        "flex items-center space-x-1 text-sm text-muted-foreground",
+        "flex items-center space-x-1 text-sm text-muted-foreground w-full",
         className,
       )}
     >
-      <ol className="flex items-center space-x-1">
+      <ol className="flex items-center space-x-1 w-full">
         {displayItems.map((item, index) => (
-          <li key={`${item.label}-${index}`} className="flex items-center">
+          <li
+            key={`${item.label}-${index}`}
+            className={cn(
+              "flex items-center",
+              item.isCurrentPage && "truncate",
+            )}
+          >
             {index > 0 && (
-              <Separator className="mx-2 h-4 w-4 text-muted-foreground/50" />
+              <Separator className="flex-shrink-0 mx-2 h-4 w-4 text-muted-foreground/50" />
             )}
 
             <BreadcrumbItem item={item} />
@@ -174,8 +180,10 @@ function BreadcrumbItem({ item }: BreadcrumbItemProps) {
             : "text-muted-foreground",
       )}
     >
-      {Icon && <Icon className="h-3.5 w-3.5" />}
-      <span className="truncate">{label}</span>
+      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
+      <span className={cn("whitespace-nowrap", isCurrentPage && "truncate")}>
+        {label}
+      </span>
     </span>
   );
 
@@ -193,7 +201,7 @@ function BreadcrumbItem({ item }: BreadcrumbItemProps) {
   return (
     <span
       {...(isCurrentPage && { "aria-current": "page" })}
-      className={cn(isCurrentPage && "text-foreground font-medium")}
+      className={cn(isCurrentPage && "text-foreground font-medium truncate")}
     >
       {content}
     </span>

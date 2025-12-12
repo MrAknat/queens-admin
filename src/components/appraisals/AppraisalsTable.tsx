@@ -2,6 +2,7 @@
 
 import { pdf } from "@react-pdf/renderer";
 import { Search, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -178,7 +179,16 @@ export function AppraisalsTable({
                     <TableRow key={appraisal._id} className="hover:bg-muted/50">
                       <TableCell>
                         <div className="font-medium">
-                          {appraisal.vehicle.description}
+                          {showDraftsOnly ? (
+                            appraisal.vehicle.description
+                          ) : (
+                            <Link
+                              href={`/past-appraisals/${appraisal._id}`}
+                              className="hover:underline cursor-pointer text-primary"
+                            >
+                              {appraisal.vehicle.description}
+                            </Link>
+                          )}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           {`${appraisal.vehicle.rego}${

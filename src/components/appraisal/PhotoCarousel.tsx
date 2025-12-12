@@ -25,9 +25,14 @@ import type { PhotoData } from "./types";
 interface PhotoCarouselProps {
   appraisalId: string;
   photos: PhotoData[];
+  readOnly?: boolean;
 }
 
-export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
+export function PhotoCarousel({
+  appraisalId,
+  photos,
+  readOnly = false,
+}: PhotoCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -89,6 +94,27 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
   };
 
   if (!photos || photos.length === 0) {
+    if (readOnly) {
+      return (
+        <Card>
+          <CardHeader>
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Camera className="h-4 w-4 text-primary" />
+                <h3 className="font-medium">Vehicle Photos</h3>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center justify-center h-50 rounded-lg border-2 border-dashed border-gray-200">
+              <Camera className="h-12 w-12 text-gray-300 mb-2" />
+              <p className="text-gray-500 font-medium">No photos available</p>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+
     return (
       <Card>
         <CardHeader>
@@ -138,14 +164,16 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
             <Camera className="h-4 w-4 text-primary" />
             <h3 className="font-medium">Vehicle Photos ({photos.length})</h3>
           </div>
-          <Button
-            variant="outline"
-            className="gap-2 h-8 px-3"
-            onClick={() => setIsAddPhotoOpen(true)}
-          >
-            <Plus className="h-4 w-4" />
-            Add Photos
-          </Button>
+          {!readOnly && (
+            <Button
+              variant="outline"
+              className="gap-2 h-8 px-3"
+              onClick={() => setIsAddPhotoOpen(true)}
+            >
+              <Plus className="h-4 w-4" />
+              Add Photos
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
@@ -205,22 +233,24 @@ export function PhotoCarousel({ appraisalId, photos }: PhotoCarouselProps) {
                           <p className="text-xs truncate flex-1">
                             {photo.title || "Untitled"}
                           </p>
-                          <div className="flex items-center gap-1">
-                            <button
-                              type="button"
-                              onClick={(e) => handleEditClick(e, photo)}
-                              className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={(e) => handleDeleteClick(e, photo)}
-                              className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
-                            >
-                              <Trash className="h-4 w-4" />
-                            </button>
-                          </div>
+                          {!readOnly && (
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={(e) => handleEditClick(e, photo)}
+                                className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => handleDeleteClick(e, photo)}
+                                className="opacity-0 group-hover/title:opacity-100 text-gray-300 hover:text-white transition-opacity"
+                              >
+                                <Trash className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
