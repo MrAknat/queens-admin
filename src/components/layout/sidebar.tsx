@@ -27,7 +27,7 @@ const navigationItems = [
   {
     href: "/todays-appraisals",
     icon: ClipboardEdit,
-    label: "Today’s Appraisals",
+    label: "Today's Appraisals",
     roles: [],
   },
   {

@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/input";
 import { useDeletePhoto, useUpdatePhoto } from "@/hooks/useAppraisals";
 import { cn } from "@/lib/utils";
+import { useUIStore } from "@/stores/ui-store";
 import { AddPhotoDialog } from "./AddPhotoDialog";
 import { PhotoModal } from "./PhotoModal";
 import type { PhotoData } from "./types";
@@ -51,6 +52,8 @@ export function PhotoCarousel({
 
   const { mutate: updatePhoto } = useUpdatePhoto(appraisalId);
   const { mutate: deletePhoto } = useDeletePhoto(appraisalId);
+
+  const { isMobile } = useUIStore();
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -183,7 +186,7 @@ export function PhotoCarousel({
               {photos.map((photo, photoIndex) => (
                 <div
                   key={photo._id}
-                  className="mr-2 min-w-0 min-h-[200px] md:flex-[0_0_calc(30%-0.75rem)] sm:flex-[0_0_calc(50%-0.5rem)] xs:flex-[0_0_100%]"
+                  className="mr-2 min-w-0 min-h-[200px] flex-[0_0_100%] sm:flex-[0_0_calc(50%-0.5rem)] md:flex-[0_0_calc(30%-0.75rem)]"
                 >
                   <div className="relative w-full h-full aspect-video bg-gray-100 rounded-lg overflow-hidden group cursor-pointer">
                     <Image
@@ -194,13 +197,15 @@ export function PhotoCarousel({
                       loading="lazy"
                     />
 
-                    <button
-                      type="button"
-                      className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-all duration-200 flex items-center justify-center"
-                      onClick={() => handlePhotoClick(photoIndex)}
-                    >
-                      <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                    </button>
+                    {!isMobile && (
+                      <button
+                        type="button"
+                        className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-all duration-200 flex items-center justify-center"
+                        onClick={() => handlePhotoClick(photoIndex)}
+                      >
+                        <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </button>
+                    )}
 
                     <div
                       role="toolbar"
