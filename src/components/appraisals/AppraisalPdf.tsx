@@ -1,4 +1,11 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import {
+  Document,
+  Image,
+  Page,
+  StyleSheet,
+  Text,
+  View,
+} from "@react-pdf/renderer";
 import moment from "moment";
 import type { Appraisal } from "@/hooks/useAppraisals";
 import {
@@ -396,9 +403,13 @@ const styles = StyleSheet.create({
 
 interface AppraisalPdfProps {
   appraisal: Appraisal;
+  qrCodeDataUrl?: string;
 }
 
-export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
+export const AppraisalPdf = ({
+  appraisal,
+  qrCodeDataUrl,
+}: AppraisalPdfProps) => {
   const { activeLeads, delistedLeads } = appraisal.leads.reduce<{
     activeLeads: PDFLead[];
     delistedLeads: PDFLead[];
@@ -510,9 +521,13 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
 
             {/* QR Code Section */}
             <View style={styles.qrSection}>
-              <View style={styles.qrPlaceholder}>
-                <Text style={styles.qrText}>QR CODE</Text>
-              </View>
+              {qrCodeDataUrl ? (
+                <Image src={qrCodeDataUrl} style={{ width: 80, height: 80 }} />
+              ) : (
+                <View style={styles.qrPlaceholder}>
+                  <Text style={styles.qrText}>QR CODE</Text>
+                </View>
+              )}
             </View>
           </View>
 

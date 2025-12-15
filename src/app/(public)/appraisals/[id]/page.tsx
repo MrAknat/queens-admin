@@ -75,7 +75,7 @@ export default function PublicAppraisalDetailsPage() {
         <h1 className="text-2xl font-bold tracking-tight">{appraisalTitle}</h1>
         <p className="text-muted-foreground">View details of your appraisal.</p>
       </div>
-      <div className="flex flex-col-reverse xl:flex-row gap-6">
+      <div className="flex w-full flex-col-reverse xl:flex-row gap-6">
         <section className="flex-1 flex flex-col gap-6">
           <LeadsTable leads={appraisal?.leads} />
 

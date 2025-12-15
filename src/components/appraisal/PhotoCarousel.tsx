@@ -12,13 +12,12 @@ import {
   ZoomIn,
 } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/input";
 import { useDeletePhoto, useUpdatePhoto } from "@/hooks/useAppraisals";
 import { cn } from "@/lib/utils";
-import { useUIStore } from "@/stores/ui-store";
 import { AddPhotoDialog } from "./AddPhotoDialog";
 import { PhotoModal } from "./PhotoModal";
 import type { PhotoData } from "./types";
@@ -49,11 +48,21 @@ export function PhotoCarousel({
   const [modalPhotoIndex, setModalPhotoIndex] = useState(0);
   const [editingPhotoId, setEditingPhotoId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
 
   const { mutate: updatePhoto } = useUpdatePhoto(appraisalId);
   const { mutate: deletePhoto } = useDeletePhoto(appraisalId);
 
-  const { isMobile } = useUIStore();
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();

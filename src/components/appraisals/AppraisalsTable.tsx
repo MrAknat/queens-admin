@@ -4,6 +4,7 @@ import { pdf } from "@react-pdf/renderer";
 import { Search, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
@@ -227,8 +228,38 @@ export function AppraisalsTable({
                           className="cursor-pointer"
                           onClick={async () => {
                             if (!appraisal.isDraft) {
+                              let qrCodeDataUrl: string | undefined;
+
+                              const publicUrl = process.env.NEXT_PUBLIC_URL
+                                ? `${process.env.NEXT_PUBLIC_URL}/appraisals/${appraisal._id}`
+                                : null;
+
+                              if (publicUrl) {
+                                try {
+                                  qrCodeDataUrl = await QRCode.toDataURL(
+                                    publicUrl,
+                                    {
+                                      width: 80,
+                                      margin: 1,
+                                      color: {
+                                        dark: "#000000",
+                                        light: "#FFFFFF",
+                                      },
+                                    },
+                                  );
+                                } catch (err) {
+                                  console.error(
+                                    "QR Code generation error:",
+                                    err,
+                                  );
+                                }
+                              }
+
                               const blob = await pdf(
-                                <AppraisalPdf appraisal={appraisal} />,
+                                <AppraisalPdf
+                                  appraisal={appraisal}
+                                  qrCodeDataUrl={qrCodeDataUrl}
+                                />,
                               ).toBlob();
 
                               const url = URL.createObjectURL(blob);

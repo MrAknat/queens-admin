@@ -2,7 +2,8 @@
 
 import { PDFViewer } from "@react-pdf/renderer";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import QRCode from "qrcode";
+import { Suspense, useEffect, useState } from "react";
 import { AppraisalPdf } from "@/components/appraisals/AppraisalPdf";
 import { Loader } from "@/components/ui";
 import { useAppraisal } from "@/hooks/useAppraisals";
@@ -12,6 +13,28 @@ function PdfPreviewContent() {
   const appraisalId = searchParams.get("id");
 
   const { data: appraisal, isLoading } = useAppraisal(appraisalId || "");
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>();
+
+  useEffect(() => {
+    if (!appraisal) return;
+
+    const publicUrl = process.env.NEXT_PUBLIC_URL
+      ? `${process.env.NEXT_PUBLIC_URL}/appraisals/${appraisal._id}`
+      : null;
+
+    if (publicUrl) {
+      QRCode.toDataURL(publicUrl, {
+        width: 80,
+        margin: 1,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      })
+        .then((url) => setQrCodeDataUrl(url))
+        .catch((err) => console.error("QR Code generation error:", err));
+    }
+  }, [appraisal]);
 
   if (!appraisalId) {
     return (
@@ -52,7 +75,7 @@ function PdfPreviewContent() {
   return (
     <div className="w-full h-screen">
       <PDFViewer width="100%" height="100%">
-        <AppraisalPdf appraisal={appraisal} />
+        <AppraisalPdf appraisal={appraisal} qrCodeDataUrl={qrCodeDataUrl} />
       </PDFViewer>
     </div>
   );
