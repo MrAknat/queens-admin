@@ -560,8 +560,8 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
                       WHAT'S ON THE MARKET
                     </Text>
                     <Text style={styles.sectionSubtitle}>
-                      {activeLeads.length} cars currently live across Carsales,
-                      Gumtree, Autotrader, etc.
+                      {sortedActiveLeads.length} cars currently live across
+                      Carsales, Gumtree, Autotrader, etc.
                     </Text>
                   </View>
                 </View>
@@ -569,7 +569,7 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
                 <View style={styles.beigeSectionLightestColor} />
               </View>
 
-              {!activeLeads.length ? (
+              {!sortedActiveLeads.length ? (
                 <View style={styles.sectionContent}>
                   <Text style={styles.noData}>
                     No active listings available
@@ -578,7 +578,7 @@ export const AppraisalPdf = ({ appraisal }: AppraisalPdfProps) => {
               ) : (
                 <View style={styles.singleColumnTableContainer}>
                   <AppraisalPdfLeadsTable
-                    leads={activeLeads.slice(0, 16)}
+                    leads={sortedActiveLeads.slice(0, 16)}
                     numberFrom={1}
                   />
                 </View>

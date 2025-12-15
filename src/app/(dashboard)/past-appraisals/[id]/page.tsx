@@ -9,7 +9,7 @@ import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
 import { Loader } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useAppraisal } from "@/hooks/useAppraisals";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export default function PastAppraisalDetailsPage() {
   const params = useParams();
@@ -72,25 +72,6 @@ export default function PastAppraisalDetailsPage() {
   }
 
   const appraisalTitle = `${appraisal?.vehicle.description} • ${appraisal?.vehicle.rego} • ${appraisal?.vehicle.vin}`;
-
-  const renderPriceRow = (label: string, value: number | null | undefined) => (
-    <div className="flex justify-between py-2 border-b last:border-0">
-      <span className="text-gray-600">{label}</span>
-      <span className="font-semibold">
-        {value !== null && value !== undefined ? formatCurrency(value) : "-"}
-      </span>
-    </div>
-  );
-
-  const renderInfoRow = (
-    label: string,
-    value: string | number | null | undefined,
-  ) => (
-    <div className="flex justify-between py-2 border-b last:border-0">
-      <span className="text-gray-600">{label}</span>
-      <span className="font-medium">{value || "-"}</span>
-    </div>
-  );
 
   return (
     <DashboardPageLayout

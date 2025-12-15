@@ -35,14 +35,12 @@ export const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
         className={cn("flex items-center gap-2 min-w-[140px]", className)}
         {...props}
       >
-        <>
-          {loading ? (
-            <Loader size="sm" className="text-primary-foreground" />
-          ) : (
-            Icon && <Icon className={iconClassName} />
-          )}
-          {buttonLabel}
-        </>
+        {loading ? (
+          <Loader size="sm" className="text-primary-foreground" />
+        ) : (
+          Icon && <Icon className={iconClassName} />
+        )}
+        {buttonLabel}
       </Button>
     );
   },

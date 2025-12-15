@@ -167,16 +167,11 @@ export function ManualAppraisalSubmissionForm() {
 function BatchAppraisalsUploaderForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-  } = useForm<AppraisalFormData>({
+  const { handleSubmit } = useForm<AppraisalFormData>({
     mode: "onChange",
   });
 
-  const onSubmit = async (data: AppraisalFormData) => {
+  const onSubmit = async (_data: AppraisalFormData) => {
     setIsSubmitting(true);
 
     // Simulate API call

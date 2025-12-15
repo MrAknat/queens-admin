@@ -1,9 +1,7 @@
 "use client";
 
-import { Bell, Globe, Settings, Shield, User } from "lucide-react";
+import { Bell, Globe, Shield, User } from "lucide-react";
 import { DashboardPageLayout } from "@/components/layout/dashboard-page-layout";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 
 export default function SettingsPage() {

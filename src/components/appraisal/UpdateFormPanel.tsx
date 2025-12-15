@@ -43,7 +43,7 @@ export function UpdateFormPanel({
               rules={{
                 validate: {
                   isNumber: (value) =>
-                    !isNaN(Number(value)) || "Must be a valid number",
+                    !Number.isNaN(Number(value)) || "Must be a valid number",
                   isPositive: (value) =>
                     Number(value) >= 0 || "Cannot be negative",
                   isWholeNumber: (value) =>
@@ -77,7 +77,7 @@ export function UpdateFormPanel({
               rules={{
                 validate: {
                   isNumber: (value) =>
-                    !isNaN(Number(value)) || "Must be a valid number",
+                    !Number.isNaN(Number(value)) || "Must be a valid number",
                   isPositive: (value) =>
                     Number(value) >= 0 || "Cannot be negative",
                   isWholeNumber: (value) =>

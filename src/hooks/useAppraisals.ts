@@ -64,7 +64,7 @@ export interface AppraisalsResponse {
 export const appraisalQueryKeys = {
   all: ["appraisals"] as const,
   lists: () => [...appraisalQueryKeys.all, "list"] as const,
-  list: (filters: Record<string, any>) =>
+  list: (filters: Record<string, unknown>) =>
     [...appraisalQueryKeys.lists(), { filters }] as const,
   details: () => [...appraisalQueryKeys.all, "detail"] as const,
   detail: (id: string) => [...appraisalQueryKeys.details(), id] as const,
@@ -167,11 +167,13 @@ export function useCreateDraftAppraisal() {
   });
 }
 
-export function useAppraisal(id: string) {
+export function useAppraisal(id: string, isPublic: boolean = false) {
   return useQuery({
     queryKey: appraisalQueryKeys.detail(id),
     queryFn: async () => {
-      const response = await fetch(`/api/appraisals/${id}`);
+      const response = await fetch(
+        `/api/appraisals/${id}/${isPublic ? "public" : ""}`,
+      );
 
       if (!response.ok) {
         throw new Error(
