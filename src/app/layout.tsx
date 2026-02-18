@@ -13,6 +13,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Queens Control Panel",
   description: "Queens Control Panel",
+  icons: {
+    icon: "/main-logo.png",
+  },
 };
 
 export default function RootLayout({

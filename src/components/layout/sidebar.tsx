@@ -11,6 +11,7 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -124,8 +125,8 @@ export const Sidebar: React.FC = () => {
       >
         <div className="flex h-16 items-center justify-start px-4 gap-1">
           <Link href="/dashboard" className="flex w-full items-center gap-2">
-            <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <span className="text-sm font-bold">Q</span>
+            <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-sm overflow-hidden">
+              <Image src="/main-logo.png" alt="Logo" width={32} height={32} />
             </div>
             <span className="flex-shrink-1 text-lg font-semibold overflow-hidden">
               Queens
