@@ -79,15 +79,12 @@ export const Sidebar: React.FC = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       useUIStore.getState().setIsMobile(mobile);
-      if (mobile && !sidebarCollapsed) {
-        useUIStore.getState().setSidebarCollapsed(true);
-      }
     };
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, [sidebarCollapsed]);
+  }, []);
 
   const handleNavClick = () => {
     if (isMobile) {

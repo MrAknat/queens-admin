@@ -1,11 +1,14 @@
 "use client";
 
 import { Bell, Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { AdminModeToggle } from "@/components/admin-mode-toggle";
 import { LogoutButton } from "@/components/logoutButton";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useUserRoles } from "@/hooks/useUserRoles";
+import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/ui-store";
 
 interface HeaderProps {
@@ -16,22 +19,34 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
   const { isMobile, setSidebarCollapsed } = useUIStore();
   const { hasAdminRole } = useUserRoles();
 
-  const handleMenuClick = () => {
-    setSidebarCollapsed(false);
-  };
-
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 items-center justify-end gap-4 px-4 lg:px-6">
-        {/* Mobile menu button */}
+      <div
+        className={cn(
+          "flex h-16 items-center justify-end gap-4 px-4 lg:px-6",
+          isMobile && "justify-between",
+        )}
+      >
+        {/* Mobile: Logo and Menu toggle */}
         {isMobile && (
-          <Button
-            variant="ghost"
-            onClick={handleMenuClick}
-            // className="lg:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                setSidebarCollapsed(!useUIStore.getState().sidebarCollapsed)
+              }
+              className="h-9 w-9 p-0"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-sm overflow-hidden">
+                <Image src="/main-logo.png" alt="Logo" width={32} height={32} />
+              </div>
+              <span className="text-lg font-semibold">Queens</span>
+            </Link>
+          </div>
         )}
 
         {title && (
