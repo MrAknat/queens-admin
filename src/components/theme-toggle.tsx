@@ -5,7 +5,11 @@ import { useTheme } from "next-themes";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -48,11 +52,11 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="relative">
+      <div className={cn("relative", className)}>
         <button
           type="button"
           className={cn(
-            "inline-flex items-center justify-center gap-2 rounded text-sm font-medium",
+            "inline-flex items-center justify-center gap-2 rounded text-sm font-medium w-full",
             "transition-all duration-200 ease-in-out",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             "disabled:pointer-events-none disabled:opacity-50",
@@ -91,12 +95,12 @@ export function ThemeToggle() {
   ];
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className={cn("relative", className)} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded text-sm font-medium",
+          "inline-flex items-center justify-center gap-2 rounded text-sm font-medium w-full",
           "transition-all duration-200 ease-in-out",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
@@ -117,7 +121,7 @@ export function ThemeToggle() {
         />
         <span
           className={cn(
-            "hidden sm:inline-block text-foreground transition-all duration-200 group-hover:text-accent-foreground",
+            "inline-block text-foreground transition-all duration-200 group-hover:text-accent-foreground",
             isOpen && "text-accent-foreground",
           )}
         >

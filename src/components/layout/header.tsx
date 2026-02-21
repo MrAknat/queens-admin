@@ -57,22 +57,36 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
 
         <div className="flex items-center gap-2">
           {/* TODO: Add Notifications */}
-          <Button variant="ghost" className="relative h-8 w-8 p-0">
+          <Link href="/inspection">
+            <Button
+              variant="outline"
+              className="flex gap-2 h-9 px-3 bg-primary/5 border-primary/20 hover:bg-primary/10 transition-all"
+            >
+              <span className="h-2 w-2 bg-primary rounded-full animate-pulse" />
+              <span>Inspect</span>
+            </Button>
+          </Link>
+
+          {/* <Button variant="ghost" className="relative h-8 w-8 p-0">
             <Bell className="h-4 w-4" />
             <span className="absolute -top-1 -right-1 h-2 w-2 bg-destructive rounded-full"></span>
-          </Button>
+          </Button> */}
 
-          {/* TODO: Remove container divs passing className string to components directly */}
-          {hasAdminRole() && (
-            <div className="hidden lg:block">
-              <AdminModeToggle />
-            </div>
+          {!isMobile && (
+            <>
+              {/* TODO: Remove container divs passing className string to components directly */}
+              {hasAdminRole() && (
+                <div className="hidden lg:block">
+                  <AdminModeToggle />
+                </div>
+              )}
+              {/* TODO: Remove container divs passing className string to components directly */}
+              <div className="hidden lg:block">
+                <ThemeToggle />
+              </div>
+              <LogoutButton />
+            </>
           )}
-          {/* TODO: Remove container divs passing className string to components directly */}
-          <div className="hidden lg:block">
-            <ThemeToggle />
-          </div>
-          <LogoutButton />
         </div>
       </div>
     </header>

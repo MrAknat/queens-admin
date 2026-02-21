@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Bell,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
@@ -14,6 +15,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { LogoutButton } from "@/components/logoutButton";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAdminContent } from "@/hooks/useAdminContent";
@@ -168,6 +171,18 @@ export const Sidebar: React.FC = () => {
         <Separator />
 
         <div className="p-4 space-y-4">
+          {isMobile && !sidebarCollapsed && (
+            <div className="space-y-4 pb-2">
+              <div className="px-2">
+                <ThemeToggle className="w-full" />
+              </div>
+              <div className="px-2">
+                <LogoutButton className="w-full" />
+              </div>
+              <Separator />
+            </div>
+          )}
+
           <div className={cn("flex items-center gap-3", "justify-start")}>
             <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-card-muted">
               <span className="text-sm font-medium text-muted-foreground">
