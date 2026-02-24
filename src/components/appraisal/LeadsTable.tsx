@@ -226,10 +226,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
               <Select
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
-                options={AUSTRALIAN_STATES.map((state) => ({
-                  value: state,
-                  label: state,
-                }))}
+                options={[...AUSTRALIAN_STATES]}
                 className="w-auto xl:min-w-[130px] bg-card"
               />
             </div>

@@ -21,13 +21,19 @@ export const ravinQueryKeys = {
  */
 export function useRequestRavinLink() {
   return useMutation({
-    mutationFn: async (plateNumber: string) => {
+    mutationFn: async ({
+      plateNumber,
+      state,
+    }: {
+      plateNumber: string;
+      state: string;
+    }) => {
       const response = await fetch("/api/ravin-inspection", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ plateNumber }),
+        body: JSON.stringify({ data: { plateNumber, state } }),
       });
 
       if (!response.ok) {

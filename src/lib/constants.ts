@@ -35,17 +35,12 @@ export const SELLER_TYPE_OPTIONS = [
 ] as const;
 
 export const AUSTRALIAN_STATES = [
-  "QLD",
-  "NSW",
-  "VIC",
-  "WA",
-  "SA",
-  "TAS",
-  "ACT",
-  "NT",
-] as const;
-
-export const REGIONS = [
-  { value: "au", label: "Australia" },
-  { value: "nz", label: "New Zealand" },
+  { value: "QLD", label: "Queensland" },
+  { value: "NSW", label: "New South Wales" },
+  { value: "VIC", label: "Victoria" },
+  { value: "WA", label: "Western Australia" },
+  { value: "SA", label: "South Australia" },
+  { value: "TAS", label: "Tasmania" },
+  { value: "ACT", label: "Australian Capital Territory" },
+  { value: "NT", label: "Northern Territory" },
 ] as const;
