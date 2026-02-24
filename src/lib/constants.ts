@@ -35,7 +35,6 @@ export const SELLER_TYPE_OPTIONS = [
 ] as const;
 
 export const AUSTRALIAN_STATES = [
-  "All States",
   "QLD",
   "NSW",
   "VIC",
@@ -44,4 +43,9 @@ export const AUSTRALIAN_STATES = [
   "TAS",
   "ACT",
   "NT",
+] as const;
+
+export const REGIONS = [
+  { value: "au", label: "Australia" },
+  { value: "nz", label: "New Zealand" },
 ] as const;

@@ -12,16 +12,20 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import {
   useRavinInspectionStatus,
   useRequestRavinLink,
 } from "@/hooks/useRavinInspection";
+import { AUSTRALIAN_STATES, REGIONS } from "@/lib/constants";
 
 type Step = "plate" | "ravin-link" | "waiting" | "success";
 
 export default function InspectionPage() {
   const [step, setStep] = useState<Step>("plate");
   const [plateNumber, setPlateNumber] = useState("");
+  const [region, setRegion] = useState("au");
+  const [state, setState] = useState("QLD");
   const [ravinUrl, setRavinUrl] = useState("");
 
   const requestLinkMutation = useRequestRavinLink();
@@ -37,9 +41,13 @@ export default function InspectionPage() {
     if (!plateNumber) return;
 
     try {
-      const result = await requestLinkMutation.mutateAsync(
-        plateNumber.toUpperCase(),
-      );
+      const payload = JSON.stringify({
+        plateNumber: plateNumber.toUpperCase(),
+        region,
+        state,
+      });
+
+      const result = await requestLinkMutation.mutateAsync(payload);
       setRavinUrl(`https://${result.url}`);
       setStep("ravin-link");
     } catch (err) {
@@ -140,6 +148,41 @@ export default function InspectionPage() {
                     }
                     className="h-20 text-center text-4xl font-black uppercase tracking-tighter sm:tracking-widest rounded-2xl border-2 border-muted focus:border-primary transition-all bg-muted/30"
                   />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="region-select"
+                        className="text-xs font-bold uppercase text-muted-foreground ml-1"
+                      >
+                        Region
+                      </label>
+                      <Select
+                        id="region-select"
+                        options={[...REGIONS]}
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        className="h-12 text-lg font-bold rounded-2xl border-2 border-muted focus:border-primary transition-all bg-muted/20 text-center uppercase tracking-wide px-4 appearance-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="state-select"
+                        className="text-xs font-bold uppercase text-muted-foreground ml-1"
+                      >
+                        State
+                      </label>
+                      <Select
+                        id="state-select"
+                        options={AUSTRALIAN_STATES.map((s) => ({
+                          value: s,
+                          label: s,
+                        }))}
+                        value={state}
+                        onChange={(e) => setState(e.target.value)}
+                        className="h-12 text-lg font-bold rounded-2xl border-2 border-muted focus:border-primary transition-all bg-muted/20 text-center uppercase tracking-wide px-4 appearance-none"
+                      />
+                    </div>
+                  </div>
                   {error && (
                     <p className="text-sm text-destructive font-semibold text-center mt-2 animate-bounce">
                       {error}
