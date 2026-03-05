@@ -44,7 +44,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
   const [showDelisted, setShowDelisted] = useState(true);
   const [selectedDays, setSelectedDays] = useState<number>(60);
   const [selectedSellerType, setSelectedSellerType] = useState<string>("All");
-  const [selectedState, setSelectedState] = useState<string>("All States");
+  const [selectedState, setSelectedState] = useState<string>("QLD");
   const [sortColumn, setSortColumn] = useState<SortColumn>("priceEgc");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
